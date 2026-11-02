@@ -27,4 +27,4 @@ class Config:
     new_field: int = 42
 ```
 
-不要在前面加 "Here's the change"，不要在后面加 "This adds..."。
+不要在代码前添加“以下是修改”，也不要在代码后补充“这新增了……”等说明。

@@ -1,4 +1,6 @@
-# Claude Configuration Index
+# Claude 配置索引
+
+说明性文字统一使用中文；配置字段、有效名称、分类标签、命令、路径和产品名称保留原始标识，以保证加载与引用兼容。
 
 此索引以当前 `agent/` 文件为准，涵盖配置入口；技能的 references、templates、scripts 随所属技能维护，不重复计为独立配置。路径均相对本文件。
 
@@ -33,95 +35,95 @@ agent/
 
 ## 来源与维护约定
 
-- Local Markdown 的依据为现有文件署名、仓库 Apache-2.0 许可及已有索引；Hooks、状态栏和设置的本地维护依据为 Git 历史（如 `80faff2`、`a241329`、`1cf2354`、`65be515`、`f52ed88`），未独立署名的文件不推断具体作者。
+- 本地 Markdown 的依据为现有文件署名、仓库 Apache-2.0 许可及已有索引；Hooks、状态栏和设置的本地维护依据为 Git 历史（如 `80faff2`、`a241329`、`1cf2354`、`65be515`、`f52ed88`），未独立署名的文件不推断具体作者。
 - 技能采用 `skills/<skill-name>/SKILL.md`，每个技能与附属资源整体迁移；仅修改仓库分类标签和迁移相关路径，保留运行时字段、外部署名与许可。不向脚本、JSON、模板或参考文档添加 Frontmatter。
-- 分类标题使用技能首个标签：Check、Documentation。分类通过标签和本索引表达，不增加技能发现所需的目录层级。
+- 分类标题以技能首个标签 Check、Documentation 为标识，并附中文释义。分类通过标签和本索引表达，不增加技能发现所需的目录层级。
 
-## Agents
+## 智能体角色
 
-| Name | Path | Version | Author | License | Type | External Info | Description |
+| 名称 | 路径 | 版本 | 作者 | 许可证 | 来源类型 | 外部来源信息 | 功能说明 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| architect | [agents/architect.md](agents/architect.md) | 1.0.0 | Robin | Apache-2.0 | Local | — | System architect for high-level design decisions. |
-| code-reviewer | [agents/code-reviewer.md](agents/code-reviewer.md) | 1.0.0 | Robin | Apache-2.0 | Local | — | Expert code review specialist. |
-| debugger | [agents/debugger.md](agents/debugger.md) | 1.0.0 | Robin | Apache-2.0 | Local | — | Debugging specialist for errors, test failures, crashes, and unexpected behavior. |
-| documentation-writer | [agents/documentation-writer.md](agents/documentation-writer.md) | 1.0.0 | Robin | Apache-2.0 | Local | — | Writes and updates documentation, docstrings, and inline comments. |
-| library-integration | [agents/library-integration.md](agents/library-integration.md) | 1.0.0 | Robin | Apache-2.0 | Local | — | Specializes in integrating third-party libraries, SDKs, and APIs into a project. |
-| performance-analyzer | [agents/performance-analyzer.md](agents/performance-analyzer.md) | 1.0.0 | Robin | Apache-2.0 | Local | — | Performance analysis specialist. |
-| refactor | [agents/refactor.md](agents/refactor.md) | 1.0.0 | Robin | Apache-2.0 | Local | — | Safe code refactoring specialist. |
-| shell-expert | [agents/shell-expert.md](agents/shell-expert.md) | 1.0.0 | Robin | Apache-2.0 | Local | — | Shell script specialist. |
-| test-writer | [agents/test-writer.md](agents/test-writer.md) | 1.0.0 | Robin | Apache-2.0 | Local | — | Writes unit and integration tests. |
+| architect | [agents/architect.md](agents/architect.md) | 1.0.0 | Robin | Apache-2.0 | 本地 | — | 负责高层设计决策的系统架构师。 |
+| code-reviewer | [agents/code-reviewer.md](agents/code-reviewer.md) | 1.0.0 | Robin | Apache-2.0 | 本地 | — | 审查代码的正确性、安全性、性能和可维护性。 |
+| debugger | [agents/debugger.md](agents/debugger.md) | 1.0.0 | Robin | Apache-2.0 | 本地 | — | 诊断错误、测试失败、崩溃和意外行为。 |
+| documentation-writer | [agents/documentation-writer.md](agents/documentation-writer.md) | 1.0.0 | Robin | Apache-2.0 | 本地 | — | 编写和更新文档、文档字符串及行内注释。 |
+| library-integration | [agents/library-integration.md](agents/library-integration.md) | 1.0.0 | Robin | Apache-2.0 | 本地 | — | 将第三方库、SDK 和 API 集成到项目中。 |
+| performance-analyzer | [agents/performance-analyzer.md](agents/performance-analyzer.md) | 1.0.0 | Robin | Apache-2.0 | 本地 | — | 分析性能瓶颈并提出优化建议。 |
+| refactor | [agents/refactor.md](agents/refactor.md) | 1.0.0 | Robin | Apache-2.0 | 本地 | — | 在保持行为不变的前提下安全重构代码。 |
+| shell-expert | [agents/shell-expert.md](agents/shell-expert.md) | 1.0.0 | Robin | Apache-2.0 | 本地 | — | 编写、调试和审查 Shell 脚本。 |
+| test-writer | [agents/test-writer.md](agents/test-writer.md) | 1.0.0 | Robin | Apache-2.0 | 本地 | — | 编写单元测试和集成测试。 |
 
-## Output Styles
+## 输出风格
 
-| Name | Path | Version | Author | License | Type | External Info | Description |
+| 名称 | 路径 | 版本 | 作者 | 许可证 | 来源类型 | 外部来源信息 | 功能说明 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| Chinese-Concise | [output-styles/chinese-concise.md](output-styles/chinese-concise.md) | 1.0.0 | Robin | Apache-2.0 | Local | — | 中文回复，简洁直接，不啰嗦不总结。适合日常开发交互。 |
-| Code-Only | [output-styles/code-only.md](output-styles/code-only.md) | 1.0.0 | Robin | Apache-2.0 | Local | — | 只输出代码和必要的 shell 命令，不解释不总结。适合明确知道要什么的快速实现场景。 |
-| Diagrams-First | [output-styles/diagrams-first.md](output-styles/diagrams-first.md) | 1.0.0 | Robin | Apache-2.0 | Local | — | 解释架构、数据流或代码结构时，先用 Mermaid 图展示，再文字说明。 |
+| Chinese-Concise | [output-styles/chinese-concise.md](output-styles/chinese-concise.md) | 1.0.0 | Robin | Apache-2.0 | 本地 | — | 中文回复，简洁直接，不啰嗦不总结。适合日常开发交互。 |
+| Code-Only | [output-styles/code-only.md](output-styles/code-only.md) | 1.0.0 | Robin | Apache-2.0 | 本地 | — | 只输出代码和必要的 shell 命令，不解释不总结。适合明确知道要什么的快速实现场景。 |
+| Diagrams-First | [output-styles/diagrams-first.md](output-styles/diagrams-first.md) | 1.0.0 | Robin | Apache-2.0 | 本地 | — | 解释架构、数据流或代码结构时，先用 Mermaid 图展示，再文字说明。 |
 
-## Rules
+## 规则
 
-| Name | Path | Version | Author | License | Type | External Info | Description |
+| 名称 | 路径 | 版本 | 作者 | 许可证 | 来源类型 | 外部来源信息 | 功能说明 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| git-conventions | [rules/git-conventions.md](rules/git-conventions.md) | 1.0.0 | Robin | Apache-2.0 | Local | — | Git commit conventions for the project, including Conventional Commits format and commit rules. |
-| python-style | [rules/python-style.md](rules/python-style.md) | 1.0.0 | Robin | Apache-2.0 | Local | — | Python coding style guide based on Google Python Style Guide, adapted for modern Python 3.10+. |
-| shell-style | [rules/shell-style.md](rules/shell-style.md) | 1.0.0 | Robin | Apache-2.0 | Local | — | Shell script coding style guide based on Google Shell Style Guide, adapted for bash 4.2+ compatibility. |
+| git-conventions | [rules/git-conventions.md](rules/git-conventions.md) | 1.0.0 | Robin | Apache-2.0 | 本地 | — | 项目 Git 提交规范，包括 Conventional Commits 格式和提交规则。 |
+| python-style | [rules/python-style.md](rules/python-style.md) | 1.0.0 | Robin | Apache-2.0 | 本地 | — | 基于 Google Python 风格指南，适用于 Python 3.10 及以上版本的编码规范。 |
+| shell-style | [rules/shell-style.md](rules/shell-style.md) | 1.0.0 | Robin | Apache-2.0 | 本地 | — | 基于 Google Shell 风格指南，适配 Bash 4.2 及以上版本的 Shell 编码规范。 |
 
-## Skills
+## 技能
 
 技能入口统一位于 `skills/<skill-name>/SKILL.md`。每个目录内的 `scripts/`、`references/`、`templates/` 保持原相对结构。
 
-### Check
+### Check（检查）
 
 运行项目检查与 Shell 语法、静态分析。
 
-| Name | Path | Version | Author | License | Type | External Info | Description |
+| 名称 | 路径 | 版本 | 作者 | 许可证 | 来源类型 | 外部来源信息 | 功能说明 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| check | [skills/check/SKILL.md](skills/check/SKILL.md) | 1.0.0 | Robin | Apache-2.0 | Local | — | 运行项目已配置的 pre-commit 检查，用中文报告结果及修复提示。 |
-| shell-check | [skills/shell-check/SKILL.md](skills/shell-check/SKILL.md) | 1.0.0 | Robin | Apache-2.0 | Local | — | Validate shell scripts with both syntax check (bash -n) and static analysis (shellcheck). |
+| check | [skills/check/SKILL.md](skills/check/SKILL.md) | 1.0.0 | Robin | Apache-2.0 | 本地 | — | 运行项目已配置的 pre-commit 检查，用中文报告结果及修复提示。 |
+| shell-check | [skills/shell-check/SKILL.md](skills/shell-check/SKILL.md) | 1.0.0 | Robin | Apache-2.0 | 本地 | — | 使用 bash -n 检查 Shell 语法，使用 shellcheck 执行静态分析。 |
 
-### Documentation
+### Documentation（文档）
 
 技术文档翻译与本地化。
 
-| Name | Path | Version | Author | License | Type | External Info | Description |
+| 名称 | 路径 | 版本 | 作者 | 许可证 | 来源类型 | 外部来源信息 | 功能说明 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| tech-doc-translator | [skills/tech-doc-translator/SKILL.md](skills/tech-doc-translator/SKILL.md) | 1.0.0 | Robin | Apache-2.0 | Local | — | Use when translating English technical documentation (AI/ML, developer tools, API docs) into Chinese Markdown. |
+| tech-doc-translator | [skills/tech-doc-translator/SKILL.md](skills/tech-doc-translator/SKILL.md) | 1.0.0 | Robin | Apache-2.0 | 本地 | — | 将英文技术文档（AI/ML、开发者工具、API 文档等）翻译为中文 Markdown。 |
 
-## Hooks
+## 钩子
 
-| Name | Path | Version | Author | License | Type | External Info | Description |
+| 名称 | 路径 | 版本 | 作者 | 许可证 | 来源类型 | 外部来源信息 | 功能说明 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| record-event | [hooks/logging/record-event.sh](hooks/logging/record-event.sh) | — | 待确认 | Apache-2.0（仓库许可） | Local | — | 分流命令、代理、配置审计及异常事件，保留各类日志格式。 |
-| notify | [hooks/notifications/notify.sh](hooks/notifications/notify.sh) | — | 待确认 | Apache-2.0（仓库许可） | Local | — | Notification hook: WeChat + desktop + voice when Claude needs attention. |
-| format-file | [hooks/tools/format-file.sh](hooks/tools/format-file.sh) | — | 待确认 | Apache-2.0（仓库许可） | Local | — | PostToolUse hook: auto-format edited files and shellcheck .sh files. |
-| guard-tool | [hooks/tools/guard-tool.sh](hooks/tools/guard-tool.sh) | — | 待确认 | Apache-2.0（仓库许可） | Local | — | PreToolUse hook: block dangerous commands and protect sensitive files. |
-| context | [hooks/session/context.sh](hooks/session/context.sh) | — | 待确认 | Apache-2.0（仓库许可） | Local | — | 初始化会话或恢复 compact 上下文，仅 startup 重置会话记录。 |
-| summarize | [hooks/session/summarize.sh](hooks/session/summarize.sh) | — | 待确认 | Apache-2.0（仓库许可） | Local | — | SessionEnd hook: send session summary to WeChat via Server酱. |
+| record-event | [hooks/logging/record-event.sh](hooks/logging/record-event.sh) | — | 待确认 | Apache-2.0（仓库许可） | 本地 | — | 分流命令、代理、配置审计及异常事件，保留各类日志格式。 |
+| notify | [hooks/notifications/notify.sh](hooks/notifications/notify.sh) | — | 待确认 | Apache-2.0（仓库许可） | 本地 | — | Claude 需要用户关注时，通过微信、桌面和语音发送通知。 |
+| format-file | [hooks/tools/format-file.sh](hooks/tools/format-file.sh) | — | 待确认 | Apache-2.0（仓库许可） | 本地 | — | 工具调用后自动格式化已编辑文件，并对 .sh 文件运行 shellcheck。 |
+| guard-tool | [hooks/tools/guard-tool.sh](hooks/tools/guard-tool.sh) | — | 待确认 | Apache-2.0（仓库许可） | 本地 | — | 工具调用前拦截危险命令，保护敏感文件。 |
+| context | [hooks/session/context.sh](hooks/session/context.sh) | — | 待确认 | Apache-2.0（仓库许可） | 本地 | — | 初始化会话或恢复 compact 上下文，仅 startup 重置会话记录。 |
+| summarize | [hooks/session/summarize.sh](hooks/session/summarize.sh) | — | 待确认 | Apache-2.0（仓库许可） | 本地 | — | 会话结束时，通过 Server酱将会话摘要发送至微信。 |
 
-## Settings & MCP & Status Line
+## 设置、MCP 与状态栏
 
-| Name | Path | Version | Author | License | Type | External Info | Description |
+| 名称 | 路径 | 版本 | 作者 | 许可证 | 来源类型 | 外部来源信息 | 功能说明 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| settings.json | [settings.json](settings.json) | — | 待确认 | Apache-2.0（仓库许可） | Local | — | Claude Code 权限、Hooks、插件与状态栏配置。 |
-| .mcp.json | [.mcp.json](.mcp.json) | — | 待确认 | Apache-2.0（仓库许可） | Local | — | MCP 服务器启动配置。 |
-| scripts/status-line.sh | [scripts/status-line.sh](scripts/status-line.sh) | — | 待确认 | Apache-2.0（仓库许可） | Local | — | 显示上下文用量、Git 状态与模型信息。 |
+| settings.json | [settings.json](settings.json) | — | 待确认 | Apache-2.0（仓库许可） | 本地 | — | Claude Code 权限、Hooks、插件与状态栏配置。 |
+| .mcp.json | [.mcp.json](.mcp.json) | — | 待确认 | Apache-2.0（仓库许可） | 本地 | — | MCP 服务器启动配置。 |
+| scripts/status-line.sh | [scripts/status-line.sh](scripts/status-line.sh) | — | 待确认 | Apache-2.0（仓库许可） | 本地 | — | 显示上下文用量、Git 状态与模型信息。 |
 
-## Frontmatter Standard
+## 前置元数据规范
 
 以下示例适用于加载器兼容的本地 Markdown 配置入口；合并元数据时保留运行时字段和未知字段。外部配置保留原作者、版本、许可、平台和归属声明。
 
 ```yaml
 ---
-name: <config-name>
-description: <brief-description>
-version: <semver>
-author: <author-name>
-license: <spdx-license>
+name: <配置名称>
+description: <简短说明>
+version: <语义化版本>
+author: <作者姓名>
+license: <SPDX许可证标识>
 platforms: [linux, macos, windows]
 metadata:
-  tags: [<category>, <tag1>, <tag2>]
-  related_skills: [<skill1>, <skill2>]
+  tags: [<主分类>, <标签1>, <标签2>]
+  related_skills: [<技能名称1>, <技能名称2>]
 ---
 ```
 

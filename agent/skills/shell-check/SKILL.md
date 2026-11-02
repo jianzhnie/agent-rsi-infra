@@ -1,6 +1,6 @@
 ---
 name: shell-check
-description: "Validate shell scripts with both syntax check (bash -n) and static analysis (shellcheck). Usage: /shell-check [file_or_dir] — defaults to tracked and untracked, non-ignored .sh files in the current Git repository."
+description: 检查 Shell 脚本语法（bash -n）并执行静态分析（shellcheck）。用法为 /shell-check [file_or_dir]；默认检查当前 Git 仓库中已跟踪及未跟踪且未被忽略的 .sh 文件。
 version: 1.0.0
 author: Robin
 license: Apache-2.0
@@ -9,38 +9,38 @@ metadata:
   tags: [Check, Skill, Shell, Lint, Static-Analysis]
   related_skills: [check]
 ---
-Run both bash syntax validation and shellcheck static analysis on the specified target.
+对指定目标执行 Bash 语法检查和 shellcheck 静态分析。
 
-## If the user provides a file path
+## 用户提供文件路径时
 
-Run both checks on that single file:
+对该文件运行两项检查：
 
 ```bash
 bash -n "$TARGET" 2>&1
 shellcheck "$TARGET" 2>&1
 ```
 
-## Directory or default repository target
+## 目录或默认仓库目标
 
-Use Bash and NUL-delimited filenames so spaces and nested paths are handled correctly.
-Check that `shellcheck` is installed before running; report it as unavailable if missing,
-and still run `bash -n`. Do not report a missing tool as a passing check.
+使用 Bash 和以 NUL 分隔的文件名，正确处理空格及嵌套路径。
+运行前检查是否安装 `shellcheck`；缺失时报告不可用，
+仍执行 `bash -n`，不能将缺少工具报告为检查通过。
 
-For a directory argument, collect files using:
+提供目录参数时，使用以下方式收集文件：
 
 ```bash
 find "$TARGET" -type f -name '*.sh' -print0
 ```
 
-With no argument, collect tracked and untracked, non-ignored Shell files from
-`git rev-parse --show-toplevel`. Outside a Git repository, request a target directory.
+未提供参数时，收集已跟踪及未跟踪、且未被忽略的 Shell 文件，仓库根目录由
+`git rev-parse --show-toplevel` 确定。不在 Git 仓库中时，请用户指定目标目录。
 
 ```bash
 git ls-files --cached --others --exclude-standard -z -- '*.sh'
 ```
 
-Consume the selected file list with a Bash loop, running both checks for each
-existing file. Continue after individual failures and aggregate the results:
+使用 Bash 循环读取选定文件，对每个存在的文件执行
+两项检查。单项失败后继续，并汇总结果：
 
 ```bash
 while IFS= read -r -d '' file; do
@@ -50,16 +50,16 @@ while IFS= read -r -d '' file; do
 done < <(find "$TARGET" -type f -name '*.sh' -print0)
 ```
 
-The loop is an execution pattern, not a pass/fail summary: record each command's
-exit status explicitly, and do not enable `set -e` in a way that stops at the first
-failure. For repository mode, run from the repository root and replace `find`
-with the `git ls-files` command above. Deduplicate filenames before checking if
-the selected source yields duplicates.
+上述循环仅展示执行方式，不代表检查结果。必须显式记录每条命令的
+退出状态，不得因启用 `set -e` 而在首次失败时停止。
+仓库模式从仓库根目录运行，并将 `find` 替换为
+前面的 `git ls-files` 命令。文件来源可能重复时，
+检查前先去重。
 
-## Reporting
+## 结果报告
 
-For each file, report:
-- **Syntax check** (`bash -n`): PASS or FAIL with parse error details
-- **Static analysis** (`shellcheck`): PASS or clean, or list issues with file, line, severity (error/warning/info), and message
+逐文件报告：
+- **语法检查**（`bash -n`）：通过（PASS）或失败（FAIL），失败时附解析错误详情。
+- **静态分析**（`shellcheck`）：通过或无问题，或列出文件、行号、严重程度（错误／警告／提示）及问题说明。
 
-Give a final summary: total files checked, syntax pass/fail count, shellcheck clean/issue count.
+最后汇总文件总数、语法通过及失败数量、静态分析无问题及有问题数量。

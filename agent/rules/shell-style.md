@@ -1,6 +1,6 @@
 ---
 name: shell-style
-description: Shell script coding style guide based on Google Shell Style Guide, adapted for bash 4.2+ compatibility.
+description: 基于 Google Shell 风格指南，适配 Bash 4.2 及以上版本的 Shell 编码规范。
 version: 1.0.0
 author: Robin
 license: Apache-2.0
@@ -13,34 +13,34 @@ paths:
   - "**/*.bash"
 ---
 
-# Shell Script Style
+# Shell 脚本规范
 
-All shell scripts in this project must follow these conventions. Based on Google Shell Style Guide, adapted for bash 4.2+ compatibility.
+本项目所有 Shell 脚本必须遵循以下约定。基于 Google Shell 风格指南，适配 Bash 4.2 及以上版本。
 
-## Table of Contents
+## 目录
 
-- [File Structure](#file-structure)
-- [Naming Conventions](#naming-conventions)
-- [Comments](#comments)
-- [Formatting](#formatting)
-- [Variables and Constants](#variables-and-constants)
-- [Functions](#functions)
-- [Conditionals and Testing](#conditionals-and-testing)
-- [Error Handling](#error-handling)
-- [Command Substitution and Pipelines](#command-substitution-and-pipelines)
-- [Size Limits](#size-limits)
-- [Lint](#lint)
-- [Best Practices](#best-practices)
+- [文件结构](#文件结构)
+- [命名约定](#命名约定)
+- [注释](#注释)
+- [格式](#格式)
+- [变量与常量](#变量与常量)
+- [函数](#函数)
+- [条件判断](#条件判断)
+- [错误处理](#错误处理)
+- [命令替换与管道](#命令替换与管道)
+- [规模限制](#规模限制)
+- [静态检查](#静态检查)
+- [最佳实践](#最佳实践)
 
-## File Structure
+## 文件结构
 
-Scripts must be organized in this order:
+脚本必须按以下顺序组织：
 
-1. **Shebang** and `set` options
-2. **Constants** and `readonly` exports
-3. **Functions** (all together, no executable code between functions)
-4. **`main` function** (for scripts with ≥1 other function)
-5. **Call to `main`** at the bottom: `main "$@"`
+1. **解释器声明**和 `set` 选项。
+2. **常量**与 `readonly` 导出。
+3. **函数**：集中放置，函数之间不夹杂可执行代码。
+4. **`main` 函数**：适用于至少包含一个其他函数的脚本。
+5. **调用 `main`**：放在底部，使用 `main "$@"`。
 
 ```bash
 #!/bin/bash
@@ -60,79 +60,79 @@ main() {
 main "$@"
 ```
 
-Rules:
+规则：
 
-- **Shebang**: `#!/bin/bash` (not `#!/usr/bin/env bash` — for bash 4.2+ compatibility)
-- **Directly-executed scripts** must start with `set -euo pipefail`
-- **Sourced files** (e.g. `common.sh`) must NOT set shell options — they inherit from the caller
-- **Library files** must use `.sh` suffix; executable scripts may omit suffix
+- **解释器声明**：使用 `#!/bin/bash`，而非 `#!/usr/bin/env bash`，以兼容 Bash 4.2 及以上版本。
+- **直接执行的脚本**必须以 `set -euo pipefail` 开始。
+- **被加载的文件**（如 `common.sh`）不得设置 Shell 选项，应继承调用者的设置。
+- **库文件**必须使用 `.sh` 后缀；可执行脚本可省略后缀。
 
-## Naming Conventions
+## 命名约定
 
-| Element | Convention | Example |
+| 元素 | 约定 | 示例 |
 |---------|-----------|---------|
-| Script / file | `lower_snake_case` | `run_server.sh`, `common.sh` |
-| Function | `lower_snake_case` | `run_server()`, `mylib::helper()` |
-| Variable | `lower_snake_case` | `local count`, `file_path` |
-| Constant / `readonly` | `UPPER_SNAKE_CASE` | `readonly MAX_RETRIES=3` |
-| Exported variable | `UPPER_SNAKE_CASE` | `export PATH_TO_DATA` |
-| Loop variable | match collection name | `for file in "${files[@]}"; do` |
+| 脚本／文件 | `lower_snake_case` | `run_server.sh`、`common.sh` |
+| 函数 | `lower_snake_case` | `run_server()`、`mylib::helper()` |
+| 变量 | `lower_snake_case` | `local count`、`file_path` |
+| 常量／`readonly` | `UPPER_SNAKE_CASE` | `readonly MAX_RETRIES=3` |
+| 导出变量 | `UPPER_SNAKE_CASE` | `export PATH_TO_DATA` |
+| 循环变量 | 与集合名称对应 | `for file in "${files[@]}"; do` |
 
-Rules:
+规则：
 
-- Use `readonly` or `declare -r` to declare constants explicitly
-- Use `local` for function-internal variables
-- Associated variables should share naming style: `user_name`, `user_id`, `user_home`
+- 使用 `readonly` 或 `declare -r` 显式声明常量。
+- 函数内部变量使用 `local`。
+- 关联变量使用一致的命名风格，如 `user_name`、`user_id`、`user_home`。
 
-## Comments
+## 注释
 
-### File header
+### 文件头
 
-Every executable script must have a header comment describing purpose and usage:
+每个可执行脚本必须有说明用途和用法的文件头注释：
 
 ```bash
 #!/bin/bash
-# run_server.sh — Starts the inference server.
+# run_server.sh — 启动推理服务器。
 #
-# Usage: run_server.sh [--port PORT] [--workers N]
-# Options:
-#   --port     Server port (default: 8000)
-#   --workers  Number of worker processes (default: 4)
+# 用法: run_server.sh [--port PORT] [--workers N]
+# 选项：
+#   --port     服务端口（默认 8000）
+#   --workers  工作进程数（默认 4）
 ```
 
-### Function comments
+### 函数注释
 
-Functions should have a header describing purpose, arguments, and return value:
+函数头注释应说明用途、参数和返回值：
 
 ```bash
-# Runs health check on the specified endpoint.
-# Args:
-#   $1: endpoint URL
-#   $2: timeout in seconds (default: 30)
-# Returns:
-#   0 if healthy, 1 otherwise
+# 对指定端点执行健康检查。
+# 参数：
+#   $1: 端点 URL
+#   $2: 超时秒数（默认 30）
+# 返回值：
+#   健康时返回 0，否则返回 1
 health_check() {
     ...
 }
 ```
 
-### Inline comments
+### 行内注释
 
-- Explain **why**, not what — the code itself should show what
-- Use `# TODO(username): description` for future work
-- Use UTF-8 encoding; prefer English to avoid encoding issues
+- 解释原因，具体实现由代码展示。
+- 待办事项使用 `# TODO(username): 待办说明`。
+- 使用 UTF-8 编码，说明性注释统一使用中文。
 
-## Formatting
+## 格式
 
-- **Indentation**: 4 spaces, never tabs
-- **Line length**: max 120 characters (break lines with `\` or grouping)
-- **Trailing semicolons**: omit `;` at end of lines
-- **Trailing commas**: when items span multiple lines, add trailing comma on last item
+- **缩进**：4 个空格，不使用制表符。
+- **行长**：最多 120 个字符，使用反斜杠或分组换行。
+- **行尾分号**：省略行尾的 `;`。
+- **末尾逗号**：多行项目的最后一项添加逗号。
 
-### Control structure formatting
+### 控制结构格式
 
 ```bash
-# Correct — ; do / ; then on same line as for/if/while
+# 正确：; do / ; then 与 for/if/while 位于同一行
 for file in "${files[@]}"; do
     echo "$file"
 done
@@ -146,7 +146,7 @@ else
     exit 1
 fi
 
-# Correct — case formatting
+# 正确：case 格式
 case "$action" in
     start)
         start_service
@@ -161,60 +161,60 @@ case "$action" in
 esac
 ```
 
-Rules:
+规则：
 
-- `; do` and `; then` must be on the same line as `for`/`if`/`while`
-- `else`, `fi`, `done` on their own line
-- Do not mix single-line and multi-line `if` styles in the same script
+- `; do` 和 `; then` 必须与 `for`／`if`／`while` 位于同一行。
+- `else`、`fi`、`done` 各自独占一行。
+- 同一脚本内不混用单行和多行 `if` 风格。
 
-### Quoting
+### 引号
 
-- **Always double-quote** strings containing variables, command substitutions, spaces, or shell metacharacters
-- Use `"${var}"` (with braces) for clarity
-- Do not quote literal integers
-- Do not quote command options or path literals without variables
+- 包含变量、命令替换、空格或 Shell 元字符的字符串**始终加双引号**。
+- 使用带花括号的变量形式以提高可读性。
+- 整数字面量不加引号。
+- 不含变量的命令选项和路径字面量不加引号。
 
 ```bash
-# Correct
+# 正确
 echo "Processing: ${file_name}"
 cmd --max="${MAX_COUNT}"
 
-# Wrong — unquoted variable
+# 错误：变量未加引号
 echo $file_name
 
-# Correct — literal integer needs no quotes
+# 正确：整数字面量不加引号
 exit 1
 ```
 
-## Variables and Constants
+## 变量与常量
 
-### Declaration
+### 声明
 
 ```bash
-# Correct — separate declaration and assignment for command substitution
+# 正确：命令替换的声明和赋值分开
 local file_count
 file_count=$(wc -l < "$file")
 
-# Correct — simple assignment on one line
+# 正确：简单赋值可写在一行
 local name="server"
 readonly MAX_CONN=100
 
-# Wrong — command substitution in same line as declaration
+# 错误：命令替换与声明写在同一行
 local file_count=$(wc -l < "$file")
 ```
 
-### Defaults and substitutions
+### 默认值与替换
 
 ```bash
-# Use :- for default values
+# 使用 :- 设置默认值
 port="${SERVER_PORT:-8000}"
 name="${1:?Error: server name is required}"
 ```
 
-### Arrays
+### 数组
 
-- Use arrays for lists of items; never use strings for sequences
-- Always quote array expansions
+- 列表使用数组，不使用字符串表示序列。
+- 数组展开始终加引号。
 
 ```bash
 local files=("config.json" "model.pt" "tokenizer.json")
@@ -223,59 +223,59 @@ for f in "${files[@]}"; do
 done
 ```
 
-### Special variables
+### 特殊变量
 
-- Always quote `$@` and `$*`: `"$@"` (preferred) or `"$*"`
-- Prefer `"$@"` over `"$*"` unless you explicitly need concatenation
+- `$@` 和 `$*` 始终加引号：优先使用 `"$@"`，必要时使用 `"$*"`。
+- 除非明确需要拼接，否则优先使用 `"$@"` 而非 `"$*"`。
 
-## Functions
+## 函数
 
-### Definition
+### 定义
 
 ```bash
-# Correct
+# 正确
 run_server() {
     ...
 }
 
-# Correct — library functions
+# 正确：库函数
 mylib::helper() {
     ...
 }
 ```
 
-Rules:
+规则：
 
-- Opening brace `{` must be on the same line as the function name
-- No space between function name and `()`
-- `function` keyword is optional; use it consistently if chosen
+- 左花括号 `{` 与函数名位于同一行。
+- 函数名与 `()` 之间不加空格。
+- `function` 关键字可选；采用后应保持一致。
 
-### Return values
+### 返回值
 
-- Return **exit status only** (0 = success, non-zero = failure)
-- Do not use `return` to pass computed results — use `echo` or a variable
+- 仅返回**退出状态**，0 表示成功，非零表示失败。
+- 不使用 `return` 传递计算结果，改用 `echo` 或变量。
 
 ```bash
-# Correct — return status
+# 正确：返回退出状态
 is_file_readable() {
     local file="$1"
     [[ -r "$file" ]]
 }
 
-# Correct — output result via echo
+# 正确：通过 echo 输出结果
 get_file_size() {
     local file="$1"
     stat -c %s "$file"
 }
 
-# Wrong — returning computed result
+# 错误：通过返回值传递计算结果
 compute_sum() {
     local a="$1" b="$2"
-    return $((a + b))  # Incorrect: return expects 0-255 exit code
+    return $((a + b))  # 错误：return 接受 0 至 255 的退出码
 }
 ```
 
-### Local variables
+### 局部变量
 
 ```bash
 my_func() {
@@ -285,17 +285,17 @@ my_func() {
 }
 ```
 
-## Conditionals and Testing
+## 条件判断
 
-| Preferred | Avoid |
+| 推荐 | 避免 |
 |-----------|-------|
 | `[[ ... ]]` | `[ ... ]`, `test`, `/usr/bin/[` |
-| `(( ... ))` for numeric | `let`, `$[ ... ]`, `expr` |
-| `-z`, `-n` for empty strings | `"${var}X"` tricks |
-| `==` for string equality | `=` (confuses with assignment) |
+| `(( ... ))` 用于数值判断 | `let`、`$[ ... ]`、`expr` |
+| `-z`、`-n` 用于空字符串判断 | 拼接额外字符判断空值 |
+| `==` 用于字符串相等判断 | `=`，易与赋值混淆 |
 
 ```bash
-# Correct
+# 正确
 if [[ -z "$name" ]]; then
     echo "Name is empty"
 fi
@@ -304,25 +304,25 @@ if (( retries > MAX_RETRIES )); then
     echo "Too many retries"
 fi
 
-# Correct — explicit -n / -z
+# 正确：显式使用 -n / -z
 if [[ -n "$value" ]]; then ... fi
 if [[ -z "$value" ]]; then ... fi
 ```
 
-## Error Handling
+## 错误处理
 
-### Exit on error
+### 出错即退出
 
-Always use `set -euo pipefail` at the top of executable scripts:
+可执行脚本顶部始终使用 `set -euo pipefail`：
 
-- `set -e` — exit immediately on command failure
-- `set -u` — exit on undefined variable
-- `set -o pipefail` — pipeline fails if any command fails
+- `set -e`：命令失败时立即退出。
+- `set -u`：引用未定义变量时退出。
+- `set -o pipefail`：管道中任一命令失败，整个管道即失败。
 
-### Error messages
+### 错误信息
 
-- Write all error messages to **STDERR** (`>&2`)
-- Use a helper function for consistent error output
+- 所有错误信息写入**标准错误输出**（`>&2`）。
+- 使用辅助函数统一错误输出。
 
 ```bash
 err() {
@@ -334,14 +334,14 @@ die() {
     exit 1
 }
 
-# Usage
+# 用法
 die "Failed to load config: ${config_file}"
 ```
 
-### Checking results
+### 检查结果
 
-- Check return values explicitly when not using `set -e`
-- Use `PIPESTATUS` immediately after pipelines when not using `pipefail`
+- 未使用 `set -e` 时，显式检查返回值。
+- 未使用 `pipefail` 时，管道执行后立即读取 `PIPESTATUS`。
 
 ```bash
 some_command
@@ -350,9 +350,9 @@ if [[ $? -ne 0 ]]; then
 fi
 ```
 
-### Cleanup
+### 清理
 
-Use `trap` for cleanup on exit or error:
+使用 `trap` 在退出或出错时清理：
 
 ```bash
 cleanup() {
@@ -361,70 +361,70 @@ cleanup() {
 trap cleanup EXIT
 ```
 
-## Command Substitution and Pipelines
+## 命令替换与管道
 
-### Command substitution
+### 命令替换
 
-- Always use `$(command)` — never backticks
-- Declare and assign on separate lines (see Variables section)
+- 始终使用 `$(command)`，不使用反引号。
+- 声明和赋值分开，参见变量章节。
 
-### Pipelines
+### 管道
 
-- Prefer built-in commands over external commands
-- Avoid piping to `while read` — use process substitution instead
+- 优先使用内置命令。
+- 避免将管道连接到 `while read`，改用进程替换。
 
 ```bash
-# Wrong — subshell prevents variable changes
+# 错误：子 Shell 中的变量修改不会影响外层
 ls | while read -r file; do
     count=$((count + 1))
 done
 
-# Correct — process substitution
+# 正确：进程替换
 while read -r file; do
     count=$((count + 1))
 done < <(ls)
 ```
 
-### Wildcards
+### 通配符
 
-- Always use explicit path with wildcards: `./*` not `*`
+- 通配符始终附带显式路径：使用 `./*`，而非 `*`。
 
 ```bash
-# Correct
+# 正确
 rm -rf ./*
 
-# Wrong
+# 错误
 rm -rf *
 ```
 
-## Size Limits
+## 规模限制
 
-- **Scripts**: under 400 lines
-- **Functions**: under 50 lines
-- If a function exceeds 50 lines, extract helper functions
-- If a script exceeds 400 lines, consider splitting into modules
+- **脚本**：少于 400 行。
+- **函数**：少于 50 行。
+- 函数超过 50 行时，提取辅助函数。
+- 脚本超过 400 行时，考虑拆分模块。
 
-## Lint
+## 静态检查
 
-- All code must pass `shellcheck`
-- Only `disable=SC2086` is allowed, and only with a justification comment
+- 所有代码必须通过 `shellcheck`。
+- 仅允许 `disable=SC2086`，且必须附解释原因的注释。
 
 ```bash
-# shellcheck disable=SC2086 — word splitting is intentional here
+# shellcheck disable=SC2086：此处有意进行单词拆分
 rm -rf ${files_to_remove}
 ```
 
-## Best Practices
+## 最佳实践
 
-- **Avoid `eval`** — it introduces security risks; use arrays or functions instead
-- **Avoid aliases** in scripts — use functions
-- **Avoid temporary files** — prefer process substitution; if needed, use `mktemp`
-- **Avoid magic numbers** — define constants at the top
-- **Avoid `cat | grep`** — use `grep pattern file` directly
-- **Idempotency** — scripts should be safe to run multiple times
-- **Absolute paths** in environment variable assignments; relative paths must use `./` prefix
-- **Script directory**: get it reliably with `SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"`
-- **Parameter validation**: check argument count or provide `--help`/`usage`
+- **避免 `eval`**：存在安全风险，改用数组或函数。
+- 脚本中**避免别名**，改用函数。
+- **避免临时文件**：优先使用进程替换；确有需要时使用 `mktemp`。
+- **避免魔法数字**：在顶部定义常量。
+- **避免 `cat | grep`**：直接使用 `grep pattern file`。
+- **幂等性**：脚本应可安全地多次运行。
+- 环境变量赋值使用**绝对路径**；相对路径必须带 `./` 前缀。
+- **脚本目录**：使用以下方式可靠定位：`SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"`
+- **参数校验**：检查参数数量，或提供 `--help`／`usage`。
 
 ```bash
 usage() {

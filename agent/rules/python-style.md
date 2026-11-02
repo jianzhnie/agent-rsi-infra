@@ -1,6 +1,6 @@
 ---
 name: python-style
-description: Python coding style guide based on Google Python Style Guide, adapted for modern Python 3.10+.
+description: 基于 Google Python 风格指南，适用于 Python 3.10 及以上版本的编码规范。
 version: 1.0.0
 author: Robin
 license: Apache-2.0
@@ -13,33 +13,33 @@ paths:
   - "**/*.pyi"
 ---
 
-# Python Style Guide
+# Python 编码规范
 
-Based on the [Google Python Style Guide](https://google.github.io/styleguide/pyguide.html), adapted for modern Python 3.10+.
+基于 [Google Python 风格指南](https://google.github.io/styleguide/pyguide.html)，适配 Python 3.10 及以上版本。
 
-Recommended tooling: ruff, black (88 chars, double quotes), isort, mypy.
+推荐工具：ruff、black（88 字符、双引号）、isort、mypy。
 
 ---
 
-## 1 Module Mechanics
+## 1 模块组织
 
-### `__all__` (recommended)
+### `__all__`（推荐）
 
-Recommended for public modules: export an explicit `__all__` list as the source of truth for the module's public API. Not required — project does not use wildcard imports, and missing `__all__` has no functional impact.
+建议公共模块显式导出 `__all__` 列表，作为公共 API 的唯一依据。此项不是硬性要求：项目不使用通配符导入，缺少 `__all__` 不影响功能。
 
 ```python
 __all__ = ["UserService", "create_user", "UserError"]
 ```
 
-### `from __future__ import annotations` (optional)
+### `from __future__ import annotations`（可选）
 
-Enables PEP 604 (`X | Y`) and lazy evaluation of annotations. Note that this project targets Python 3.10+, so `X | Y` syntax works natively without the import.
+支持 PEP 604（`X | Y`）及注解延迟求值。本项目面向 Python 3.10 及以上版本，无需此导入也可使用 `X | Y`。
 
-**Skip this import if your code uses** `torch.jit.script`, runtime `typing.get_type_hints()`, or `ClassVar` / `InitVar` in dataclasses — lazy string annotations can break these at runtime. Otherwise it is safe to include.
+**若代码使用以下功能，应跳过此导入**：`torch.jit.script`、运行时 `typing.get_type_hints()`，或数据类中的 `ClassVar`／`InitVar`。延迟字符串注解可能破坏这些功能，其他场景可安全使用。
 
-### Main guard
+### 主入口保护
 
-All executable scripts define and call a `main()` function:
+所有可执行脚本都应定义并调用 `main()` 函数：
 
 ```python
 def main() -> None:
@@ -49,19 +49,19 @@ if __name__ == "__main__":
     main()
 ```
 
-### Import ordering
+### 导入顺序
 
-Groups (alphabetical within each, one blank line between):
+按以下顺序分组，组内按字母排序，组间空一行：
 
-1. `from __future__ import ...` (if present)
-2. Standard library
-3. Third-party
-4. First-party / local
+1. `from __future__ import ...`（如有）
+2. 标准库
+3. 第三方库
+4. 项目自身或本地模块
 
-Rules:
-- `import x` for packages; `from x import y` where `x` is the package prefix
-- `import y as z` only for widely-recognized abbreviations (`np`, `pd`)
-- No relative imports, no wildcard imports, no multiple imports per line
+规则：
+- 包使用 `import x`；使用 `from x import y` 时，`x` 为包前缀。
+- 仅对广泛认可的缩写使用 `import y as z`，如 `np`、`pd`。
+- 不使用相对导入、通配符导入或一行多个导入。
 
 ```python
 from collections.abc import Iterator, Sequence
@@ -75,21 +75,21 @@ from myproject.core import Config
 from myproject.utils import helper
 ```
 
-Prefer `collections.abc` over `typing` for abstract base types: `from collections.abc import Iterator` not `from typing import Iterator`.
+抽象基类优先从 `collections.abc` 导入，例如使用 `from collections.abc import Iterator`，而非 `from typing import Iterator`。
 
 ---
 
-## 2 Formatting
+## 2 格式
 
-**Line length**: Maximum 88 characters. Use implicit line joining inside `()`, `[]`, `{}`. Never use `\` backslash continuation.
+**行长**：最多 88 个字符。使用 `()`、`[]`、`{}` 内的隐式续行，不使用反斜杠续行。
 
-**Indentation**: 4 spaces. No tabs.
+**缩进**：4 个空格，不使用制表符。
 
-**Blank lines**: 2 blank lines between top-level definitions (class, function). 1 blank line between method definitions. 1 blank line between import groups.
+**空行**：顶层类和函数定义之间空两行，方法定义之间空一行，导入组之间空一行。
 
-**Whitespace**: No spaces inside `()`, `[]`, `{}`. One space after `,`, `:`, `;`. One space on both sides of binary operators (`+`, `-`, `==`, etc.). No spaces around `=` in keyword arguments: `func(a=1)`. One space around `=` in type-annotated defaults: `def func(a: int = 1)`.
+**空白**：`()`、`[]`、`{}` 内侧不加空格；逗号、冒号、分号后空一格；二元运算符两侧空一格。关键字参数中的等号两侧不加空格，如 `func(a=1)`；带类型注解的默认值等号两侧空一格，如 `def func(a: int = 1)`。
 
-**Trailing comma**: Required when closing bracket is on its own line:
+**末尾逗号**：右括号独占一行时，最后一项必须加逗号：
 
 ```python
 my_list = [
@@ -99,135 +99,135 @@ my_list = [
 ]
 ```
 
-## 3 Naming
+## 3 命名
 
-| Type | Convention | Example |
+| 类型 | 约定 | 示例 |
 |------|------------|---------|
-| Module / package | `lower_snake_case` | `my_module` |
-| Class / exception / type alias | `CapWords` | `MyClass`, `ValueError`, `ProcessorConfig` |
-| Function / method / variable | `lower_snake_case` | `my_function`, `block_size` |
-| Constant | `UPPER_SNAKE_CASE` | `MAX_SIZE` |
-| Private (internal) | leading underscore | `_internal_func` |
+| 模块／包 | `lower_snake_case` | `my_module` |
+| 类／异常／类型别名 | `CapWords` | `MyClass`、`ValueError`、`ProcessorConfig` |
+| 函数／方法／变量 | `lower_snake_case` | `my_function`、`block_size` |
+| 常量 | `UPPER_SNAKE_CASE` | `MAX_SIZE` |
+| 私有或内部成员 | 下划线前缀 | `_internal_func` |
 
-Prohibited:
-- Hyphens, names carrying type info (`id_to_name_dict`), dunder names (reserved), single-char names except in tight loops (`i`, `j`, `k`)
+禁止：
+- 使用连字符、携带类型信息的名称（如 `id_to_name_dict`）、保留的双下划线名称，以及紧凑循环之外的单字符名称（如 `i`、`j`、`k`）。
 
 ---
 
-## 4 Type Annotations
+## 4 类型注解
 
-### Required
+### 必需注解
 
-All public functions and methods must annotate parameters and return type.
+所有公共函数和方法必须为参数及返回值添加类型注解。
 
-### Modern syntax (3.10+)
+### 现代语法（3.10 及以上版本）
 
-- `X | Y` instead of `Union[X, Y]`
-- `X | None` instead of `Optional[X]`
-- Built-in generics: `list[int]`, `dict[str, int]`, `tuple[int, str]`
+- 使用 `X | Y` 替代 `Union[X, Y]`。
+- 使用 `X | None` 替代 `Optional[X]`。
+- 使用内置泛型：`list[int]`、`dict[str, int]`、`tuple[int, str]`。
 
-### Special types
+### 特殊类型
 
-| Type | When |
+| 类型 | 用途 |
 |------|------|
-| `ClassVar` | Class-level mutable attributes |
-| `TypeAlias` | Complex type shorthand at module level |
-| `Final` | Constants that should not be reassigned |
-| `Any` | Only when the type truly cannot be expressed |
+| `ClassVar` | 类级可变属性 |
+| `TypeAlias` | 模块级复杂类型的简写 |
+| `Final` | 不应重新赋值的常量 |
+| `Any` | 仅用于确实无法表达类型的情况 |
 
-### None defaults
+### None 默认值
 
-Explicit `None` default requires `| None` in the type:
+显式使用 `None` 默认值时，类型中必须包含 `| None`：
 
 ```python
-def func(a: str | None = None) -> None:  # correct
+def func(a: str | None = None) -> None:  # 正确
     ...
 ```
 ```python
-def func(a: str = None) -> None:          # wrong
+def func(a: str = None) -> None:          # 错误
     ...
 ```
 
-### Rules
+### 规则
 
-- `self` and `cls` need not be annotated
-- `__init__` return type need not be annotated
-- Favor `collections.abc` for abstract types: `Sequence`, `Mapping`, `Iterable` over their `typing` equivalents
+- `self` 和 `cls` 无需注解。
+- `__init__` 返回类型无需注解。
+- 抽象类型优先使用 `collections.abc` 中的 `Sequence`、`Mapping`、`Iterable`，而非 `typing` 中的对应类型。
 
 ---
 
-## 5 Docstrings
+## 5 文档字符串
 
-Always `"""` triple double-quotes. Follow the structure below for public API.
+始终使用三个双引号，公共 API 遵循以下结构。
 
-### Module
+### 模块
 
 ```python
-"""One-line summary of the module.
+"""用一句话概述模块。
 
-Leave one blank line, then describe the module in more detail.
+空一行，再补充模块的详细说明。
 """
 ```
 
-### Function / Method
+### 函数／方法
 
 ```python
 def my_function(arg1: int, arg2: str) -> bool:
-    """One-line summary, no more than 88 chars, ending with a period.
+    """用一句话概述，不超过 88 个字符，以句号结尾。
 
     Args:
-        arg1: Description of arg1.
-        arg2: Description of arg2.
+        arg1: 参数 arg1 的说明。
+        arg2: 参数 arg2 的说明。
 
     Returns:
-        Description of return value.
+        返回值说明。
 
     Raises:
-        ValueError: When arg1 is negative.
+        ValueError: 参数 arg1 为负数时。
     """
 ```
 
-Rules:
-- Summary: one line, ends with period / question mark / exclamation
-- `Args`, `Returns`, `Raises` sections for public API
-- Private methods (`_`) may use a one-line docstring or omit it
-- Do not document the obvious
+规则：
+- 摘要占一行，以句号、问号或感叹号结尾。
+- 公共 API 使用 `Args`、`Returns`、`Raises` 小节。
+- 私有方法（下划线前缀）可使用单行文档字符串或省略。
+- 不解释显而易见的内容。
 
-### Class
+### 类
 
 ```python
 class MyClass:
-    """One-line summary.
+    """用一句话概述。
 
     Attributes:
-        attr1: Description of attr1.
-        attr2: Description of attr2.
+        attr1: 属性 attr1 的说明。
+        attr2: 属性 attr2 的说明。
     """
 ```
 
 ---
 
-## 6 Comments
+## 6 注释
 
-- Explain **WHY**, not **WHAT**
-- Block comments (`#`) above the described code, not inline
-- Delete commented-out code before committing
-- Do not reference PR numbers or ticket IDs in code comments
+- 解释原因和意图。
+- 块注释放在相关代码上方，不放在行尾。
+- 提交前删除已注释掉的代码。
+- 不在代码注释中引用 PR 编号或工单 ID。
 
-TODO format:
+待办注释格式：
 
 ```python
-# TODO(username): What needs to be done.
+# TODO(username): 待完成的事项。
 ```
 
 ---
 
-## 7 Error Handling
+## 7 错误处理
 
-- Catch the most specific exception; no bare `except:` or `except Exception:` unless re-raising immediately
-- Never silently swallow exceptions — log at minimum
-- Custom exceptions must inherit an existing exception and end with `Error`
-- Use `raise from` to preserve tracebacks:
+- 捕获最具体的异常；除非立即重新抛出，否则不使用裸 `except:` 或 `except Exception:`。
+- 不静默吞掉异常，至少记录日志。
+- 自定义异常必须继承已有异常，名称以 `Error` 结尾。
+- 使用 `raise from` 保留异常堆栈：
 
 ```python
 try:
@@ -236,28 +236,28 @@ except FileNotFoundError as e:
     raise RuntimeError(f"Failed to load {path}") from e
 ```
 
-- Use `with` for files and resources; use `finally` for cleanup
-- Minimize code inside `try` blocks — only the line that can fail
+- 文件和资源使用 `with`，清理操作使用 `finally`。
+- 缩小 `try` 范围，仅包含可能失败的语句。
 
-### assert
+### 断言（assert）
 
-Use `assert` only for internal invariants (logic errors, not recoverable). Never for input validation or runtime checks — assertions can be disabled with `-O`.
+`assert` 仅用于内部不变条件，即不可恢复的逻辑错误；不用于输入校验或运行时检查，因为 `-O` 可禁用断言。
 
 ```python
-# Yes — internal invariant
+# 正确：内部不变条件
 assert x >= 0, "internal: negative value after normalization"
 
-# No — runtime check
+# 错误：运行时检查
 assert os.path.exists(path), "Path must exist"
 ```
 
 ---
 
-## 8 Values & Comparisons
+## 8 值与比较
 
-### Boolean
+### 布尔判断
 
-| Prefer | Avoid |
+| 推荐 | 避免 |
 |--------|-------|
 | `if seq:` | `if len(seq) != 0:` |
 | `if not seq:` | `if len(seq) == 0:` |
@@ -265,13 +265,13 @@ assert os.path.exists(path), "Path must exist"
 | `if flag:` | `if flag == True:` |
 | `if not flag:` | `if flag == False:` |
 
-When `0` is a valid value, compare explicitly: `if x == 0:` not `if not x:`.
+当 `0` 是有效值时，应显式比较：使用 `if x == 0:`，而非 `if not x:`。
 
-Use `isinstance` checks, not type identity: `isinstance(x, MyClass)` not `type(x) is MyClass`.
+使用 `isinstance` 检查类型，如 `isinstance(x, MyClass)`，而非 `type(x) is MyClass`。
 
-### Default arguments
+### 默认参数
 
-Never use mutable objects as defaults:
+不使用可变对象作为默认值：
 
 ```python
 def foo(a, b: list[int] | None = None):
@@ -279,22 +279,22 @@ def foo(a, b: list[int] | None = None):
         b = []
 ```
 ```python
-def foo(a, b: Sequence[int] = ()):  # also valid — immutable tuple
+def foo(a, b: Sequence[int] = ()):  # 同样有效：不可变元组
     ...
 ```
 
-### String formatting
+### 字符串格式化
 
-- Prefer f-strings for inline formatting
-- Never use `+` or `+=` for string accumulation in loops — use `"".join()` or `io.StringIO`
-- Logging: use `%`-style placeholders for lazy evaluation:
+- 行内格式化优先使用 f 字符串。
+- 不在循环中使用 `+` 或 `+=` 累积字符串，使用字符串连接方法或 `io.StringIO`。
+- 日志使用 `%` 风格占位符以延迟求值：
 
 ```python
-logger.info("Loading from %s", path)     # correct
-logger.info(f"Loading from {path}")       # wrong — eager eval
+logger.info("Loading from %s", path)     # 正确
+logger.info(f"Loading from {path}")       # 错误：立即求值
 ```
 
-Module-level logger pattern:
+模块级日志对象模式：
 
 ```python
 import logging
@@ -304,21 +304,21 @@ logger = logging.getLogger(__name__)
 
 ---
 
-## 9 Patterns
+## 9 常用模式
 
-### Comprehensions & generators
+### 推导式与生成器
 
-Allowed for simple cases. No multiple `for` clauses:
+适用于简单场景，不使用多个 `for` 子句：
 
 ```python
-result = [x * 2 for x in data if x > 0]     # correct
-has_positive = any(x > 0 for x in data)      # correct — generator, not list
-has_positive = any([x > 0 for x in data])    # wrong — unnecessary list
+result = [x * 2 for x in data if x > 0]     # 正确
+has_positive = any(x > 0 for x in data)      # 正确：生成器，避免创建列表
+has_positive = any([x > 0 for x in data])    # 错误 — unnecessary list
 ```
 
-### Dataclasses
+### 数据类
 
-Prefer `@dataclass` for data containers. Use `__post_init__` for validation that runs after field initialization:
+数据容器优先使用 `@dataclass`，通过 `__post_init__` 在字段初始化后执行校验：
 
 ```python
 @dataclass
@@ -331,9 +331,9 @@ class Config:
             raise ValueError(f"max_items must be >= 1, got {self.max_items}")
 ```
 
-### Enums
+### 枚举
 
-Use `Enum` + `auto()` for enumerations:
+使用 `Enum` 和 `auto()` 定义枚举：
 
 ```python
 from enum import Enum, auto
@@ -344,9 +344,9 @@ class Status(Enum):
     COMPLETED = auto()
 ```
 
-### Properties
+### 属性
 
-Use `@property` instead of getter/setter methods:
+使用 `@property` 替代属性读取和设置方法：
 
 ```python
 @property
@@ -354,30 +354,30 @@ def full_name(self) -> str:
     return f"{self.first} {self.last}"
 ```
 
-### Match / case (3.10+)
+### 模式匹配（3.10 及以上版本）
 
-Use pattern matching for complex branching on enums, dataclasses, or tuples. Prefer over long `if`/`elif` chains.
+枚举、数据类或元组的复杂分支优先使用模式匹配，避免冗长的 `if`／`elif` 链。
 
-### Lambdas
+### 匿名函数
 
-Only for trivial one-liners (e.g. sort keys). Use a nested `def` for anything multi-line.
+仅用于排序键等简单单行逻辑，多行逻辑使用嵌套 `def`。
 
-### Context managers
+### 上下文管理器
 
-Use `with` for any resource with clean-up. When defining custom context managers, prefer `@contextmanager` for simple cases, `__enter__`/`__exit__` for stateful ones.
+需要清理的资源均使用 `with`。简单上下文管理器优先使用 `@contextmanager`，有状态的使用 `__enter__`／`__exit__`。
 
-### Classes
+### 类的约定
 
-- Instance attributes initialized in `__init__`, not dynamically added later
-- Avoid `staticmethod` — use module-level functions
-- `classmethod` only for named constructors or class-level state
-- Inherit from `object` only in Python 2 compat code
+- 实例属性在 `__init__` 中初始化，不在之后动态添加。
+- 避免使用 `staticmethod`，改用模块级函数。
+- `classmethod` 仅用于具名构造器或类级状态。
+- 仅在兼容 Python 2 时显式继承 `object`。
 
 ---
 
-## 10 General Conventions
+## 10 通用约定
 
-- Use `pathlib.Path` over `os.path` for file operations
-- Use `logging` module, never `print()`, for diagnostic output
-- Keep functions focused; consider splitting when exceeding ~40 lines
-- Be consistent with existing code in the same file
+- 文件操作优先使用 `pathlib.Path`，而非 `os.path`。
+- 诊断信息使用 `logging`，不使用 `print()`。
+- 函数职责应集中，超过约 40 行时考虑拆分。
+- 与同一文件中的现有代码保持一致。

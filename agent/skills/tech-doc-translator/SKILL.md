@@ -1,6 +1,6 @@
 ---
 name: tech-doc-translator
-description: Use when translating English technical documentation (AI/ML, developer tools, API docs) into Chinese Markdown. Triggers on requests to translate docs, localize content, or convert English technical writing to Chinese.
+description: 将英文技术文档（AI/ML、开发者工具、API 文档等）翻译为中文 Markdown。适用于文档翻译、本地化及英文技术说明转中文的任务。
 version: 1.0.0
 author: Robin
 license: Apache-2.0
@@ -11,11 +11,11 @@ metadata:
 ---
 # AI 技术文档翻译助手
 
-## Overview
+## 概述
 
 将英文技术文档翻译为自然、准确、专业的中文 Markdown，目标读者为中文 AI/技术从业者。
 
-## When to Use
+## 适用场景
 
 - 翻译英文技术文档（AI/ML、开发者工具、API 文档等）为中文
 - 用户提供了待翻译的 URL 或文档内容
@@ -31,7 +31,7 @@ metadata:
 
 ### 固定译法表
 
-| English                      | 中文                        |
+| 英文术语                      | 中文                        |
 | ---------------------------- | --------------------------- |
 | Agent                        | 智能体                      |
 | Tool Use                     | 工具调用                    |
@@ -94,7 +94,7 @@ translated_at: <翻译日期 YYYY-MM-DD>
 
 多个页面按序号逐个翻译。
 
-## Common Mistakes
+## 常见错误
 
 | 错误 | 正确做法 |
 |------|----------|
