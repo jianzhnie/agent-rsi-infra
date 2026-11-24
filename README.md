@@ -25,6 +25,7 @@ Engineering infrastructure for recursive self-improvement of coding agents: shar
 - `add-or-fix-type-checking`：迁入 Transformers 的类型检查流程；[来源与适用范围](.agents/skills/add-or-fix-type-checking/UPSTREAM.md)。
 - `pt2-bug-basher`：显式调用的 PyTorch 2 编译器排障；[来源与适配](.agents/skills/pt2-bug-basher/UPSTREAM.md)。
 - `code-reviewer`：只读代码审查，默认 light、按需 strict，使用共享清单。
+- vLLM 来源 Skills：Kernel 微基准、Triton 开发、API 兼容核对、安全审查、模型部署配置查询与模型前向微基准，见[资源索引](.agents/README.md)。
 - 2 个 Claude 角色：调试、性能分析。
 - Python 检查配置与 Git 提交约定。
 - Claude 可选资源：会话与工具 Hooks、通知、状态栏和设置示例。

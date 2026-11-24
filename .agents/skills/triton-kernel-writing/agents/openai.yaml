@@ -1,0 +1,4 @@
+interface:
+  display_name: "Triton Kernel Writing"
+  short_description: "Write and review practical Triton GPU kernels."
+  default_prompt: "Use $triton-kernel-writing to implement or review this Triton kernel."

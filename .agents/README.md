@@ -15,6 +15,10 @@
 | shell-check | [共享 Skill](skills/shell-check/SKILL.md) | 可执行 Shell 检查与结果汇总 |
 | pt2-bug-basher | [上游适配 Skill](skills/pt2-bug-basher/SKILL.md) | 显式调用的 PyTorch 2 编译器排障流程 |
 | add-or-fix-type-checking | [上游 Skill](skills/add-or-fix-type-checking/SKILL.md) | Transformers 类型检查流程，保留上游原文 |
+| kernel-microbenchmark | [上游适配 Skill](skills/kernel-microbenchmark/SKILL.md) | GPU Kernel 正确性、计时与多卡基准 |
+| triton-kernel-writing | [上游适配 Skill](skills/triton-kernel-writing/SKILL.md) | Triton 索引、特化、同步与调优 |
+| model-recipes | [上游适配 Skill](skills/model-recipes/SKILL.md) | 按模型与硬件查询 vLLM 部署配置 |
+| model-microbenchmark | [上游适配 Skill](skills/model-microbenchmark/SKILL.md) | 使用 vllm bench forward 测量模型前向 |
 | context | [脚本](../.claude/hooks/session/context.sh) | 初始化会话，compact/resume 时保留已有记录 |
 | record-event | [脚本](../.claude/hooks/logging/record-event.sh) | 命令、Agent、配置及异常日志 |
 | guard-tool | [脚本](../.claude/hooks/tools/guard-tool.sh) | 工具调用前的补充拦截 |

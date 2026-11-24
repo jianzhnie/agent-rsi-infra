@@ -1,0 +1,4 @@
+interface:
+  display_name: "Kernel Microbenchmark"
+  short_description: "Build and debug reliable GPU kernel microbenchmarks."
+  default_prompt: "Use $kernel-microbenchmark to build or diagnose this GPU kernel benchmark."
