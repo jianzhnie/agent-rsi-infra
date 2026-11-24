@@ -13,6 +13,8 @@
 | performance-analyzer | [角色](agents/performance-analyzer.md) | 根据性能测量分析瓶颈 |
 | shell-check | [共享 Skill](../.agents/skills/shell-check/SKILL.md) | 可执行 Shell 检查与结果汇总 |
 | ai-infra-change | [共享 Skill](../.agents/skills/ai-infra-change/SKILL.md) | 选择领域验证并整理可复现证据 |
+| pt2-bug-basher | [上游适配 Skill](../.agents/skills/pt2-bug-basher/SKILL.md) | 显式调用的 PyTorch 2 编译器排障流程 |
+| add-or-fix-type-checking | [上游 Skill](../.agents/skills/add-or-fix-type-checking/SKILL.md) | Transformers 类型检查流程，保留上游原文 |
 | context | [脚本](hooks/session/context.sh) | 初始化会话，compact/resume 时保留已有记录 |
 | record-event | [脚本](hooks/logging/record-event.sh) | 命令、Agent、配置及异常日志 |
 | guard-tool | [脚本](hooks/tools/guard-tool.sh) | 工具调用前的补充拦截 |

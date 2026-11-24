@@ -21,6 +21,8 @@ Engineering infrastructure for recursive self-improvement of coding agents: shar
 
 - `ai-infra-change`：按训练、推理、Kernel 等变更选择验证范围，记录数值和性能证据。
 - `shell-check`：脚本化选择文件、执行语法和静态检查，失败后继续并汇总。
+- `add-or-fix-type-checking`：迁入 Transformers 的类型检查流程；[来源与适用范围](.agents/skills/add-or-fix-type-checking/UPSTREAM.md)。
+- `pt2-bug-basher`：显式调用的 PyTorch 2 编译器排障；[来源与适配](.agents/skills/pt2-bug-basher/UPSTREAM.md)。
 - 3 个 Claude 角色：代码审查、调试、性能分析。
 - Python 检查配置与 Git 提交约定。
 - Claude 可选资源：会话与工具 Hooks、通知、状态栏和设置示例。
