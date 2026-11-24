@@ -5,6 +5,7 @@
 | 任务 | 先读的 Skill | 适用边界 |
 | --- | --- | --- |
 | SGLang Kernel API 新增、迁移、注册或去重 | [kernel-organization](../.agents/skills/kernel-organization/SKILL.md) | 命名空间与注册要求按目标 SGLang 版本核实 |
+| FlashInfer CUDA Kernel 新增或集成 | [flashinfer-add-cuda-kernel](../.agents/skills/flashinfer-add-cuda-kernel/SKILL.md) | FFI、JIT、trace 与打包按目标版本核实 |
 | Triton Kernel 实现、特化或预热 | [triton-kernel-writing](../.agents/skills/triton-kernel-writing/SKILL.md) | JIT 预热细节按需读取附属参考 |
 | Kernel 性能比较或异常计时 | [kernel-microbenchmark](../.agents/skills/kernel-microbenchmark/SKILL.md) | 明确计时边界与缓存策略 |
 | vLLM 模型前向微基准 | [model-microbenchmark](../.agents/skills/model-microbenchmark/SKILL.md) | 需对应版本与 CUDA 环境；不等同服务吞吐 |

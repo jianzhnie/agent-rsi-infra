@@ -25,6 +25,7 @@
 | code-cleanup | [上游适配 Skill](skills/code-cleanup/SKILL.md) | 有证据的代码清理与兼容边界检查 |
 | kernel-organization | [上游适配 Skill](skills/kernel-organization/SKILL.md) | SGLang Kernel 契约、归属与去重 |
 | kl-consistency-test | [上游适配 Skill](skills/kl-consistency-test/SKILL.md) | SGLang prefill/decode 与缓存状态一致性 |
+| flashinfer-add-cuda-kernel | [上游适配 Skill](skills/flashinfer-add-cuda-kernel/SKILL.md) | FlashInfer CUDA、FFI、JIT 与 trace 集成 |
 | context | [脚本](../.claude/hooks/session/context.sh) | 初始化会话，compact/resume 时保留已有记录 |
 | record-event | [脚本](../.claude/hooks/logging/record-event.sh) | 命令、Agent、配置及异常日志 |
 | guard-tool | [脚本](../.claude/hooks/tools/guard-tool.sh) | 工具调用前的补充拦截 |

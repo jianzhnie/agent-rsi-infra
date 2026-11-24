@@ -12,3 +12,5 @@
 后续适配：链接本仓库性能诊断参考，区分采集与正式计时。
 
 缓存与工具选择补充适配自 SGLang [kernel-benchmark.md](https://github.com/sgl-project/sglang/blob/049bf85d931c9633d26094ae5ff9a7dbac6723b4/.claude/rules/kernel-benchmark.md)，固定 commit `049bf85d931c9633d26094ae5ff9a7dbac6723b4`；许可见[保留全文](../kernel-organization/LICENSE)。按目标架构核实缓存行为，不将固定 buffer 大小或单一计时工具设为通用要求。
+
+FlashInfer benchmark 专项参考提炼自 [benchmark-kernel](https://github.com/flashinfer-ai/flashinfer/blob/4d5a6ce322587d247fb192f97a0d23eeba9e3412/.claude/skills/benchmark-kernel/SKILL.md)，固定 commit `4d5a6ce322587d247fb192f97a0d23eeba9e3412`，许可见[保留全文](../flashinfer-add-cuda-kernel/LICENSE)。保留计时选择、reference check 和复现产物方法，不承诺 CUPTI 总是更准确。

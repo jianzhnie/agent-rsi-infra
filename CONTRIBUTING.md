@@ -30,6 +30,20 @@
 
 注释保留从当前代码无法直接恢复的信息：跨文件调用顺序、单位与张量布局、特殊常量的来源、workaround 的依据和退出条件。清理时先核实这些事实，不因注释短或看似重复就删除。修改代码时同步更新相关注释；变更历史放 Git 或 PR，当前仍有效的约束留在代码旁。语言、长度和 docstring 格式沿用目标仓库要求。
 
+## 提交 PR 前的自查
+
+按目标分支与任务范围确定基准，审查完整 diff，覆盖已提交、已暂存、未暂存改动及属于本次任务的新增文件，排除无关变更。目标仓库有 PR 模板时保留其结构；非显然设计应有可解释的依据，兼容性变化、已知限制和有意偏离写入说明。
+
+性能声明同时提供优化前后的绝对数据、设备与输入规模、复现命令和波动，不能只有加速比。发现的问题按实际影响处理，已接受的限制供审查者参考；没有确认问题时如实说明覆盖范围，不为凑结果继续制造发现。自查不授权发布 PR，也不改变只读审查 Skill 的操作边界。
+
+## PR 复审与验证证据
+
+复审先读取会话评论、review 提交和行内评论；`gh pr view --comments` 不包含全部行内讨论。按目标仓库分页读取 `issues/<pr>/comments`、`pulls/<pr>/reviews` 与 `pulls/<pr>/comments`；需要 resolved/outdated 状态时查询 GraphQL `reviewThreads`。逐项记录已修复、解释保留或待确认的问题，说明未解决项；对外回复仍需用户授权。
+
+确认当前 PR head 的检查结果，并核对 workflow 的触发事件、路径过滤与测试选择：存在某个硬件 workflow 不表示它在本次 PR 中运行。动态导入、插件注册和 JIT 构建可能被静态选择器漏掉；按目标项目机制检查覆盖，不能直接套用其他仓库的强制运行标记。rebase 或 squash 后重新核对提交要求和 CI。
+
+验证记录写清命令、代码版本、设备与配置、实际结果及未运行原因。未验证项明确标记，不能用省略表示通过。测试应确认实际选择了目标 backend、发生了 offload 或满足特性前提，避免在静默跳过或回退路径上通过；只有依赖设备行为的结论才需要相应设备验证，普通文档修改不因此要求 GPU。
+
 ## 从反馈改进流程
 
 发现重复失败后，保存失败输入、日志、代码版本与预期结果；定位原因，再选择最小修正：
@@ -63,6 +77,7 @@
 | [vLLM 指令维护](https://github.com/vllm-project/vllm/blob/3f86db3b2df84dc2e4d10b81da43afad132d66c6/docs/contributing/editing-agent-instructions.md) | 验证规则必要性、消除冲突、分层维护与清理陈旧内容 | 本文的 Agent 指令维护流程 |
 | [SGLang 测试准入](https://github.com/sgl-project/sglang/blob/049bf85d931c9633d26094ae5ff9a7dbac6723b4/.claude/rules/unit-test-admission.md)、[注释维护](https://github.com/sgl-project/sglang/blob/049bf85d931c9633d26094ae5ff9a7dbac6723b4/.claude/rules/comment-style.md) | 具体回归、独立契约与跨边界事实 | 本文的测试与注释审查要求 |
 | [SGLang 部署基线](https://github.com/sgl-project/sglang/blob/049bf85d931c9633d26094ae5ff9a7dbac6723b4/.claude/rules/cookbook-first.md)、[评测设置](https://github.com/sgl-project/sglang/blob/049bf85d931c9633d26094ae5ff9a7dbac6723b4/.claude/rules/prefer-sgl-eval.md) | 区分部署与 CI 配置，固定评测工具及生成设置 | 部署配置 Skill、性能诊断与 AI Infra 验证要求 |
+| [DeepSpeed PR checklist](https://github.com/deepspeedai/DeepSpeed/blob/039bfc9f3f493ae5bf3f99582b4e4e593660d98d/.agents/skills/pr-checklist/SKILL.md) | 完整复审、实际 CI 覆盖、目标路径验证与设备兼容边界 | 本文的 PR 复审流程及严格审查清单 |
 | 上述报告中的确定性检查实践 | 同一入口可本地运行或用于 CI | [scripts/check.py](scripts/check.py)、可执行 Shell 检查和隔离测试 |
 
 调研文件保留原有核查范围。这里采用工程方法，不将上游某个版本的命令、产品能力或性能数字视为本仓库已经实测的结果。
@@ -72,3 +87,7 @@ PyTorch 指令采用固定版本的方法性约定，保留来源；许可见随
 TRL 规范于 2026-11-24 读取，链接指向可变的 `main`。采用其工程方法，不迁入 Trainer 自包含架构、`paper_index.md`、专用测试目录或文档格式，也不采用“为保持一致而复制已知缺陷”的要求。重复逻辑的修复仍以正确性和目标仓库契约为准；测试继续隔离网络与通知。
 
 上述 SGLang 规则采用固定版本的方法提炼，许可见已保留的 [Apache-2.0 全文](.agents/skills/code-cleanup/LICENSE)。不迁入其注释语言限制、测试类别硬门槛、目录布局或统一评测工具要求。
+
+DeepSpeed checklist 采用固定 commit `039bfc9f3f493ae5bf3f99582b4e4e593660d98d` 的方法性提炼；[上游 Apache-2.0 许可](https://github.com/deepspeedai/DeepSpeed/blob/039bfc9f3f493ae5bf3f99582b4e4e593660d98d/LICENSE)。不采用其代码行数门槛、专用 accelerator/comm API、全量设备验证要求、格式工具或发布操作。
+
+PR 自查流程补充参考 FlashInfer [self-review](https://github.com/flashinfer-ai/flashinfer/blob/4d5a6ce322587d247fb192f97a0d23eeba9e3412/.claude/skills/self-review/SKILL.md)，固定 commit `4d5a6ce322587d247fb192f97a0d23eeba9e3412`，许可见[保留全文](.agents/skills/flashinfer-add-cuda-kernel/LICENSE)。不复制自动修复、PR 发布动作或强制发现问题的要求。

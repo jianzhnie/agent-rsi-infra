@@ -12,3 +12,7 @@
 两份清单由共享 Skill `code-reviewer` 按需读取，不单独注册。原 Claude Agent 的审查正文迁入 `SKILL.md`，移除模型、记忆、颜色、轮次与专用工具字段；作者、许可和版本保留在技能元数据中。提炼和静态检查不等于验证了模型对所有审查场景的行为。
 
 测试与注释审查补充提炼自 SGLang [unit-test-admission.md](https://github.com/sgl-project/sglang/blob/049bf85d931c9633d26094ae5ff9a7dbac6723b4/.claude/rules/unit-test-admission.md) 与 [comment-style.md](https://github.com/sgl-project/sglang/blob/049bf85d931c9633d26094ae5ff9a7dbac6723b4/.claude/rules/comment-style.md)。许可见[已保留的全文](../../code-cleanup/LICENSE)；详细适配边界与共享要求统一维护在根贡献文档。
+
+设备接口、共享执行路径及 PR 复审方法补充提炼自 [DeepSpeed pr-checklist](https://github.com/deepspeedai/DeepSpeed/blob/039bfc9f3f493ae5bf3f99582b4e4e593660d98d/.agents/skills/pr-checklist/SKILL.md)，固定 commit `039bfc9f3f493ae5bf3f99582b4e4e593660d98d`，许可为[上游 Apache-2.0](https://github.com/deepspeedai/DeepSpeed/blob/039bfc9f3f493ae5bf3f99582b4e4e593660d98d/LICENSE)。不复制专用命令、设备调用禁令、硬件矩阵或自动发布动作；复审流程统一维护在贡献文档。
+
+完整 diff 与性能证据自查补充参考 FlashInfer [self-review](https://github.com/flashinfer-ai/flashinfer/blob/4d5a6ce322587d247fb192f97a0d23eeba9e3412/.claude/skills/self-review/SKILL.md)，固定 commit `4d5a6ce322587d247fb192f97a0d23eeba9e3412`；许可见[保留全文](../../flashinfer-add-cuda-kernel/LICENSE)，不迁入自动修复或强制发现问题的规则。

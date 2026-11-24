@@ -19,3 +19,5 @@ tools: Read, Edit, Bash, Grep, Glob
 4. 从真实失败补充必要的回归测试，运行受影响路径的检查。涉及外部服务或用户数据的实验先确认授权范围。
 
 报告根因与 `file:line`、修改内容、实际验证结果和剩余问题。无法运行的检查说明原因；不自动写入持久记忆或修改项目规则。
+
+涉及 CUDA/FlashInfer 崩溃时，按需读取 [CUDA 崩溃诊断](../../docs/cuda-crash-debugging.md)，区分异步报错位置与真实故障位置。

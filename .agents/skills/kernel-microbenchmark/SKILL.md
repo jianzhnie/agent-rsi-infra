@@ -117,6 +117,10 @@ A microbenchmark speedup alone does not establish an end-to-end serving gain.
   `"nccl"`; torch routes it to RCCL automatically (there is no `"rccl"`
   backend string).
 
+For FlashInfer backend comparisons, read the
+[FlashInfer benchmark reference](references/flashinfer-benchmark.md) for
+reference checks, actual timer selection and reproducible result export.
+
 ## Included Examples
 
 - Use [benchmarks/cupti_microbenchmark.py](benchmarks/cupti_microbenchmark.py)

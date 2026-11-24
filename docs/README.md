@@ -6,6 +6,7 @@
 
 - [任务与 Skill 路由](component-skills.md)：组件变更与诊断任务的阅读入口。
 - [部署说明](deployment.md)：共享入口、各工具适配与验证边界。
+- [CUDA 崩溃诊断](cuda-crash-debugging.md)：API 日志、异步错误与最小复现。
 - [性能诊断参考](performance-profiling.md)：工具选择、采集开销与基准测量边界。
 - [AI Infra 工程实践](ai_infra_agent.md)：项目实践与验证要求。
 
