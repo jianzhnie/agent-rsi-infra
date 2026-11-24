@@ -78,6 +78,7 @@
 | [SGLang 测试准入](https://github.com/sgl-project/sglang/blob/049bf85d931c9633d26094ae5ff9a7dbac6723b4/.claude/rules/unit-test-admission.md)、[注释维护](https://github.com/sgl-project/sglang/blob/049bf85d931c9633d26094ae5ff9a7dbac6723b4/.claude/rules/comment-style.md) | 具体回归、独立契约与跨边界事实 | 本文的测试与注释审查要求 |
 | [SGLang 部署基线](https://github.com/sgl-project/sglang/blob/049bf85d931c9633d26094ae5ff9a7dbac6723b4/.claude/rules/cookbook-first.md)、[评测设置](https://github.com/sgl-project/sglang/blob/049bf85d931c9633d26094ae5ff9a7dbac6723b4/.claude/rules/prefer-sgl-eval.md) | 区分部署与 CI 配置，固定评测工具及生成设置 | 部署配置 Skill、性能诊断与 AI Infra 验证要求 |
 | [DeepSpeed PR checklist](https://github.com/deepspeedai/DeepSpeed/blob/039bfc9f3f493ae5bf3f99582b4e4e593660d98d/.agents/skills/pr-checklist/SKILL.md) | 完整复审、实际 CI 覆盖、目标路径验证与设备兼容边界 | 本文的 PR 复审流程及严格审查清单 |
+| [FlashInfer 根指令](https://github.com/flashinfer-ai/flashinfer/blob/4d5a6ce322587d247fb192f97a0d23eeba9e3412/AGENTS.md) | 验证加载来源、缓存隔离、graph replay 与长期资源总量 | FlashInfer Kernel Skill、CUDA 诊断及严格审查清单 |
 | 上述报告中的确定性检查实践 | 同一入口可本地运行或用于 CI | [scripts/check.py](scripts/check.py)、可执行 Shell 检查和隔离测试 |
 
 调研文件保留原有核查范围。这里采用工程方法，不将上游某个版本的命令、产品能力或性能数字视为本仓库已经实测的结果。

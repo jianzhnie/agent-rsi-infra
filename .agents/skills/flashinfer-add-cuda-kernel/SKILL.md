@@ -25,10 +25,18 @@ license: Apache-2.0
 
 教程中的 `skip_check` 或 bypass 不应成为新接口的默认捷径；只有调用者契约已保证输入约束时，才沿用项目支持的跳过校验路径。
 
+## 确认代码与缓存来源
+
+验证 Kernel 修改前，确认实际加载模块的来源。新进程能清除已加载模块的进程内状态，但不保证绕过预编译包；该版本的 `flashinfer-jit-cache` 产物可能优先于修改后的源码。先检查安装与加载路径，在隔离的验证环境中按目标版本流程排除旧产物，不自动卸载用户环境中的包。
+
+生成源码写入 `FLASHINFER_GEN_SRC_DIR`，编译产物写入 `FLASHINFER_JIT_DIR`；冷缓存实验使用独立 workspace，避免删除共享缓存。构建故障保留生成源码、`build.ninja` 与环境信息。调试构建和正式性能构建分开记录；该版本 verbose 模式可能连带启用 debug，需优化构建日志时显式核对 `FLASHINFER_JIT_VERBOSE=1 FLASHINFER_JIT_DEBUG=0`。
+
+实验后端的显式使用、自动选择和发布范围按目标版本政策验证，不因实验已通过就将其加入稳定默认路径。详细约定见[上游根指令](https://github.com/flashinfer-ai/flashinfer/blob/4d5a6ce322587d247fb192f97a0d23eeba9e3412/AGENTS.md)。
+
 ## 验证与交付
 
 - 与独立 reference 对比，覆盖声明支持的 dtype、代表性和非整齐 shape、空输入、大 offset 及非连续布局；不支持的情况明确拒绝，容差按语义选择。
-- 验证预分配输出、别名、非默认 stream 和 graph 行为中受改动影响的部分。运行目标版本的 trace 模板一致性检查，确认 API 与模板可发现。
+- 验证预分配输出、别名、非默认 stream 和 graph 行为中受改动影响的部分；在输入、plan 或 backend 改变后检查 graph replay 与捕获 buffer 生命周期，eager 通过不能替代 replay 验证。运行目标版本的 trace 模板一致性检查，确认 API 与模板可发现。
 - 新增硬件限制时检查测试 guard 和实际后端选择；缺少设备时报告未验证范围，不以 fallback 通过宣称新路径正确。
 - 性能测量使用[Kernel 微基准流程](../kernel-microbenchmark/SKILL.md)，FlashInfer CLI 用法按需读取其附属参考。报告绝对耗时、硬件、输入与编译开销，局部加速不等于模型端到端收益。
 

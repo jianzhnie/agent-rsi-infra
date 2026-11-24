@@ -4,7 +4,7 @@
 
 ## 先记录调用边界
 
-FlashInfer 对带 `@flashinfer_api` 的 API 提供日志。按目标版本核实覆盖范围与环境变量，在复现进程启动前设置：
+FlashInfer 对带 `@flashinfer_api` 的 API 提供日志。按目标版本核实覆盖范围与环境变量，日志环境变量在该版本导入 FlashInfer 时读取，应在 import 前设置，例如在复现进程启动前：
 
 ```bash
 FLASHINFER_LOGLEVEL=3 FLASHINFER_LOGDEST='crash_%i.log' python repro.py
@@ -12,7 +12,7 @@ FLASHINFER_LOGLEVEL=3 FLASHINFER_LOGDEST='crash_%i.log' python repro.py
 
 上游约定级别 1 记录函数名、3 记录张量元数据、5 增加统计，`%i` 表示进程 ID，不是 rank。多机采集还需用主机和会话目录隔离文件，并记录 PID 与 rank 的对应关系。
 
-先用元数据检查 shape、dtype、设备和布局；数值问题再按需采集统计。统计可能触发同步并改变执行时序，graph capture 中也可能被跳过。缺少日志或统计不代表调用未发生或输入正确。日志与 dump 可能含请求数据，应限定范围和保存位置。
+先用元数据检查 shape、dtype、设备和布局；数值问题再按需采集统计。统计采集可能增加 Kernel、同步或输出开销并改变执行时序。该版本根指令说明 graph capture 可捕获统计 Kernel 并在 replay 时输出，只有该 Kernel 无法运行时才跳过；不要假定 capture 阶段一律无统计。缺少日志或统计不代表调用未发生或输入正确。日志与 dump 可能含请求数据，应限定范围和保存位置。
 
 ## 区分日志线索与故障证据
 
@@ -32,3 +32,5 @@ Kernel 内 `printf` 只在少量合法线程上输出；warp-specialized 代码�
 ## 来源
 
 提炼自 FlashInfer [debug-cuda-crash](https://github.com/flashinfer-ai/flashinfer/blob/4d5a6ce322587d247fb192f97a0d23eeba9e3412/.claude/skills/debug-cuda-crash/SKILL.md)，固定 commit `4d5a6ce322587d247fb192f97a0d23eeba9e3412`。许可见[保留的全文](../.agents/skills/flashinfer-add-cuda-kernel/LICENSE)。不采用“最后一条日志就是故障位置”或“关闭日志必然零开销”的结论；未执行 CUDA 调试验证。
+
+日志导入时机与 graph 统计行为按同版本 [AGENTS.md](https://github.com/flashinfer-ai/flashinfer/blob/4d5a6ce322587d247fb192f97a0d23eeba9e3412/AGENTS.md) 补充；与旧教程描述不一致时核实目标版本实现。

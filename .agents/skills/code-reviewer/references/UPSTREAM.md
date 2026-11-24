@@ -16,3 +16,5 @@
 设备接口、共享执行路径及 PR 复审方法补充提炼自 [DeepSpeed pr-checklist](https://github.com/deepspeedai/DeepSpeed/blob/039bfc9f3f493ae5bf3f99582b4e4e593660d98d/.agents/skills/pr-checklist/SKILL.md)，固定 commit `039bfc9f3f493ae5bf3f99582b4e4e593660d98d`，许可为[上游 Apache-2.0](https://github.com/deepspeedai/DeepSpeed/blob/039bfc9f3f493ae5bf3f99582b4e4e593660d98d/LICENSE)。不复制专用命令、设备调用禁令、硬件矩阵或自动发布动作；复审流程统一维护在贡献文档。
 
 完整 diff 与性能证据自查补充参考 FlashInfer [self-review](https://github.com/flashinfer-ai/flashinfer/blob/4d5a6ce322587d247fb192f97a0d23eeba9e3412/.claude/skills/self-review/SKILL.md)，固定 commit `4d5a6ce322587d247fb192f97a0d23eeba9e3412`；许可见[保留全文](../../flashinfer-add-cuda-kernel/LICENSE)，不迁入自动修复或强制发现问题的规则。
+
+长期资源复用的聚合保留量、负载变化及应用显存余量检查，提炼自 FlashInfer 同版本 [AGENTS.md](https://github.com/flashinfer-ai/flashinfer/blob/4d5a6ce322587d247fb192f97a0d23eeba9e3412/AGENTS.md)；许可见[已保留全文](../../flashinfer-add-cuda-kernel/LICENSE)，不将局部预热结果外推为完整服务可用性。
