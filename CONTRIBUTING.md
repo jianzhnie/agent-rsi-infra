@@ -32,6 +32,16 @@
 
 更新规则和 Skill 需审查；不因一次偶发问题增加永久限制，不自动将日志内容改写为指令。对性能、数值或硬件结论保留原始证据。
 
+## 维护 Agent 指令
+
+新增或修改根指令、领域指南及 Skill 时：
+
+1. **先验证必要性**：用代表性任务检查现有行为，说明缺少哪条知识会导致什么错误。已有行为正确时不加规则；能由实现、lint 或测试解决的问题优先在对应层修复。
+2. **检查冲突与重复**：搜索 `AGENTS.md`、关联指南和客户端入口，已有内容用链接复用；冲突约定合并到同一事实来源。
+3. **放到适当位置**：全仓通用约定放根指令，领域知识放对应指南，可复用的任务流程放 Skill。工具的标准用法链接官方文档，易变信息提供查找方式。
+4. **同时清理旧内容**：检查相邻条目，删除失效要求、合并同义规则；避免按事故逐条累积禁令。不以固定行数限制替代内容判断。
+5. **验证效果**：对行为性规则比较修改前后的代表性任务结果，并检查入口与链接；未做行为验证时如实说明。仅通过格式检查不能证明 Agent 会遵循指令。
+
 ## 调研实践的落地
 
 | 参考 | 采用的实践 | 本仓库实现 |
@@ -42,6 +52,7 @@
 | [Liger Kernel 与训练验证](docs/research/training-frameworks-agent-engineering.md) | 正确性、模型行为与 benchmark 分开 | 验证要求中的训练、Kernel 与性能条目 |
 | [PyTorch CLAUDE.md](https://github.com/pytorch/pytorch/blob/1d28e3a704d1d634d240e8fe0566c0c6df975458/CLAUDE.md) | 环境定位、显式状态、生成文件、回归与诊断、完整 CI 结果 | 根指令中的工作、环境与提交约定；PT2 Skill 的日志和配置指导 |
 | [TRL .ai/AGENTS.md](https://github.com/huggingface/trl/blob/main/.ai/AGENTS.md) | 简洁实现、重复逻辑同步、真实对象与公开接口测试 | 根指令中的工作要求与环境验证约定 |
+| [vLLM 指令维护](https://github.com/vllm-project/vllm/blob/3f86db3b2df84dc2e4d10b81da43afad132d66c6/docs/contributing/editing-agent-instructions.md) | 验证规则必要性、消除冲突、分层维护与清理陈旧内容 | 本文的 Agent 指令维护流程 |
 | 上述报告中的确定性检查实践 | 同一入口可本地运行或用于 CI | [scripts/check.py](scripts/check.py)、可执行 Shell 检查和隔离测试 |
 
 调研文件保留原有核查范围。这里采用工程方法，不将上游某个版本的命令、产品能力或性能数字视为本仓库已经实测的结果。

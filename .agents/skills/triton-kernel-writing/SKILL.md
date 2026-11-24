@@ -49,6 +49,13 @@ description: Write or review Triton GPU kernels, with practical guidance for gen
   but it can be very slow for prefill. If the kernel serves prefill, consider
   tiling tokens or otherwise increasing the work and locality per program.
 
+## JIT Warmup
+
+When adding compile warmup or changing specialization, read
+[the JIT warmup reference](references/jit-kernel-warmup.md). Reuse runtime
+specialization mapping, deduplicate actual compile keys, and separate metadata
+registration, compilation, and execution.
+
 ## Validation
 
 - Check correctness at boundary shapes and at sizes that exercise masks and

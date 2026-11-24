@@ -5,6 +5,7 @@
 - [贡献与验证](../CONTRIBUTING.md)：调研实践的落地、检查入口与证据要求。
 
 - [部署说明](deployment.md)：共享入口、各工具适配与验证边界。
+- [性能诊断参考](performance-profiling.md)：工具选择、采集开销与基准测量边界。
 - [AI Infra 工程实践](ai_infra_agent.md)：项目实践与验证要求。
 
 ## 调研资料

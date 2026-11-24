@@ -127,4 +127,8 @@ Inspect GPU memory requirements before running. Adapt the operation, cases,
 work formula, and correctness tolerances; the built-in torch.mm self-checks
 only check template plumbing, not an independent implementation reference.
 
+When a timing result needs profiling, consult the
+[performance diagnosis reference](../../../docs/performance-profiling.md) for
+tool selection, collection overhead, and unprofiled confirmation runs.
+
 Source and local adaptations: [UPSTREAM.md](UPSTREAM.md).
