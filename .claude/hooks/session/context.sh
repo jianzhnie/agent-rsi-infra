@@ -45,6 +45,6 @@ else
     git -C "$PROJECT_DIR" log --oneline -5 2>/dev/null || echo "(no git history)"
     echo ""
     echo "### Reference"
-    echo "- CLAUDE.md, .claude/rules/, .claude/agents/ for full conventions"
+    echo "- AGENTS.md, .agents/agents/, .agents/skills/ for full conventions"
 fi
 exit 0

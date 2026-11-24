@@ -35,7 +35,7 @@ class LayoutTests(unittest.TestCase):
         self.assertEqual(registered, expected)
 
     def test_index_covers_all_configuration_entries(self):
-        text = (AGENT / "README.md").read_text()
+        text = (ROOT / ".agents/README.md").read_text()
         # Index tables contain one local file link per configuration entry.
         links = [
             target
@@ -46,23 +46,33 @@ class LayoutTests(unittest.TestCase):
         ]
         self.assertEqual(len(links), len(set(links)))
         expected = {
-            "settings.example.json",
-            "scripts/status-line.sh",
+            "../.claude/settings.example.json",
+            "../.claude/scripts/status-line.sh",
         }
         for folder in ("agents",):
             expected.update(
-                str(p.relative_to(AGENT)) for p in (AGENT / folder).glob("*.md")
+                str(p.relative_to(ROOT / ".agents"))
+                for p in (ROOT / ".agents" / folder).glob("*.md")
             )
         expected.update(
-            "../.agents/skills/" + str(p.relative_to(ROOT / ".agents/skills"))
+            "skills/" + str(p.relative_to(ROOT / ".agents/skills"))
             for p in (ROOT / ".agents/skills").glob("*/SKILL.md")
         )
         expected.update(
-            str(p.relative_to(AGENT))
+            "../.claude/" + str(p.relative_to(AGENT))
             for p in (AGENT / "hooks").rglob("*.sh")
             if p.name != "common.sh"
         )
         self.assertEqual(set(links), expected)
+
+    def test_shared_agents_resolve_to_single_source(self):
+        source = ROOT / ".agents/agents"
+        self.assertTrue((AGENT / "agents").is_symlink())
+        self.assertEqual((AGENT / "agents").resolve(), source)
+        entries = list(source.glob("*.md"))
+        self.assertTrue(entries)
+        for entry in entries:
+            self.assertTrue((AGENT / "agents" / entry.name).samefile(entry))
 
     def test_shared_skills_resolve_to_single_source(self):
         self.assertEqual((AGENT / "skills").resolve(), ROOT / ".agents/skills")
@@ -86,7 +96,8 @@ class LayoutTests(unittest.TestCase):
     def test_local_document_links_resolve(self):
         for doc in [
             ROOT / "README.md",
-            AGENT / "README.md",
+            ROOT / ".agents/README.md",
+            *sorted((ROOT / ".agents/agents").glob("*.md")),
             ROOT / "AGENTS.md",
             ROOT / "CONTRIBUTING.md",
             *sorted((ROOT / ".agents/skills").rglob("*.md")),

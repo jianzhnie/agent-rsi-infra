@@ -4,8 +4,9 @@
 
 ## 目录与事实来源
 
+- `.agents/README.md`：资源索引；`.agents/agents/`：Claude 格式的角色源文件。
 - `.agents/skills/`：共享 Skills，保留技能名、署名、许可和附属资源。
-- `.claude/`：Claude 角色、Hooks、脚本与配置示例。
+- `.claude/`：Claude 兼容链接、Hooks、脚本与配置示例。
 - `AGENTS.md`、`CLAUDE.md`、`GEMINI.md`：客户端入口，不复制通用规范正文。
 - `scripts/check.py`：本地与 CI 共用的检查入口。
 - `tests/`：布局、技能发现与隔离运行回归。
@@ -46,15 +47,17 @@
 从仓库根目录运行：
 
 ```bash
-python3 scripts/check.py
+python3 scripts/check.py --check
 pre-commit run --all-files
 ```
+
+默认或 `--check` 只检查源码。需要自动修复 Python 风格时显式运行 `python3 scripts/check.py --fix`；它先应用安全 Ruff 修复和格式化，再完整检查。不要额外引入 Black/isort 等独立配置。
 
 Shell 检查按变更文件运行 `bash -n` 与 `shellcheck`；缺少工具应说明，不算通过。pre-commit 的 `--all-files` 处理 Git 跟踪文件，新文件还应单独检查。
 
 ## 领域任务
 
-修改训练、RL、推理、Kernel 或编译器行为时，读取目标仓库指令并使用 `.agents/skills/ai-infra-change/SKILL.md` 选择验证。配置与普通文档修改不因此要求 GPU 或模型评测。
+修改训练、RL、推理、Kernel 或编译器行为时，读取目标仓库指令，参考 `docs/ai_infra_agent.md` 中的验证要求选择检查范围。配置与普通文档修改不因此要求 GPU 或模型评测。
 
 ## 进一步阅读
 

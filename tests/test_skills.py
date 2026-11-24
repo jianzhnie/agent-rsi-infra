@@ -24,7 +24,7 @@ class SkillResourcesTests(unittest.TestCase):
         available = {entry.parent.name for entry in SKILLS.glob("*/SKILL.md")}
         entries = [
             *SKILLS.glob("*/SKILL.md"),
-            *(ROOT / ".claude/agents").glob("*.md"),
+            *(ROOT / ".agents/agents").glob("*.md"),
         ]
         for entry in entries:
             match = re.search(r"^  related_skills: \[(.*?)\]$", entry.read_text(), re.M)

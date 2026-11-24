@@ -14,7 +14,7 @@
 
 - 根 `CLAUDE.md` 使用 `@AGENTS.md` 导入共享指令。
 - `.claude/skills` 链接到 `../.agents/skills`，共享技能与其附属资源，包括可执行的 Shell 检查脚本。
-- 角色使用 `.claude/agents/`。
+- `.claude/agents` 链接到 `../.agents/agents`，角色源文件统一维护在 `.agents/agents/`。
 
 可选 Hooks 和状态栏的步骤：
 
@@ -41,12 +41,14 @@ Cursor 与 Copilot 适配已移除，当前仓库不提供专用入口。
 
 ## 5. 本地与 CI 验证
 
-从完整 Git 工作区运行 `python3 scripts/check.py`，执行 Python lint/格式、隔离回归与 Shell 检查。安装依赖见根 README。缺少工具或 Shell 检查未选中文件会返回非零。
+从完整 Git 工作区运行 `python3 scripts/check.py --check`，执行 Python lint/格式、隔离回归与 Shell 检查。安装依赖见根 README。缺少工具或 Shell 检查未选中文件会返回非零。
 
-CI 使用相同入口验证 Linux 与 macOS；实际客户端加载、目标模型与 GPU/NPU 验证仍需对应环境。
+需要 Python 自动修复时显式使用 `python3 scripts/check.py --fix`，应用安全 Ruff 修复与格式化后重新运行全部验证。pre-commit 中的修复 hooks 需单独检查其修改。
+
+CI 使用显式 `--check` 入口验证 Linux 与 macOS；实际客户端加载、目标模型与 GPU/NPU 验证仍需对应环境。
 
 ## 6. 维护
 
-共享开发指令维护在根目录 `AGENTS.md`，Python 检查以 `pyproject.toml` 为准。Skills 维护在 `.agents/skills/`，Claude 专用资源维护在 `.claude/`，测试维护在 `tests/`。
+共享开发指令维护在根目录 `AGENTS.md`，Python 检查以 `pyproject.toml` 为准。资源索引维护在 `.agents/README.md`，角色与 Skills 分别维护在 `.agents/agents/` 和 `.agents/skills/`，Claude Hooks 与设置维护在 `.claude/`，测试维护在 `tests/`。
 
 变更公共路径时同步更新客户端入口、索引和测试。升级客户端或启用新的配置项时，重新检查实际加载行为。

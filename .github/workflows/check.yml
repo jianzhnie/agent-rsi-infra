@@ -37,7 +37,7 @@ jobs:
             brew list shellcheck >/dev/null 2>&1 || brew install shellcheck
           fi
       - name: Run shared checks
-        run: python scripts/check.py
+        run: python scripts/check.py --check
       - name: Run pre-commit
         if: matrix.os == 'ubuntu-latest' && matrix.python == '3.13'
         run: pre-commit run --all-files
