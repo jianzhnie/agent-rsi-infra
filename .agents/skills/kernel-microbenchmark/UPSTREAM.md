@@ -10,3 +10,5 @@
 迁入时验证文档链接、格式与可在本机运行的辅助脚本。未执行 GPU、CUDA/ROCm、多卡、模型或真实服务验证；未重新核实上游引用的全部安全公告、性能结论及外部服务可用性。
 
 后续适配：链接本仓库性能诊断参考，区分采集与正式计时。
+
+缓存与工具选择补充适配自 SGLang [kernel-benchmark.md](https://github.com/sgl-project/sglang/blob/049bf85d931c9633d26094ae5ff9a7dbac6723b4/.claude/rules/kernel-benchmark.md)，固定 commit `049bf85d931c9633d26094ae5ff9a7dbac6723b4`；许可见[保留全文](../kernel-organization/LICENSE)。按目标架构核实缓存行为，不将固定 buffer 大小或单一计时工具设为通用要求。

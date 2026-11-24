@@ -10,3 +10,5 @@
 补充修正：章节提取按代码围栏类型与长度识别结束标记，避免合法嵌套示例截断章节。
 
 迁入时验证文档链接、格式与可在本机运行的辅助脚本。未执行 GPU、CUDA/ROCm、多卡、模型或真实服务验证；未重新核实上游引用的全部安全公告、性能结论及外部服务可用性。
+
+部署基线与 CI 复现的区分提炼自 SGLang [cookbook-first.md](https://github.com/sgl-project/sglang/blob/049bf85d931c9633d26094ae5ff9a7dbac6723b4/.claude/rules/cookbook-first.md)，许可见[已保留的全文](../code-cleanup/LICENSE)，不要求目标项目采用 SGLang 目录。

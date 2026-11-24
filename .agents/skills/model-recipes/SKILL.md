@@ -26,6 +26,15 @@ catalog, rendered by
 4. To create or update a recipe, follow the
    [authoring workflow below](#create-or-update-a-recipe).
 
+## Deployment baseline vs CI reproduction
+
+Start deployment and performance tuning from the target framework's official
+model recipe, checking its version and hardware applicability. CI configurations
+pin reproducible correctness runs; they are not automatically deployment advice.
+When reproducing CI, keep its settings and report differences from the deployment
+baseline. If a change alters a recommended deployment, update its user-facing
+recipe in the same change. See the [adaptation source](UPSTREAM.md).
+
 ## Find a recipe
 
 Read recipes from the published JSON on recipes.vllm.ai. It is generated from

@@ -28,12 +28,22 @@ description: Build, debug, and interpret GPU kernel microbenchmarks for CUDA, RO
   `from flashinfer.testing import bench_gpu_time_with_cupti`. Otherwise use
   validated device-event or profiler timing and report the method. Separate
   graph replay from eager execution, and label warm-cache vs cold-cache runs.
-- ROCm cannot use CUDA CUPTI timing. For cold-cache measurements, consider HIP graph replay over rotating
-  buffers whose total footprint exceeds the last-level cache (e.g. 256 MB on
-  MI355X), so every call reads cold from HBM, timed with HIP events — see
-  [benchmarks/graph_replay_benchmark.py](benchmarks/graph_replay_benchmark.py)
-  (CUDA/ROCm). Compare timer overhead: `do_bench` per-rep
-  launch/event overhead inflates small/decode-size kernels.
+- Replaying fixed pointers in a graph or event-timed loop can repeatedly reuse
+  L2. For a cold-cache question, flush between invocations or rotate inputs
+  with a footprint comfortably above the relevant cache capacity. Explain a
+  hot-cache result using the production reuse pattern; a large total footprint
+  alone does not prove that every access misses cache.
+- On ROCm, use supported HIP event or graph timing instead of CUDA CUPTI.
+  [graph_replay_benchmark.py](benchmarks/graph_replay_benchmark.py) demonstrates
+  rotating weights on CUDA/ROCm. Size its footprint for the actual device and
+  validate the cache assumption; the example's fixed size is not universal.
+- Account for the memory path: local-device, peer-GPU and mapped host reads do
+  not necessarily share cache behavior. Peer reads can reuse remote cache;
+  verify host-mapping policy on the target architecture rather than assuming
+  a device-L2 flush controls all memory traffic.
+- No single timer is required. SGLang's `marker.do_bench` is an option in a
+  compatible checkout, alongside device events, CUPTI or other validated
+  methods. Check launch/event overhead for small kernels and report the method.
 - For compute-heavy kernels, report TFLOPS with the FLOP formula in the
   benchmark. For memory-heavy kernels, report estimated bytes moved and GB/s.
   For mixed kernels, report the most honest metric available and call out the

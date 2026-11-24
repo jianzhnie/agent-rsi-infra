@@ -332,6 +332,10 @@ repo/
 | API 与配置 | 请求响应、Schema、默认值 | 旧配置与真实客户端兼容 |
 | 多模态流水线 | 阶段协议、流式、取消与资源释放 | 音画同步、背压、端到端任务质量 |
 
+模型质量评测需固定 harness、版本、数据集及划分、样本数和计分方式；评测工具的依赖尽量与服务环境隔离，避免为评测改动被测服务。工具按任务和目标项目选择，不统一要求 `sgl-eval`。
+
+显式记录实际生效的 temperature、top_p、top_k、随机种子、最大输出长度、thinking 设置及 chat-template 参数。评测工具可能覆盖模型默认值，`thinking` 与 `enable_thinking` 等模板键也不通用，应核对最终请求。复现 CI 时使用 CI 的同一设置；部署评测先核对官方模型指南。不同 harness 或设置的分数不能直接归因为模型或代码优劣；更换工具时先建立可比对照。
+
 ### 7.3 Kernel 与编译器
 
 | 变更 | 主要验证 | 按影响补充 |
@@ -422,3 +426,5 @@ baseline 与候选使用相同设备、输入和配置；按任务说明是否�
 - Codex：[AGENTS.md](https://developers.openai.com/codex/guides/agents-md)、[Skills](https://developers.openai.com/codex/skills)、[配置](https://developers.openai.com/codex/config-basic)。
 - Cursor：[Rules](https://cursor.com/docs/rules)、[Skills](https://cursor.com/docs/skills)。
 - GitHub Copilot：[自定义指令](https://docs.github.com/en/copilot/concepts/prompting-and-context/custom-instructions)、[配置参考](https://docs.github.com/en/copilot/reference/customization-cheat-sheet)。
+
+评测可比性与部署基线补充参考 SGLang 的 [prefer-sgl-eval.md](https://github.com/sgl-project/sglang/blob/049bf85d931c9633d26094ae5ff9a7dbac6723b4/.claude/rules/prefer-sgl-eval.md) 和 [cookbook-first.md](https://github.com/sgl-project/sglang/blob/049bf85d931c9633d26094ae5ff9a7dbac6723b4/.claude/rules/cookbook-first.md)，许可与提炼边界见[贡献说明](../CONTRIBUTING.md#调研实践的落地)。

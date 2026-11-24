@@ -60,7 +60,7 @@ Shell 检查按变更文件运行 `bash -n` 与 `shellcheck`；缺少工具应�
 
 ## 领域任务
 
-修改训练、RL、推理、Kernel 或编译器行为时，读取目标仓库指令，参考 `docs/ai_infra_agent.md` 中的验证要求选择检查范围。配置与普通文档修改不因此要求 GPU 或模型评测。
+修改训练、RL、推理、Kernel 或编译器行为时，读取目标仓库指令，按 [任务路由](docs/component-skills.md) 选择适用 Skill，参考 `docs/ai_infra_agent.md` 中的验证要求选择检查范围。配置与普通文档修改不因此要求 GPU 或模型评测。
 
 ## 进一步阅读
 

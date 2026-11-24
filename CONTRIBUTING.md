@@ -22,6 +22,14 @@
 
 这些方法参考 [Megatron-LM 格式检查流程](https://github.com/NVIDIA/Megatron-LM/blob/591c3ee3ae06a556748669482f70ebf29d2b5bd7/skills/mcore-linting-and-formatting/SKILL.md)，采用检查/修复分离和修复后验证；不迁入其 Skill 或专用命令。
 
+## 测试与注释审查
+
+测试应说明它能防住哪种后续回归。优先覆盖真实故障、需要推导的边界或不变量，以及容易漏同步的注册、字段生命周期和协议契约。并发故障尽量用受控调度复现具体交错，不把无法触发原故障的压力循环当作回归证据。
+
+区分实现镜像与独立契约：仅复述实现的断言价值有限；外部规范常量、注册完整性、负分支和缺省行为，即使实现很短，也可能是唯一的静默失败防线。合并或删除测试前，检查是否仍有其他用例保护同一故障；新增用例优先放入相关测试文件。
+
+注释保留从当前代码无法直接恢复的信息：跨文件调用顺序、单位与张量布局、特殊常量的来源、workaround 的依据和退出条件。清理时先核实这些事实，不因注释短或看似重复就删除。修改代码时同步更新相关注释；变更历史放 Git 或 PR，当前仍有效的约束留在代码旁。语言、长度和 docstring 格式沿用目标仓库要求。
+
 ## 从反馈改进流程
 
 发现重复失败后，保存失败输入、日志、代码版本与预期结果；定位原因，再选择最小修正：
@@ -53,6 +61,8 @@
 | [PyTorch CLAUDE.md](https://github.com/pytorch/pytorch/blob/1d28e3a704d1d634d240e8fe0566c0c6df975458/CLAUDE.md) | 环境定位、显式状态、生成文件、回归与诊断、完整 CI 结果 | 根指令中的工作、环境与提交约定；PT2 Skill 的日志和配置指导 |
 | [TRL .ai/AGENTS.md](https://github.com/huggingface/trl/blob/main/.ai/AGENTS.md) | 简洁实现、重复逻辑同步、真实对象与公开接口测试 | 根指令中的工作要求与环境验证约定 |
 | [vLLM 指令维护](https://github.com/vllm-project/vllm/blob/3f86db3b2df84dc2e4d10b81da43afad132d66c6/docs/contributing/editing-agent-instructions.md) | 验证规则必要性、消除冲突、分层维护与清理陈旧内容 | 本文的 Agent 指令维护流程 |
+| [SGLang 测试准入](https://github.com/sgl-project/sglang/blob/049bf85d931c9633d26094ae5ff9a7dbac6723b4/.claude/rules/unit-test-admission.md)、[注释维护](https://github.com/sgl-project/sglang/blob/049bf85d931c9633d26094ae5ff9a7dbac6723b4/.claude/rules/comment-style.md) | 具体回归、独立契约与跨边界事实 | 本文的测试与注释审查要求 |
+| [SGLang 部署基线](https://github.com/sgl-project/sglang/blob/049bf85d931c9633d26094ae5ff9a7dbac6723b4/.claude/rules/cookbook-first.md)、[评测设置](https://github.com/sgl-project/sglang/blob/049bf85d931c9633d26094ae5ff9a7dbac6723b4/.claude/rules/prefer-sgl-eval.md) | 区分部署与 CI 配置，固定评测工具及生成设置 | 部署配置 Skill、性能诊断与 AI Infra 验证要求 |
 | 上述报告中的确定性检查实践 | 同一入口可本地运行或用于 CI | [scripts/check.py](scripts/check.py)、可执行 Shell 检查和隔离测试 |
 
 调研文件保留原有核查范围。这里采用工程方法，不将上游某个版本的命令、产品能力或性能数字视为本仓库已经实测的结果。
@@ -60,3 +70,5 @@
 PyTorch 指令采用固定版本的方法性约定，保留来源；许可见随 PT2 Skill 保留的 [上游 LICENSE](.agents/skills/pt2-bug-basher/LICENSE)。其构建、测试框架与 GitHub 政策不替代本仓库的实际命令和用户授权。
 
 TRL 规范于 2026-11-24 读取，链接指向可变的 `main`。采用其工程方法，不迁入 Trainer 自包含架构、`paper_index.md`、专用测试目录或文档格式，也不采用“为保持一致而复制已知缺陷”的要求。重复逻辑的修复仍以正确性和目标仓库契约为准；测试继续隔离网络与通知。
+
+上述 SGLang 规则采用固定版本的方法提炼，许可见已保留的 [Apache-2.0 全文](.agents/skills/code-cleanup/LICENSE)。不迁入其注释语言限制、测试类别硬门槛、目录布局或统一评测工具要求。
