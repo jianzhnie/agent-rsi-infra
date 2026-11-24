@@ -6,6 +6,8 @@
 - 许可：保留上游 [LICENSE](LICENSE) 全文与版权信息；不是本仓库 Apache-2.0 许可的重新授权。
 - 迁入日期：2026-11-24。上游技能目录仅含 `SKILL.md`，没有附属脚本。
 
+同版本 [PyTorch CLAUDE.md](https://github.com/pytorch/pytorch/blob/1d28e3a704d1d634d240e8fe0566c0c6df975458/CLAUDE.md) 的配置作用域与结构化诊断建议也已吸收。
+
 ## 本地改动
 
 - 环境检查遵循目标项目和用户已选择的解释器，不强制 Conda 或反复询问已有信息。

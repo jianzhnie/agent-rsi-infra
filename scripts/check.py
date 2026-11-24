@@ -9,8 +9,8 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def main() -> int:
     checks = [
-        ("lint", ["ruff", "check", "scripts", "tests"]),
-        ("format", ["ruff", "format", "--check", "scripts", "tests"]),
+        ("lint", ["ruff", "check", "scripts", "tests", ".agents/skills"]),
+        ("format", ["ruff", "format", "--check", "scripts", "tests", ".agents/skills"]),
         ("tests", [sys.executable, "-m", "unittest", "discover", "-s", "tests", "-v"]),
         (
             "shell",

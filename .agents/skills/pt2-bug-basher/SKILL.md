@@ -57,6 +57,12 @@ Pick the right diagnostic tool based on the error category:
 - **Structured tracing**: `TORCH_TRACE=/path/to/trace python your_script.py` then `tlparse /path/to/trace`
 - **Single-threaded (for pdb)**: `TORCHINDUCTOR_COMPILE_THREADS=1 python your_script.py`
 
+## Scoped configuration and diagnostic artifacts
+
+When temporarily changing Dynamo configuration, use the target version's `torch._dynamo.config.patch` context manager or decorator rather than manual global save/restore. Keep changes local to the test or diagnostic run.
+
+For remote or production-only failures, preserve diagnostics in structured traces when supported by the target version (for example `torch._logging.trace_structured`), alongside local artifacts when useful. Use unique output paths and tell the user how to retrieve the artifacts with `tlparse`; do not assume access to the developer's filesystem.
+
 ## Error Triage
 
 Classify the failure using the error message and traceback:

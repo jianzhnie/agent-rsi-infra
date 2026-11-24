@@ -19,6 +19,7 @@ Engineering infrastructure for recursive self-improvement of coding agents: shar
 
 ## 现有资源
 
+- `install-skill-from-github`：从 GitHub 迁入完整技能，保留许可和来源，默认安装到本仓库。
 - `ai-infra-change`：按训练、推理、Kernel 等变更选择验证范围，记录数值和性能证据。
 - `shell-check`：脚本化选择文件、执行语法和静态检查，失败后继续并汇总。
 - `add-or-fix-type-checking`：迁入 Transformers 的类型检查流程；[来源与适用范围](.agents/skills/add-or-fix-type-checking/UPSTREAM.md)。

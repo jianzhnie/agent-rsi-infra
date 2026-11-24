@@ -11,6 +11,7 @@
 | code-reviewer | [角色](agents/code-reviewer.md) | 只读审查，按严重程度报告有证据的问题 |
 | debugger | [角色](agents/debugger.md) | 复现、定位和修复问题 |
 | performance-analyzer | [角色](agents/performance-analyzer.md) | 根据性能测量分析瓶颈 |
+| install-skill-from-github | [共享 Skill](../.agents/skills/install-skill-from-github/SKILL.md) | GitHub Skill 迁入、许可与来源记录 |
 | shell-check | [共享 Skill](../.agents/skills/shell-check/SKILL.md) | 可执行 Shell 检查与结果汇总 |
 | ai-infra-change | [共享 Skill](../.agents/skills/ai-infra-change/SKILL.md) | 选择领域验证并整理可复现证据 |
 | pt2-bug-basher | [上游适配 Skill](../.agents/skills/pt2-bug-basher/SKILL.md) | 显式调用的 PyTorch 2 编译器排障流程 |
