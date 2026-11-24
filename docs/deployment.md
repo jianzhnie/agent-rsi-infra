@@ -54,3 +54,7 @@ CI 使用显式 `--check` 入口验证 Linux 与 macOS；实际客户端加载�
 共享开发指令维护在根目录 `AGENTS.md`，Python 检查以 `pyproject.toml` 为准。资源索引维护在 `.agents/README.md`，角色与 Skills 分别维护在 `.agents/agents/` 和 `.agents/skills/`，Claude Hooks 与设置维护在 `.claude/`，测试维护在 `tests/`。
 
 变更公共路径时同步更新客户端入口、索引和测试。升级客户端或启用新的配置项时，重新检查实际加载行为。
+
+## SGLang 专项 Skills
+
+分布式挂起、Kernel 组织、代码清理和 KL 一致性技能中的源码路径与框架接口指目标 SGLang checkout；不要求本仓库安装 SGLang。`llm-torch-profiler-analysis` 默认分析已有本地 trace，在线采集脚本保留为按需审查的上游资源。`mechanical-refactor-verify` 依赖 Git、Python 3.10+ 和目标仓库的格式化工具，附属测试使用 pytest；执行证明脚本及 hooks 前检查其内容，机械变换通过不代表业务行为正确。

@@ -26,6 +26,7 @@ Engineering infrastructure for recursive self-improvement of coding agents: shar
 - `pt2-bug-basher`：显式调用的 PyTorch 2 编译器排障；[来源与适配](.agents/skills/pt2-bug-basher/UPSTREAM.md)。
 - `code-reviewer`：只读代码审查，默认 light、按需 strict，使用共享清单。
 - vLLM 来源 Skills：Kernel 微基准、Triton 开发、API 兼容核对、安全审查、模型部署配置查询与模型前向微基准，见[资源索引](.agents/README.md)。
+- SGLang 来源 Skills：分布式挂起诊断、离线 trace 分析、机械重构验证、代码清理、Kernel 组织与 KL 一致性测试，见[资源索引](.agents/README.md)。
 - 2 个 Claude 角色：调试、性能分析。
 - Python 检查配置与 Git 提交约定。
 - Claude 可选资源：会话与工具 Hooks、通知、状态栏和设置示例。

@@ -19,6 +19,12 @@
 | triton-kernel-writing | [上游适配 Skill](skills/triton-kernel-writing/SKILL.md) | Triton 索引、特化、同步与调优 |
 | model-recipes | [上游适配 Skill](skills/model-recipes/SKILL.md) | 按模型与硬件查询 vLLM 部署配置 |
 | model-microbenchmark | [上游适配 Skill](skills/model-microbenchmark/SKILL.md) | 使用 vllm bench forward 测量模型前向 |
+| debug-distributed-hang | [上游适配 Skill](skills/debug-distributed-hang/SKILL.md) | SGLang 多卡挂起、rank 分歧与通信诊断 |
+| llm-torch-profiler-analysis | [上游适配 Skill](skills/llm-torch-profiler-analysis/SKILL.md) | 离线 LLM trace 分析与融合、重叠线索 |
+| mechanical-refactor-verify | [上游适配 Skill](skills/mechanical-refactor-verify/SKILL.md) | 可重放机械变换验证，不替代行为测试 |
+| code-cleanup | [上游适配 Skill](skills/code-cleanup/SKILL.md) | 有证据的代码清理与兼容边界检查 |
+| kernel-organization | [上游适配 Skill](skills/kernel-organization/SKILL.md) | SGLang Kernel 契约、归属与去重 |
+| kl-consistency-test | [上游适配 Skill](skills/kl-consistency-test/SKILL.md) | SGLang prefill/decode 与缓存状态一致性 |
 | context | [脚本](../.claude/hooks/session/context.sh) | 初始化会话，compact/resume 时保留已有记录 |
 | record-event | [脚本](../.claude/hooks/logging/record-event.sh) | 命令、Agent、配置及异常日志 |
 | guard-tool | [脚本](../.claude/hooks/tools/guard-tool.sh) | 工具调用前的补充拦截 |
