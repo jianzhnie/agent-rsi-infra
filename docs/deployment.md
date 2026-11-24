@@ -23,7 +23,7 @@ GPU 与 vLLM Skills 的依赖在目标项目环境中准备，不加入本仓库
 1. 阅读 `.claude/settings.example.json`，选择需要的 Hook 事件与状态栏配置。通知事件按需启用。
 2. 将选定项合并到目标项目 `.claude/settings.json`，保留已有配置；核对客户端支持的事件和字段。
 3. 脚本按 `.claude/hooks/` 与 `.claude/scripts/` 路径部署。`notifications/common.sh` 随目录一起复制，不单独注册为 Hook。
-4. 在目标客户端验证所选事件与命令；本仓库 unittest 只验证隔离脚本行为与文件路径。
+4. 在目标客户端验证所选事件与命令；本仓库 pytest 只验证隔离脚本行为与文件路径。
 
 本仓库未提供 MCP 服务器配置，也未预设插件或外部工具授权。
 

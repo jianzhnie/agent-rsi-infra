@@ -2,7 +2,7 @@
 
 本仓库为 AI Infra 开发提供可复用的 Coding Agent 工程规范、Skills、角色与验证工具。目标是让任务有明确依据、执行有适用流程、结果可验证，并把有效反馈沉淀为可审查的改进。
 
-这是设计说明。实际开发要求以 [AGENTS.md](AGENTS.md) 为准，资源以 [索引](.agents/README.md) 为准，部署步骤见 [部署说明](docs/deployment.md)。
+这是设计说明。实际开发要求以 [AGENTS.md](../AGENTS.md) 为准，资源以 [索引](../.agents/README.md) 为准，部署步骤见 [部署说明](deployment.md)。
 
 ## 1. 设计目标与范围
 
@@ -33,9 +33,9 @@ flowchart TD
 
 | 层次 | 事实来源 | 职责 |
 | --- | --- | --- |
-| 通用指令 | [AGENTS.md](AGENTS.md) | 本仓库的开发、环境、验证与提交约定 |
-| 客户端入口 | [CLAUDE.md](CLAUDE.md)、[GEMINI.md](GEMINI.md) | 导入共享指令，说明客户端适配边界 |
-| 任务选择 | [组件与 Skill 路由](docs/component-skills.md) | 按任务和目标框架选择资源 |
+| 通用指令 | [AGENTS.md](../AGENTS.md) | 本仓库的开发、环境、验证与提交约定 |
+| 客户端入口 | [CLAUDE.md](../CLAUDE.md)、[GEMINI.md](../GEMINI.md) | 导入共享指令，说明客户端适配边界 |
+| 任务选择 | [组件与 Skill 路由](component-skills.md) | 按任务和目标框架选择资源 |
 | 执行方法 | `.agents/skills/<name>/SKILL.md` | 任务输入、关键操作、验证和交付要求 |
 | 角色分工 | `.agents/agents/` | 通用调试与性能分析角色 |
 | 自动化 | `scripts/`、`.claude/hooks/` | 可重复检查、事件处理与可选通知 |
@@ -51,7 +51,7 @@ agent-rsi-infra/
 ├── AGENTS.md                  # 共享开发要求
 ├── CLAUDE.md / GEMINI.md       # 客户端入口
 ├── CONTRIBUTING.md            # 贡献与改进流程
-├── code_agent.md              # 本设计
+├── standards.md               # 实践标准
 ├── .agents/
 │   ├── README.md              # 资源索引
 │   ├── agents/                # 通用角色源文件
@@ -64,7 +64,7 @@ agent-rsi-infra/
 │   └── settings.example.json  # 配置模板
 ├── scripts/check.py           # 本地与 CI 共用检查入口
 ├── tests/
-└── docs/
+└── docs/RSI_DESIGN.md          # 设计与验证边界
 ```
 
 - **Claude Code**：根入口导入共享指令，通过生成适配使用角色，Skills 使用共享链接。Hooks 和状态栏按需配置，不把示例直接变为活动设置。
@@ -107,10 +107,23 @@ agent-rsi-infra/
 | 验证候选 | 在原失败与代表性任务上核对结果，记录开销、退化和未验证项 |
 | 审查纳入 | 检查冲突、重复和适用范围，按需合并、替换或删除旧要求 |
 
-不把日志或一次偶发失败直接变成永久指令。规则修改需有行为依据；格式通过只证明格式有效。涉及模型和硬件的结论保留原始证据，变更历史通过 Git 追溯。具体流程见 [贡献要求](CONTRIBUTING.md)。
+不把日志或一次偶发失败直接变成永久指令。规则修改需有行为依据；格式通过只证明格式有效。涉及模型和硬件的结论保留原始证据，变更历史通过 Git 追溯。具体流程见 [贡献要求](../CONTRIBUTING.md)。
 
 ## 7. 验证与后续演进
 
 当前检查入口是 `python3 scripts/check.py --check`，配合 pre-commit、相关回归和技能结构检查。它验证仓库自身的布局与工具行为，不证明所有客户端、目标框架或设备上的能力。
 
 后续按实际任务推进：先修复发现、链接、授权或验证中的具体问题，再增加缺失能力。只有重复任务证明有价值时，才建设任务样例与改进前后对照；只有出现新的客户端需求时，才新增适配。每项扩展都应说明适用任务、验证方式和维护成本，避免以技能数量或配置数量作为成果指标。
+
+## 8. 实践标准的落地
+
+| 标准 | 本仓库落点 | 验证边界 |
+| --- | --- | --- |
+| 共享规范与分层加载 | 根指令、任务路由、通用角色及客户端适配 | 布局、引用与生成一致性；客户端加载单独核实 |
+| Python 工程治理 | Ruff、pytest、pre-commit 和统一检查入口 | pytest 兼容已有 unittest 用例，不要求为迁移改写断言 |
+| 多语言与编译器治理 | 框架专项 Skills 与领域验证指南 | 本仓库无业务 C++/CUDA 源码；在目标项目沿用 clang-format、构建和 API 检查 |
+| 正确性与性能分离 | reference/回归、模型评估、独立 benchmark | 文档检查不外推为模型质量或硬件性能证据 |
+| 审查与责任 | 只读 code-reviewer、提交前自查及人工 Review | Agent 输出辅助判断，人类作者理解、验证并承担提交责任 |
+| 受控 RSI | 失败证据、最小修正、代表性对照与审查 | 不自动改写规则，不以一次成功晋级，不按技能数量衡量改进 |
+
+环境优先使用项目已选定的 Python；建议在 `.venv` 中安装开发依赖，可使用 uv 管理。缺少解释器或工具时明确报告，不全局安装。分布式和模型验证记录设备、节点、并行策略、启动命令及配置；快速检查与昂贵验证分开报告。标准原文见 [standards.md](../standards.md)。

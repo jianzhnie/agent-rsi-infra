@@ -79,6 +79,26 @@ class LayoutTests(unittest.TestCase):
             sources, {p.stem for p in (ROOT / ".codex/agents").glob("*.toml")}
         )
 
+    def test_role_description_with_colon_remains_yaml_string(self):
+        import tempfile
+
+        from scripts.sync_agents import render
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            source = root / ".agents/agents/debugger.md"
+            source.parent.mkdir(parents=True)
+            source.write_text(
+                '---\nname: debugger\ndescription: Inspect: "failure"\n---\n\nDebug.\n'
+            )
+            outputs = render(root)
+            adapter = outputs[root / ".claude/agents/debugger.md"]
+            value = re.search(r"^description: (.+)$", adapter, re.M).group(1)
+            self.assertEqual(json.loads(value), 'Inspect: "failure"')
+            source.write_text("---\nname: debugger\n---\nDebug.\n")
+            with self.assertRaisesRegex(ValueError, "Missing role"):
+                render(root)
+
     def test_shared_skills_resolve_to_single_source(self):
         self.assertEqual((AGENT / "skills").resolve(), ROOT / ".agents/skills")
         for skill in (ROOT / ".agents/skills").rglob("*"):

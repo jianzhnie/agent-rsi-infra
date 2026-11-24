@@ -2,6 +2,8 @@
 
 ## 使用与实践
 
+- [RSI 设计](RSI_DESIGN.md)：架构、共享资源、客户端适配与实践标准。
+
 - [贡献与验证](../CONTRIBUTING.md)：调研实践的落地、检查入口与证据要求。
 
 - [任务与 Skill 路由](component-skills.md)：组件变更与诊断任务的阅读入口。

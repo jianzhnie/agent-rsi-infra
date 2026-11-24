@@ -74,7 +74,7 @@ class CheckFlowTests(unittest.TestCase):
         result = self.run_checks("--fix")
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         self.assertEqual(self.source.read_text(), "value = 1\n")
-        self.assertIn("Ran 1 test", result.stderr)
+        self.assertIn("1 passed", result.stdout)
         self.assertIn("Shell verification completed", result.stdout)
         commands = (self.project / "tool-log").read_text().splitlines()
         self.assertIn("--no-unsafe-fixes", commands[0])
@@ -84,7 +84,7 @@ class CheckFlowTests(unittest.TestCase):
         self.env["UNFIXABLE"] = "1"
         result = self.run_checks("--fix")
         self.assertEqual(result.returncode, 1)
-        self.assertIn("Ran 1 test", result.stderr)
+        self.assertIn("1 passed", result.stdout)
         self.assertIn("Shell verification completed", result.stdout)
         self.assertIn("Failed checks:", result.stderr)
 

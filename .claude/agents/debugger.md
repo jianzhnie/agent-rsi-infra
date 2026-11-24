@@ -1,6 +1,6 @@
 ---
 name: debugger
-description: 调试专家，处理错误、测试失败、崩溃和意外行为。遇到问题时主动使用，系统追踪根因并提出修复方案。
+description: "调试专家，处理错误、测试失败、崩溃和意外行为。遇到问题时主动使用，系统追踪根因并提出修复方案。"
 tools: Read, Bash, Grep, Glob, Edit
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: performance-analyzer
-description: 性能分析专家，调查吞吐量问题、内存瓶颈、延迟退化和慢操作时主动使用，定位关键性能路径并提出具体优化建议。
+description: "性能分析专家，调查吞吐量问题、内存瓶颈、延迟退化和慢操作时主动使用，定位关键性能路径并提出具体优化建议。"
 tools: Read, Bash, Grep, Glob
 ---
 

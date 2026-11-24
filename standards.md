@@ -16,3 +16,12 @@
 - 修改模型行为时，应提供相应模型评估。
 - 根级 `AGENTS.md` 保持精简，领域知识下沉到 Domain Guides。
 - Agent 指令应避免重复、冲突和无效规则；单次事故优先修代码、CI 或测试，而不是不断堆叠 Prompt。
+- 文档中的 CLI 参数、环境变量默认值和实际行为必须有可靠依据。
+- 正确性与性能验证应分开呈现。
+- 使用 Self-review Skill 和人工 Review 指南辅助审查。
+- Python 使用 Ruff 等工具进行格式和 Lint 管理。
+- C/C++ 使用 clang-format。
+- pre-commit 统一执行检查。
+- pytest 组织测试。
+- C++ API 风格可通过专门审计脚本辅助检查。
+- Python、C++、编译器 API 应分别治理，避免用一套规则覆盖所有语言和抽象层。

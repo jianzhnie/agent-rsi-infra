@@ -36,7 +36,7 @@ def main(argv: list[str] | None = None) -> int:
             ("format", ["ruff", "format", "--check", *PYTHON_PATHS]),
             (
                 "tests",
-                [sys.executable, "-m", "unittest", "discover", "-s", "tests", "-v"],
+                [sys.executable, "-m", "pytest", "tests", "-q"],
             ),
             ("shell", ["bash", ".agents/skills/shell-check/scripts/check.sh"]),
         ]
