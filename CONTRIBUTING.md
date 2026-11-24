@@ -11,7 +11,13 @@
 
 本地开发环境需 Python 3.10+、Bash、Git、jq、shellcheck；Python 工具通过 `python3 -m pip install -e '.[dev]'` 安装。Shell 脚本兼容 macOS 自带 Bash，文件选择需要支持 `git ls-files --deduplicate` 的 Git。
 
-提交说明包含动机、兼容性、验证结果，以及 AI 工具的参与范围。保留外部资源的来源和许可，不把格式检查通过当作模型行为或性能已验证。
+提交说明包含动机、兼容性、验证结果，以及 AI 工具的参与范围。不把格式检查通过当作模型行为或性能已验证。
+
+## 外部代码来源
+
+迁入或改写外部代码、Skill 和附属资源时，记录来源 URL、revision（优先完整 commit SHA）及适用 license，保留要求的版权声明、LICENSE 和 NOTICE。使用可变分支且无法确认 commit 时如实标注，不声称是固定快照。
+
+来源与本地改动统一写入对应的 `UPSTREAM.md` 或已有来源记录；文件级声明按上游许可要求保留，提交或 PR 说明引用该记录。目录迁移、重命名和格式调整不改变原始来源，也不据此添加未经证实的个人署名。
 
 ## 验证分层
 
