@@ -7,6 +7,7 @@
 - `.agents/skills/`：共享 Skills，保留技能名、署名、许可和附属资源。
 - `.claude/`：Claude 角色、Hooks、脚本与配置示例。
 - `AGENTS.md`、`CLAUDE.md`、`GEMINI.md`：客户端入口，不复制通用规范正文。
+- `scripts/check.py`：本地与 CI 共用的检查入口。
 - `tests/`：布局、技能发现与隔离运行回归。
 - `docs/`：规划、部署和调研资料。
 
@@ -35,15 +36,18 @@
 从仓库根目录运行：
 
 ```bash
-python3 -m unittest discover -s tests -v
-ruff check tests
-ruff format --check tests
+python3 scripts/check.py
 pre-commit run --all-files
 ```
 
 Shell 检查按变更文件运行 `bash -n` 与 `shellcheck`；缺少工具应说明，不算通过。pre-commit 的 `--all-files` 处理 Git 跟踪文件，新文件还应单独检查。
 
+## 领域任务
+
+修改训练、RL、推理、Kernel 或编译器行为时，读取目标仓库指令并使用 `.agents/skills/ai-infra-change/SKILL.md` 选择验证。配置与普通文档修改不因此要求 GPU 或模型评测。
+
 ## 进一步阅读
 
+- `CONTRIBUTING.md`：贡献、验证与有证据的流程改进。
 - `docs/deployment.md`：工具入口与部署。
 - `docs/ai_infra_agent.md`：领域工程实践与验证要求。

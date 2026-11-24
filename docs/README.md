@@ -2,6 +2,8 @@
 
 ## 使用与实践
 
+- [贡献与验证](../CONTRIBUTING.md)：调研实践的落地、检查入口与证据要求。
+
 - [部署说明](deployment.md)：共享入口、各工具适配与验证边界。
 - [AI Infra 工程实践](ai_infra_agent.md)：项目实践与验证要求。
 

@@ -11,7 +11,8 @@
 | code-reviewer | [角色](agents/code-reviewer.md) | 只读审查，按严重程度报告有证据的问题 |
 | debugger | [角色](agents/debugger.md) | 复现、定位和修复问题 |
 | performance-analyzer | [角色](agents/performance-analyzer.md) | 根据性能测量分析瓶颈 |
-| shell-check | [共享 Skill](../.agents/skills/shell-check/SKILL.md) | Shell 检查与结果汇总 |
+| shell-check | [共享 Skill](../.agents/skills/shell-check/SKILL.md) | 可执行 Shell 检查与结果汇总 |
+| ai-infra-change | [共享 Skill](../.agents/skills/ai-infra-change/SKILL.md) | 选择领域验证并整理可复现证据 |
 | context | [脚本](hooks/session/context.sh) | 初始化会话，compact/resume 时保留已有记录 |
 | record-event | [脚本](hooks/logging/record-event.sh) | 命令、Agent、配置及异常日志 |
 | guard-tool | [脚本](hooks/tools/guard-tool.sh) | 工具调用前的补充拦截 |

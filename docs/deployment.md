@@ -13,7 +13,7 @@
 ## 2. Claude Code
 
 - 根 `CLAUDE.md` 使用 `@AGENTS.md` 导入共享指令。
-- `.claude/skills` 链接到 `../.agents/skills`，共享技能与其附属资源。
+- `.claude/skills` 链接到 `../.agents/skills`，共享技能与其附属资源，包括可执行的 Shell 检查脚本。
 - 角色使用 `.claude/agents/`。
 
 可选 Hooks 和状态栏的步骤：
@@ -39,7 +39,13 @@
 
 Cursor 与 Copilot 适配已移除，当前仓库不提供专用入口。
 
-## 5. 维护
+## 5. 本地与 CI 验证
+
+从完整 Git 工作区运行 `python3 scripts/check.py`，执行 Python lint/格式、隔离回归与 Shell 检查。安装依赖见根 README。缺少工具或 Shell 检查未选中文件会返回非零。
+
+CI 使用相同入口验证 Linux 与 macOS；实际客户端加载、目标模型与 GPU/NPU 验证仍需对应环境。
+
+## 6. 维护
 
 共享开发指令维护在根目录 `AGENTS.md`，Python 检查以 `pyproject.toml` 为准。Skills 维护在 `.agents/skills/`，Claude 专用资源维护在 `.claude/`，测试维护在 `tests/`。
 

@@ -4,21 +4,23 @@
 
 Engineering infrastructure for recursive self-improvement of coding agents: shared standards, skills, tool adapters, and validation workflows.
 
-当前提供 Claude Code、Codex 与 Gemini 入口，以及面向 AI Infra 开发的工程指南。持续改进以可复现的检查结果和人工审查为依据；自动学习与自我修改机制尚未实现。
+当前提供 Claude Code、Codex 与 Gemini 入口，以及面向 AI Infra 开发的验证流程。通过实际结果、人工审查和回归测试改进工具与 Skills。
 
 ## 目录
 
 | 路径 | 内容 |
 | --- | --- |
 | [AGENTS.md](AGENTS.md) | 共享开发指令 |
-| [.agents/skills/](.agents/skills/shell-check/SKILL.md) | 跨工具 Skills |
+| [.agents/skills/](.agents/skills/ai-infra-change/SKILL.md) | AI Infra 验证流程与 Shell 检查 |
 | [.claude/](.claude/README.md) | Claude 角色、Hooks 与设置示例 |
 | [docs/](docs/README.md) | 规划、部署、调研资料 |
-| `tests/` | 配置布局、技能发现与隔离运行测试 |
+| `scripts/`、`tests/` | 可重复运行的检查与隔离回归 |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | 贡献流程、证据要求与调研实践的落地 |
 
 ## 现有资源
 
-- 1 个共享 Skill：`shell-check`，处理文件选择、语法检查和结果汇总。
+- `ai-infra-change`：按训练、推理、Kernel 等变更选择验证范围，记录数值和性能证据。
+- `shell-check`：脚本化选择文件、执行语法和静态检查，失败后继续并汇总。
 - 3 个 Claude 角色：代码审查、调试、性能分析。
 - Python 检查配置与 Git 提交约定。
 - Claude 可选资源：会话与工具 Hooks、通知、状态栏和设置示例。
@@ -36,18 +38,18 @@ Claude 的 `settings.example.json` 保留为模板。选择需要的 Hook 事件
 基础工具：Python 3.10+、Bash、Git、jq。Shell 静态分析需要 shellcheck，Python 静态检查使用 Ruff。
 
 ```bash
-python3 -m unittest discover -s tests -v
-ruff check tests
-ruff format --check tests
+python3 scripts/check.py
 ```
 
-可选开发依赖与 Git 提交检查：
+安装开发依赖后运行上述入口；Git 提交检查按需安装：
 
 ```bash
 python3 -m pip install -e '.[dev]'
 pre-commit install
 pre-commit run --all-files
 ```
+
+CI 在 Linux/Python 3.10、Linux/Python 3.13 和 macOS/Python 3.13 上运行同一入口；本地结果不代表远端 CI 已通过。
 
 这里的 Python 安装用于管理开发依赖，不安装或部署 Agent 资源；配置仍从 Git 工作区选用。
 

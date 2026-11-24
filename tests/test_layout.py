@@ -66,9 +66,13 @@ class LayoutTests(unittest.TestCase):
 
     def test_shared_skills_resolve_to_single_source(self):
         self.assertEqual((AGENT / "skills").resolve(), ROOT / ".agents/skills")
-        for skill in (ROOT / ".agents/skills").glob("*/SKILL.md"):
+        for skill in (ROOT / ".agents/skills").rglob("*"):
+            if not skill.is_file():
+                continue
             self.assertTrue(
-                (AGENT / "skills" / skill.parent.name / "SKILL.md").samefile(skill)
+                (
+                    AGENT / "skills" / skill.relative_to(ROOT / ".agents/skills")
+                ).samefile(skill)
             )
 
     def test_client_instruction_imports_resolve(self):
@@ -84,6 +88,8 @@ class LayoutTests(unittest.TestCase):
             ROOT / "README.md",
             AGENT / "README.md",
             ROOT / "AGENTS.md",
+            ROOT / "CONTRIBUTING.md",
+            *sorted((ROOT / ".agents/skills").rglob("*.md")),
             *sorted((ROOT / "docs").glob("*.md")),
         ]:
             for target in re.findall(r"\]\(([^)]+)\)", doc.read_text()):
