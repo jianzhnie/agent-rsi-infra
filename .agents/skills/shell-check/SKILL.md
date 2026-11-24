@@ -7,7 +7,7 @@ license: Apache-2.0
 platforms: [linux, macos, windows]
 metadata:
   tags: [Check, Skill, Shell, Lint, Static-Analysis]
-  related_skills: [check]
+  related_skills: []
 ---
 对指定目标执行 Bash 语法检查和 shellcheck 静态分析。
 

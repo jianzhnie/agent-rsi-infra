@@ -9,7 +9,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
-AGENT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[1]
+AGENT = ROOT / ".claude"
 
 
 class RuntimeTests(unittest.TestCase):
@@ -154,7 +155,7 @@ class RuntimeTests(unittest.TestCase):
 
     def test_deployed_logging_with_and_without_project_variable(self):
         shutil.copytree(AGENT / "hooks", self.project / ".claude/hooks")
-        settings = json.loads((AGENT / "settings.json").read_text())
+        settings = json.loads((AGENT / "settings.example.json").read_text())
         command = settings["hooks"]["SubagentStart"][0]["hooks"][0]["command"]
         payload = json.dumps(
             {"hook_event_name": "SubagentStart", "agent_type": "reviewer"}

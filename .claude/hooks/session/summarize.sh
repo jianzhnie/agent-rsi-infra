@@ -3,7 +3,7 @@
 set -euo pipefail
 
 HOOK_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
-# shellcheck source=agent/hooks/notifications/common.sh
+# shellcheck source=.claude/hooks/notifications/common.sh
 source "$HOOK_DIR/../notifications/common.sh"
 
 PROJECT_DIR="${CLAUDE_PROJECT_DIR:-$(cd "$(dirname "$0")/../../.." && pwd)}"

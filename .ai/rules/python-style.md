@@ -7,7 +7,7 @@ license: Apache-2.0
 platforms: [linux, macos, windows]
 metadata:
   tags: [Rule, Python, Style, Formatting]
-  related_skills: [check]
+  related_skills: []
 paths:
   - "**/*.py"
   - "**/*.pyi"

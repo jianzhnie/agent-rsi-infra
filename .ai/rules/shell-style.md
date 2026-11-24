@@ -7,7 +7,7 @@ license: Apache-2.0
 platforms: [linux, macos, windows]
 metadata:
   tags: [Rule, Shell, Bash, Style, Formatting]
-  related_skills: [shell-check, check]
+  related_skills: [shell-check]
 paths:
   - "**/*.sh"
   - "**/*.bash"

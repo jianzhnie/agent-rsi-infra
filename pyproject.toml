@@ -1,21 +1,20 @@
 [build-system]
-requires = ["setuptools>=61"]
+requires = ["setuptools>=77.0.3"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "oh-my-claude-code"
+name = "oh-my-agent"
 version = "0.1.0"
-description = "A curated collection of Claude Code configurations, agents, skills, hooks, and rules"
+description = "Shared Coding Agent standards, skills, and client adapters for AI infrastructure"
 readme = "README.md"
 license = "Apache-2.0"
 license-files = ["LICENSE"]
 authors = [{ name = "jianzhnie" }]
 requires-python = ">=3.10"
-keywords = ["template", "claude-code", "pre-commit", "dev-tools"]
+keywords = ["coding-agent", "ai-infra", "skills", "claude-code", "dev-tools"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
@@ -28,19 +27,16 @@ dependencies = []
 [project.optional-dependencies]
 dev = [
     "pytest>=7.0.0",
-    "pytest-cov>=4.0.0",
     "ruff>=0.6.0",
-    "black>=23.0.0",
-    "mypy>=1.5.0",
-    "psutil>=5.9.0",
+    "pre-commit>=4.0.0",
 ]
 
 [project.urls]
 Homepage = "https://github.com/jianzhnie/oh-my-claude-code"
 
-[tool.setuptools.packages.find]
-where = ["."]
-include = ["oh_my_claude_code*"]
+[tool.setuptools]
+# This distribution installs development dependencies; resources are used from Git.
+py-modules = []
 
 [tool.ruff]
 line-length = 88
@@ -68,22 +64,8 @@ ignore = [
     "E501",  # Line too long (handled by formatter)
 ]
 
-[tool.ruff.lint.isort]
-known-first-party = ["oh_my_claude_code"]
-
 [tool.ruff.lint.pyupgrade]
 keep-runtime-typing = true
-
-[tool.mypy]
-python_version = "3.10"
-strict = true
-ignore_missing_imports = true
-exclude = [
-    "tests/",
-    "examples/",
-]
-warn_unreachable = true
-warn_no_return = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

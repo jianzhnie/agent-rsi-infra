@@ -1,129 +1,61 @@
-# oh-my-claude-code
+# oh-my-agent
 
-一套完整的 Claude Code 配置集合，包含自定义 Agents、Skills、Hooks 和 Rules，帮助开发者最大化 Claude Code 的使用效率。
+面向 AI Infra 开发的 Coding Agent 规范与配置集合。共享工程规则和 Skills 集中维护，目前提供 Claude Code、Codex 与 Gemini 的入口。
 
-## 目录结构
+本仓库提供配置与流程资料，不实现训练、推理或 Kernel 框架。
 
-```
-.
-├── .claude/
-│   ├── agents/          # 自定义 Agent 定义
-│   ├── skills/          # 自定义 Skill（check, shell-check 等）
-│   ├── hooks/           # 会话生命周期钩子脚本
-│   ├── rules/           # 代码规范（Python、Shell、Git）
-│   └── settings.json    # Claude Code 项目配置
-├── .pre-commit-config.yaml
-├── pyproject.toml
-└── README.md
-```
+## 目录
 
-## 功能特性
+| 路径 | 内容 |
+| --- | --- |
+| [AGENTS.md](AGENTS.md) | 共享开发指令入口，链接到 `.ai/AGENTS.md` |
+| [.ai/](.ai/architecture/overview.md) | 工程规范、贡献政策、领域指南 |
+| [.agents/skills/](.agents/skills/README.md) | 跨工具 Skills |
+| [.claude/](.claude/README.md) | Claude 角色、Hooks、输出风格与设置示例 |
+| [docs/](docs/README.md) | 规划、部署、调研资料 |
+| `tests/` | 配置布局、技能发现与隔离运行测试 |
 
-### Agents（9 个）
+## 现有资源
 
-| Agent | 用途 |
-|-------|------|
-| `architect` | 系统架构设计、API 设计、技术选型 |
-| `code-reviewer` | 代码审查（正确性、安全性、性能） |
-| `debugger` | 系统性调试与根因分析 |
-| `documentation-writer` | 文档和 docstring 编写 |
-| `library-integration` | 第三方库/SDK 集成 |
-| `performance-analyzer` | 性能分析（吞吐量、内存、延迟） |
-| `refactor` | 安全重构，不改变行为 |
-| `shell-expert` | Shell 脚本编写与审查 |
-| `test-writer` | 单元测试和集成测试编写 |
+- 2 个共享 Skills：`shell-check`、`tech-doc-translator`。
+- 9 个 Claude 角色：架构、审查、调试、文档、依赖集成、性能、重构、Shell 和测试。
+- 3 份共享规则：Python、Shell、Git。
+- Claude 可选资源：输出风格、会话与工具 Hooks、通知、状态栏和设置示例。
 
-### Skills（3 个）
+训练、推理、分布式和 Kernel 指南位于 `.ai/architecture/`。领域 Skills 按真实任务逐步补充，当前未提供完整的 AI Infra 自动化实现。
 
-| Skill | 用途 |
-|-------|------|
-| `check` | 运行完整 pre-commit 检查 |
-| `shell-check` | Shell 脚本语法和静态分析 |
-| `tech-doc-translator` | 英文技术文档翻译为中文 |
+## 使用
 
-### Hooks
+先阅读 [部署说明](docs/deployment.md)，按所用客户端选取入口与资源。跨工具目录布局不代表各客户端都已完成加载验证。
 
-- **SessionStart**: 会话初始化、compact 恢复
-- **PreToolUse**: 工具调用前日志
-- **PostToolUse**: 编辑/写入后自动格式化
-- **Notification**: 桌面通知推送
-- **SessionEnd**: 会话摘要生成
-- **StopFailure**: 异常停止处理
-- **ConfigChange**: 配置变更审计
-- **FileChanged**: `.env` 变更自动重载
+Claude 的 `settings.example.json` 保留为模板。采用前选择所需权限、事件、插件和服务，再放入目标项目的有效配置位置；不要直接覆盖已有设置。
 
-### Rules
+## 本地检查
 
-- `git-conventions.md` — Conventional Commits 规范
-- `python-style.md` — Python 代码风格（基于 Google Style Guide）
-- `shell-style.md` — Shell 脚本风格
-
-### MCP 服务器
-
-| 服务器 | 用途 |
-|--------|------|
-| `codegraph` | 代码知识图谱（符号、边、文件索引） |
-| `github` | GitHub API 集成 |
-| `fetch` | Web 内容获取 |
-| `filesystem` | 文件系统访问 |
-
-## 快速开始
-
-### 前置要求
-
-- [Claude Code](https://claude.ai/code) 已安装
-- Python >= 3.10（用于 pre-commit hooks）
-- [codegraph](https://github.com/anthropics/codegraph)（可选，代码索引）
-
-### 安装
+基础工具：Python 3.10+、Bash、Git、jq。Shell 静态分析需要 shellcheck，Python 静态检查使用 Ruff。
 
 ```bash
-# 克隆仓库
-git clone https://github.com/jianzhnie/oh-my-claude-code.git
-cd oh-my-claude-code
+python3 -m unittest discover -s tests -v
+ruff check tests
+ruff format --check tests
+```
 
-# 安装 Python 开发依赖和 pre-commit hooks
-pip install -e ".[dev]"
+可选开发依赖与 Git 提交检查：
+
+```bash
+python3 -m pip install -e '.[dev]'
 pre-commit install
-```
-
-### 使用
-
-将 `.claude/` 目录复制或参考其结构到你自己的项目中，Claude Code 会自动加载配置。
-
-```bash
-# 运行代码检查
 pre-commit run --all-files
-
-# 运行 lint 和格式化
-ruff check .
-ruff format .
-
-# 类型检查
-mypy .
-
-# 运行测试
-pytest
 ```
 
-## 配置说明
+这里的 Python 安装用于管理开发依赖，不安装或部署 Agent 资源；配置仍从 Git 工作区选用。
 
-### settings.json
+测试使用临时 Git 仓库，替换 curl、桌面与语音通知命令。不会发送真实通知。
 
-项目级 Claude Code 配置，包括：
-- 权限管理（允许/拒绝的命令和 MCP 工具）
-- 会话生命周期 hooks
-- Worktree 和 StatusLine 配置
-- 启用的插件
+## 维护
 
-### pyproject.toml
+- 当前目录职责见上方索引；工具使用方式见 [部署说明](docs/deployment.md)。
+- 配置索引、来源及署名：[Claude 资源索引](.claude/README.md)。
+- 修改共享 Skill 时保留元数据和资源相对路径；工具适配层不复制正文。
 
-Python 项目配置，包括 ruff、mypy、pytest 的工具设置。可作为新 Python 项目的起点。
-
-### .pre-commit-config.yaml
-
-Pre-commit hooks：ruff-format、ruff lint、trailing-whitespace、check-yaml、end-of-file-fixer、check-merge-conflict、mixed-line-ending。
-
-## 许可证
-
-Apache-2.0
+许可证：[Apache-2.0](LICENSE)。外部资源保留各自声明。
