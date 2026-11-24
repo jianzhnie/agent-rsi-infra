@@ -51,7 +51,6 @@ agent-rsi-infra/
 ├── AGENTS.md                  # 共享开发要求
 ├── CLAUDE.md / GEMINI.md       # 客户端入口
 ├── CONTRIBUTING.md            # 贡献与改进流程
-├── standards.md               # 实践标准
 ├── .agents/
 │   ├── README.md              # 资源索引
 │   ├── agents/                # 通用角色源文件
@@ -64,7 +63,7 @@ agent-rsi-infra/
 │   └── settings.example.json  # 配置模板
 ├── scripts/check.py           # 本地与 CI 共用检查入口
 ├── tests/
-└── docs/RSI_DESIGN.md          # 设计与验证边界
+└── docs/                      # 设计、工程标准与领域参考
 ```
 
 - **Claude Code**：根入口导入共享指令，通过生成适配使用角色，Skills 使用共享链接。Hooks 和状态栏按需配置，不把示例直接变为活动设置。
@@ -126,4 +125,4 @@ agent-rsi-infra/
 | 审查与责任 | 只读 code-reviewer、提交前自查及人工 Review | Agent 输出辅助判断，人类作者理解、验证并承担提交责任 |
 | 受控 RSI | 失败证据、最小修正、代表性对照与审查 | 不自动改写规则，不以一次成功晋级，不按技能数量衡量改进 |
 
-环境优先使用项目已选定的 Python；建议在 `.venv` 中安装开发依赖，可使用 uv 管理。缺少解释器或工具时明确报告，不全局安装。分布式和模型验证记录设备、节点、并行策略、启动命令及配置；快速检查与昂贵验证分开报告。标准原文见 [standards.md](../standards.md)。
+环境优先使用项目已选定的 Python；建议在 `.venv` 中安装开发依赖，可使用 uv 管理。缺少解释器或工具时明确报告，不全局安装。分布式和模型验证记录设备、节点、并行策略、启动命令及配置；快速检查与昂贵验证分开报告。标准原文见 [工程实践标准](engineering-standards.md)。

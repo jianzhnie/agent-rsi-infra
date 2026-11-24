@@ -2,6 +2,8 @@
 
 ## 使用与实践
 
+- [工程实践标准](engineering-standards.md)：协作、实现与验证原则。
+
 - [RSI 设计](RSI_DESIGN.md)：架构、共享资源、客户端适配与实践标准。
 
 - [贡献与验证](../CONTRIBUTING.md)：调研实践的落地、检查入口与证据要求。
