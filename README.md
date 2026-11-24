@@ -1,8 +1,10 @@
-# oh-my-agent
+# agent-rsi-infra
 
-面向 AI Infra 开发的 Coding Agent 规范与配置集合。共享工程规则和 Skills 集中维护，目前提供 Claude Code、Codex 与 Gemini 的入口。
+面向 Coding Agent 递归自我改进（Recursive Self-Improvement，RSI）的工程基础设施，集中维护共享规范、Skills、工具适配与验证流程。
 
-本仓库提供配置与流程资料，不实现训练、推理或 Kernel 框架。
+Engineering infrastructure for recursive self-improvement of coding agents: shared standards, skills, tool adapters, and validation workflows.
+
+当前提供 Claude Code、Codex 与 Gemini 入口，以及面向 AI Infra 开发的工程指南。持续改进以可复现的检查结果和人工审查为依据；自动学习与自我修改机制尚未实现。
 
 ## 目录
 

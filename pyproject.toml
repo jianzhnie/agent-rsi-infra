@@ -3,15 +3,15 @@ requires = ["setuptools>=77.0.3"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "oh-my-agent"
+name = "agent-rsi-infra"
 version = "0.1.0"
-description = "Shared Coding Agent standards, skills, and client adapters for AI infrastructure"
+description = "Engineering infrastructure for recursive self-improvement of coding agents: shared standards, skills, tool adapters, and validation workflows."
 readme = "README.md"
 license = "Apache-2.0"
 license-files = ["LICENSE"]
 authors = [{ name = "jianzhnie" }]
 requires-python = ">=3.10"
-keywords = ["coding-agent", "ai-infra", "skills", "claude-code", "dev-tools"]
+keywords = ["coding-agent", "rsi", "self-improvement", "ai-infra", "skills"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
@@ -32,7 +32,7 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/jianzhnie/oh-my-claude-code"
+Homepage = "https://github.com/jianzhnie/agent-rsi-infra"
 
 [tool.setuptools]
 # This distribution installs development dependencies; resources are used from Git.

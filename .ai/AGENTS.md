@@ -1,6 +1,6 @@
 # 仓库开发指令
 
-本仓库为 `oh-my-agent`，维护共享工程规范、Coding Agent Skills 和客户端适配。没有训练、推理或 Kernel 业务实现；相关资料用于指导目标项目中的工作。
+本仓库为 `agent-rsi-infra`，提供面向 Coding Agent 递归自我改进（RSI）的共享工程规范、Skills、工具适配与验证流程。没有训练、推理或 Kernel 业务实现；相关资料用于指导目标项目中的工作。
 
 ## 目录与事实来源
 
