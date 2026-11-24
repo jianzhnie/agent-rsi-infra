@@ -13,7 +13,7 @@ Engineering infrastructure for recursive self-improvement of coding agents: shar
 | [AGENTS.md](AGENTS.md) | 共享开发指令 |
 | [.agents/skills/](.agents/skills/install-skill-from-github/SKILL.md) | GitHub 技能迁入、Shell 检查与领域流程 |
 | [.agents/](.agents/README.md) | 角色、Skills 与适配资源索引 |
-| `.claude/` | Claude 兼容链接、Hooks 与设置示例 |
+| `.claude/` | Claude 专用角色适配、Skills 链接、Hooks 与设置示例 |
 | [docs/](docs/README.md) | 规划、部署、调研资料 |
 | `scripts/`、`tests/` | 可重复运行的检查与隔离回归 |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | 贡献流程、证据要求与调研实践的落地 |
@@ -28,7 +28,7 @@ Engineering infrastructure for recursive self-improvement of coding agents: shar
 - vLLM 来源 Skills：Kernel 微基准、Triton 开发、API 兼容核对、安全审查、模型部署配置查询与模型前向微基准，见[资源索引](.agents/README.md)。
 - SGLang 来源 Skills：分布式挂起诊断、离线 trace 分析、机械重构验证、代码清理、Kernel 组织与 KL 一致性测试，见[资源索引](.agents/README.md)。
 - `flashinfer-add-cuda-kernel`：FlashInfer CUDA Kernel 集成；调试与 benchmark 方法复用现有流程。
-- 2 个 Claude 角色：调试、性能分析。
+- 2 个共享角色：调试、性能分析。
 - Python 检查配置与 Git 提交约定。
 - Claude 可选资源：会话与工具 Hooks、通知、状态栏和设置示例。
 

@@ -16,7 +16,7 @@ GPU 与 vLLM Skills 的依赖在目标项目环境中准备，不加入本仓库
 
 - 根 `CLAUDE.md` 使用 `@AGENTS.md` 导入共享指令。
 - `.claude/skills` 链接到 `../.agents/skills`，共享技能与其附属资源，包括可执行的 Shell 检查脚本。
-- `.claude/agents` 链接到 `../.agents/agents`，角色源文件统一维护在 `.agents/agents/`。
+- `.claude/agents/` 是 Claude 格式的生成适配；通用角色正文维护在 `.agents/agents/`。
 
 可选 Hooks 和状态栏的步骤：
 
@@ -31,9 +31,9 @@ GPU 与 vLLM Skills 的依赖在目标项目环境中准备，不加入本仓库
 
 ## 3. Codex
 
-根 `AGENTS.md` 提供仓库指令，Skills 位于 `.agents/skills/`。无需额外的仓库级 Codex 配置；执行权限与工具设置沿用运行环境。
+根 `AGENTS.md` 提供仓库指令，Skills 位于 `.agents/skills/`。`.codex/config.toml` 注册角色，`.codex/agents/*.toml` 保存生成的角色指令；不预设模型、网络或权限豁免。性能分析角色使用只读 sandbox，调试角色继承运行环境权限。
 
-在所用 Codex 版本确认根指令与共享 Skills 的实际发现结果。Claude 的角色与 Hooks 不会因此自动变成 Codex 配置。
+在所用 Codex 版本确认根指令与共享 Skills 的实际发现结果。角色通过 Codex 专用配置接入，Hooks 仍属于 Claude 专用资源；项目配置受客户端版本和项目信任机制约束，真实加载需在目标客户端确认。
 
 ## 4. Gemini
 
@@ -58,3 +58,11 @@ CI 使用显式 `--check` 入口验证 Linux 与 macOS；实际客户端加载�
 ## SGLang 专项 Skills
 
 分布式挂起、Kernel 组织、代码清理和 KL 一致性技能中的源码路径与框架接口指目标 SGLang checkout；不要求本仓库安装 SGLang。`llm-torch-profiler-analysis` 默认分析已有本地 trace，在线采集脚本保留为按需审查的上游资源。`mechanical-refactor-verify` 依赖 Git、Python 3.10+ 和目标仓库的格式化工具，附属测试使用 pytest；执行证明脚本及 hooks 前检查其内容，机械变换通过不代表业务行为正确。
+
+## 角色适配维护
+
+`.agents/agents/*.md` 只保存 name、description、署名、许可及职责正文，不包含客户端工具名、模型或权限字段。修改后运行 `python3 scripts/sync_agents.py`，提交共享源文件与两端生成结果；`--check` 检查是否同步。生成器只管理角色配置，不修改 Claude 活动设置或用户级 Codex 配置。
+
+将适配用于其他项目时保持共享参考路径，检查目标客户端支持的配置格式；合并 `.codex/config.toml` 的角色表到已有配置，不直接覆盖。角色可用不等于自动委派已获授权；工具与 sandbox 是客户端边界，Bash 工具列表也不是完整的只读保障。
+
+Codex 格式依据：[官方多 Agent 文档](https://developers.openai.com/codex/multi-agent) 与 [配置 schema](https://github.com/openai/codex/blob/main/codex-rs/core/config.schema.json)。本仓库仅验证生成一致性与格式，未启动真实客户端验证角色发现。

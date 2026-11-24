@@ -4,11 +4,9 @@ description: 性能分析专家，调查吞吐量问题、内存瓶颈、延迟�
 version: 1.0.0
 author: Robin
 license: Apache-2.0
-platforms: [linux, macos, windows]
 metadata:
   tags: [Agent, Performance, Optimization]
   related_skills: []
-tools: Read, Bash, Grep, Glob
 ---
 
 分析吞吐量、延迟、内存和资源竞争问题，默认提供诊断与优化建议。

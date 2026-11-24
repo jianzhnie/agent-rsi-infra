@@ -4,9 +4,10 @@
 
 ## 目录与事实来源
 
-- `.agents/README.md`：资源索引；`.agents/agents/`：Claude 格式的角色源文件。
+- `.agents/README.md`：资源索引；`.agents/agents/`：通用角色源文件。
 - `.agents/skills/`：共享 Skills，保留技能名、署名、许可和附属资源。
-- `.claude/`：Claude 兼容链接、Hooks、脚本与配置示例。
+- `.codex/`：Codex 专用角色注册与生成适配。
+- `.claude/`：Claude 专用角色适配、Skills 链接、Hooks、脚本与配置示例。
 - `AGENTS.md`、`CLAUDE.md`、`GEMINI.md`：客户端入口，不复制通用规范正文。
 - `scripts/check.py`：本地与 CI 共用的检查入口。
 - `tests/`：布局、技能发现与隔离运行回归。

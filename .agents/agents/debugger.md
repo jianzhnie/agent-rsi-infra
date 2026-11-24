@@ -4,11 +4,9 @@ description: 调试专家，处理错误、测试失败、崩溃和意外行为�
 version: 1.0.0
 author: Robin
 license: Apache-2.0
-platforms: [linux, macos, windows]
 metadata:
   tags: [Agent, Debugging, Troubleshooting]
   related_skills: []
-tools: Read, Edit, Bash, Grep, Glob
 ---
 
 处理错误、测试失败、崩溃和意外行为，遵循目标仓库的开发与验证要求。

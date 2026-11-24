@@ -1,6 +1,6 @@
 # Agent 资源索引
 
-这里集中索引角色、共享 Skills 与 Claude 适配资源。共享指令见根目录 `AGENTS.md`。角色源文件位于 `agents/`，采用 Claude 格式；Skills 位于 `skills/`。
+这里集中索引角色、共享 Skills 与 Claude 适配资源。共享指令见根目录 `AGENTS.md`。角色源文件位于 `agents/`，采用通用 Markdown 与元数据；Skills 位于 `skills/`。
 
 ## 资源索引
 
@@ -35,7 +35,7 @@
 | status-line | [脚本](../.claude/scripts/status-line.sh) | 上下文用量、模型与 Git 状态 |
 | settings | [设置示例](../.claude/settings.example.json) | 可选 Hook 事件绑定与状态栏 |
 
-Claude 通过 `.claude/agents -> ../.agents/agents` 和 `.claude/skills -> ../.agents/skills` 使用同一份源文件。迁移目录不代表其他客户端能自动发现 Claude 角色。工程与提交约定由根 `CLAUDE.md` 导入 `AGENTS.md`。
+Claude 角色适配生成到 `.claude/agents/`，Codex 角色配置生成到 `.codex/agents/`；Skills 仍通过 `.claude/skills -> ../.agents/skills` 共享。角色修改后运行 `python3 scripts/sync_agents.py`，禁止手工修改生成文件。工程与提交约定由根 `CLAUDE.md` 导入 `AGENTS.md`。
 
 `code-reviewer` 与两档清单统一维护在 `.agents/skills/code-reviewer/`，通过 `skills` 链接供 Claude 使用；不再维护重复 Agent。
 

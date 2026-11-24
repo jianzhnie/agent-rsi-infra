@@ -65,14 +65,19 @@ class LayoutTests(unittest.TestCase):
         )
         self.assertEqual(set(links), expected)
 
-    def test_shared_agents_resolve_to_single_source(self):
-        source = ROOT / ".agents/agents"
-        self.assertTrue((AGENT / "agents").is_symlink())
-        self.assertEqual((AGENT / "agents").resolve(), source)
-        entries = list(source.glob("*.md"))
-        self.assertTrue(entries)
-        for entry in entries:
-            self.assertTrue((AGENT / "agents" / entry.name).samefile(entry))
+    def test_agent_adapters_match_shared_definitions(self):
+        from scripts.sync_agents import render
+
+        outputs = render()
+        self.assertTrue(outputs)
+        self.assertFalse((AGENT / "agents").is_symlink())
+        for path, content in outputs.items():
+            self.assertEqual(path.read_text(), content, str(path))
+        sources = {p.stem for p in (ROOT / ".agents/agents").glob("*.md")}
+        self.assertEqual(sources, {p.stem for p in (AGENT / "agents").glob("*.md")})
+        self.assertEqual(
+            sources, {p.stem for p in (ROOT / ".codex/agents").glob("*.toml")}
+        )
 
     def test_shared_skills_resolve_to_single_source(self):
         self.assertEqual((AGENT / "skills").resolve(), ROOT / ".agents/skills")
