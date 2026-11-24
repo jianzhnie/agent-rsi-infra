@@ -10,9 +10,8 @@ Engineering infrastructure for recursive self-improvement of coding agents: shar
 
 | 路径 | 内容 |
 | --- | --- |
-| [AGENTS.md](AGENTS.md) | 共享开发指令入口，链接到 `.ai/AGENTS.md` |
-| [.ai/](.ai/AGENTS.md) | 共享开发指令 |
-| [.agents/skills/](.agents/skills/README.md) | 跨工具 Skills |
+| [AGENTS.md](AGENTS.md) | 共享开发指令 |
+| [.agents/skills/](.agents/skills/shell-check/SKILL.md) | 跨工具 Skills |
 | [.claude/](.claude/README.md) | Claude 角色、Hooks 与设置示例 |
 | [docs/](docs/README.md) | 规划、部署、调研资料 |
 | `tests/` | 配置布局、技能发现与隔离运行测试 |

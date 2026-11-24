@@ -4,7 +4,7 @@
 
 ## 1. 共享资源
 
-根目录 `AGENTS.md` 是指向 `.ai/AGENTS.md` 的相对符号链接，两处使用相同正文。`.agents/skills/` 是技能唯一来源。
+根目录 `AGENTS.md` 是共享开发指令的唯一来源。`.agents/skills/` 是技能唯一来源。
 
 迁移或复制仓库时保留隐藏目录和符号链接。Windows 或不支持符号链接的环境需采用客户端支持的导入或生成副本方案，并自行管理同步；不能将链接目标字符串误当作文件正文。
 
@@ -31,7 +31,7 @@
 
 根 `AGENTS.md` 提供仓库指令，Skills 位于 `.agents/skills/`。无需额外的仓库级 Codex 配置；执行权限与工具设置沿用运行环境。
 
-在所用 Codex 版本确认根指令与共享 Skills 的实际发现结果。Claude 的角色与 Hooks不会因此自动变成 Codex 配置。
+在所用 Codex 版本确认根指令与共享 Skills 的实际发现结果。Claude 的角色与 Hooks 不会因此自动变成 Codex 配置。
 
 ## 4. Gemini
 
@@ -41,6 +41,6 @@ Cursor 与 Copilot 适配已移除，当前仓库不提供专用入口。
 
 ## 5. 维护
 
-共享开发指令维护在 `.ai/AGENTS.md`，Python 检查以 `pyproject.toml` 为准。Skills 维护在 `.agents/skills/`，Claude 专用资源维护在 `.claude/`，测试维护在 `tests/`。
+共享开发指令维护在根目录 `AGENTS.md`，Python 检查以 `pyproject.toml` 为准。Skills 维护在 `.agents/skills/`，Claude 专用资源维护在 `.claude/`，测试维护在 `tests/`。
 
 变更公共路径时同步更新客户端入口、索引和测试。升级客户端或启用新的配置项时，重新检查实际加载行为。

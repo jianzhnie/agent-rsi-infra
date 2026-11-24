@@ -49,7 +49,7 @@ class LayoutTests(unittest.TestCase):
             "settings.example.json",
             "scripts/status-line.sh",
         }
-        for folder in ("agents", "commands", "output-styles"):
+        for folder in ("agents",):
             expected.update(
                 str(p.relative_to(AGENT)) for p in (AGENT / folder).glob("*.md")
             )
@@ -58,17 +58,13 @@ class LayoutTests(unittest.TestCase):
             for p in (ROOT / ".agents/skills").glob("*/SKILL.md")
         )
         expected.update(
-            "../.ai/rules/" + p.name for p in (ROOT / ".ai/rules").glob("*.md")
-        )
-        expected.update(
             str(p.relative_to(AGENT))
             for p in (AGENT / "hooks").rglob("*.sh")
             if p.name != "common.sh"
         )
         self.assertEqual(set(links), expected)
 
-    def test_shared_entries_resolve_to_single_source(self):
-        self.assertEqual((ROOT / "AGENTS.md").resolve(), ROOT / ".ai/AGENTS.md")
+    def test_shared_skills_resolve_to_single_source(self):
         self.assertEqual((AGENT / "skills").resolve(), ROOT / ".agents/skills")
         for skill in (ROOT / ".agents/skills").glob("*/SKILL.md"):
             self.assertTrue(
@@ -87,9 +83,8 @@ class LayoutTests(unittest.TestCase):
         for doc in [
             ROOT / "README.md",
             AGENT / "README.md",
-            ROOT / ".agents/skills/README.md",
+            ROOT / "AGENTS.md",
             *sorted((ROOT / "docs").glob("*.md")),
-            *sorted((ROOT / ".ai").rglob("*.md")),
         ]:
             for target in re.findall(r"\]\(([^)]+)\)", doc.read_text()):
                 if target.startswith(("https://", "http://", "#")):
