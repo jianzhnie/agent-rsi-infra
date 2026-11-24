@@ -83,13 +83,6 @@ class LayoutTests(unittest.TestCase):
             for target in imports:
                 self.assertTrue((entry.parent / target).is_file(), (name, target))
 
-    def test_claude_rule_imports_resolve(self):
-        entry = AGENT / "rules/shared.md"
-        imports = re.findall(r"^@(.+)$", entry.read_text(), re.M)
-        self.assertTrue(imports)
-        for target in imports:
-            self.assertTrue((entry.parent / target).is_file(), target)
-
     def test_local_document_links_resolve(self):
         for doc in [
             ROOT / "README.md",

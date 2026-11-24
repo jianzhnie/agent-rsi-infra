@@ -11,26 +11,26 @@ Engineering infrastructure for recursive self-improvement of coding agents: shar
 | 路径 | 内容 |
 | --- | --- |
 | [AGENTS.md](AGENTS.md) | 共享开发指令入口，链接到 `.ai/AGENTS.md` |
-| [.ai/](.ai/architecture/overview.md) | 工程规范、贡献政策、领域指南 |
+| [.ai/](.ai/AGENTS.md) | 共享开发指令 |
 | [.agents/skills/](.agents/skills/README.md) | 跨工具 Skills |
-| [.claude/](.claude/README.md) | Claude 角色、Hooks、输出风格与设置示例 |
+| [.claude/](.claude/README.md) | Claude 角色、Hooks 与设置示例 |
 | [docs/](docs/README.md) | 规划、部署、调研资料 |
 | `tests/` | 配置布局、技能发现与隔离运行测试 |
 
 ## 现有资源
 
-- 2 个共享 Skills：`shell-check`、`tech-doc-translator`。
-- 9 个 Claude 角色：架构、审查、调试、文档、依赖集成、性能、重构、Shell 和测试。
-- 3 份共享规则：Python、Shell、Git。
-- Claude 可选资源：输出风格、会话与工具 Hooks、通知、状态栏和设置示例。
+- 1 个共享 Skill：`shell-check`，处理文件选择、语法检查和结果汇总。
+- 3 个 Claude 角色：代码审查、调试、性能分析。
+- Python 检查配置与 Git 提交约定。
+- Claude 可选资源：会话与工具 Hooks、通知、状态栏和设置示例。
 
-训练、推理、分布式和 Kernel 指南位于 `.ai/architecture/`。领域 Skills 按真实任务逐步补充，当前未提供完整的 AI Infra 自动化实现。
+训练、推理、分布式和 Kernel 的参考资料集中在 [AI Infra 工程实践](docs/ai_infra_agent.md)。领域 Skills 按真实任务逐步补充。
 
 ## 使用
 
 先阅读 [部署说明](docs/deployment.md)，按所用客户端选取入口与资源。跨工具目录布局不代表各客户端都已完成加载验证。
 
-Claude 的 `settings.example.json` 保留为模板。采用前选择所需权限、事件、插件和服务，再放入目标项目的有效配置位置；不要直接覆盖已有设置。
+Claude 的 `settings.example.json` 保留为模板。选择需要的 Hook 事件与状态栏配置，再合并到目标项目设置；不要直接覆盖已有设置。
 
 ## 本地检查
 
