@@ -42,3 +42,102 @@ def test_invalid_skill_resources_or_contracts_are_reported(tmp_path, fault):
     else:
         (folder / "SKILL.md").write_text("---\nname: [broken\n---\n")
     assert check(tmp_path)
+
+
+def test_duplicate_frontmatter_keys_are_rejected(tmp_path):
+    folder = fixture(tmp_path)
+    (folder / "SKILL.md").write_text(
+        "---\nname: example\nname: shadow\n"
+        "description: Example skill.\n---\n"
+    )
+
+    errors = check(tmp_path)
+
+    assert any("duplicate key 'name'" in error for error in errors)
+
+
+def test_duplicate_nested_frontmatter_keys_are_rejected(tmp_path):
+    folder = fixture(tmp_path)
+    (folder / "SKILL.md").write_text(
+        "---\nname: example\ndescription: Example skill.\n"
+        "vendor_extension:\n  nested:\n    enabled: true\n    enabled: false\n"
+        "---\n"
+    )
+
+    errors = check(tmp_path)
+
+    assert any("duplicate key 'enabled'" in error for error in errors)
+
+
+def test_yaml_merge_key_can_be_overridden_explicitly(tmp_path):
+    folder = fixture(tmp_path)
+    (folder / "SKILL.md").write_text(
+        "---\nname: example\ndescription: Example skill.\n"
+        "defaults: &defaults\n  nested: {enabled: true}\n"
+        "vendor_extension:\n  <<: *defaults\n  nested: {enabled: false}\n"
+        "---\n"
+    )
+
+    assert check(tmp_path) == []
+
+
+@pytest.mark.parametrize(
+    ("content", "expected"),
+    [
+        ("[]", "Expected a JSON object"),
+        ('{"example": {}, "example": {}}', "Duplicate JSON key"),
+    ],
+)
+def test_sidecar_catalog_rejects_invalid_json_objects(tmp_path, content, expected):
+    fixture(tmp_path)
+    (tmp_path / ".agents/skill-contracts.json").write_text(content)
+
+    errors = check(tmp_path)
+
+    assert any(expected in error for error in errors)
+
+
+@pytest.mark.parametrize(
+    ("metadata", "expected"),
+    [
+        ("[]", "Expected a JSON object"),
+        (
+            '{"repository": "https://github.com/example/repo"}',
+            "Invalid provenance path",
+        ),
+        (
+            json.dumps(
+                {
+                    "repository": "https://github.com/example/repo",
+                    "path": "../outside",
+                    "requested_ref": "main",
+                    "resolved_commit": None,
+                }
+            ),
+            "Invalid provenance path",
+        ),
+        (
+            json.dumps(
+                {
+                    "repository": "https://github.com/example/repo",
+                    "path": "skills/example",
+                    "requested_ref": "main",
+                }
+            ),
+            "Missing resolved_commit",
+        ),
+        (
+            '{"repository": "https://github.com/example/repo", '
+            '"path": "skills/example", "requested_ref": "main", '
+            '"requested_ref": "shadow", "resolved_commit": null}',
+            "Duplicate JSON key",
+        ),
+    ],
+)
+def test_install_source_requires_valid_snapshot_shape(tmp_path, metadata, expected):
+    folder = fixture(tmp_path)
+    (folder / "INSTALL_SOURCE.json").write_text(metadata)
+
+    errors = check(tmp_path)
+
+    assert any(expected in error for error in errors)
