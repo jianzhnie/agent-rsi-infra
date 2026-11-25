@@ -31,4 +31,4 @@ metadata:
 
 保持只读：不修改被审查代码、不自行更新项目规则或记忆、不创建评论、不批准或提交 PR。需要对外发布时由主流程依据用户授权处理。不要将上游参考中的外部动作视为授权。
 
-来源与本地适配见[说明](references/UPSTREAM.md)。
+来源与本地适配见[说明](references/UPSTREAM.md)。需要对照 SGLang-Omni 原始风格时，按需读取 [coding-style.md 原文](references/sglang-omni/coding-style.md)，先读其[适配边界](references/sglang-omni/UPSTREAM.md)；不将上游专用规则自动施加到本仓库或其他项目。

@@ -54,3 +54,7 @@
 - mesh/梯度 placement、配置所有权、实验边界 → 训练参考；测试成本、golden 更新和 PR 必要性 → 贡献指南及 strict 审查。
 
 各资源的 `references/torchtitan/UPSTREAM.md` 保留文件映射、本地修正和 BSD-3-Clause 许可。不迁入 fake 后端、torch_bisect、当前模型迁移清单、内部工具配置、无 BC 政策、自动提交或对外发布动作。只验证 CPU 合成产物及资源结构，不声明真实训练或 GPU 收益。
+
+## SGLang-Omni 审查与评测结果适配
+
+选择性合并 code-review/coding-style 到[贡献规范](../CONTRIBUTING.md#接口配置与模块边界)、严格审查和推理参考；running-eval-suite 只提炼到[批量评测结果管理](task-evidence.md#批量评测的结果管理)。固定 revision、许可、原始文件和未采用项统一见[来源记录](../.agents/skills/code-reviewer/references/sglang-omni/UPSTREAM.md)。未新增 Skill、评测 runner、模型配置或客户端适配；仅完成文档与资源检查，未验证实际 Agent 行为或模型评测。
