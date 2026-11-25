@@ -104,3 +104,5 @@ DeepSpeed checklist 采用固定 commit `039bfc9f3f493ae5bf3f99582b4e4e593660d98
 PR 自查流程补充参考 FlashInfer [self-review](https://github.com/flashinfer-ai/flashinfer/blob/4d5a6ce322587d247fb192f97a0d23eeba9e3412/.claude/skills/self-review/SKILL.md)，固定 commit `4d5a6ce322587d247fb192f97a0d23eeba9e3412`，许可见[保留全文](.agents/skills/flashinfer-add-cuda-kernel/LICENSE)。不复制自动修复、PR 发布动作或强制发现问题的要求。
 
 训练与推理报告的项目实践按 [迁移记录](docs/framework-practices.md) 落地到共享工作流及按需参考；架构遵循 [RSI 设计](docs/RSI_DESIGN.md)，不自动创建目标框架配置或代替设备验证。
+
+跨 Agent 或 Skill 比较结果时采用[任务契约与验证报告](docs/task-evidence.md)，保留未执行项及原始证据。报告结构检查不代表实际行为已验证。

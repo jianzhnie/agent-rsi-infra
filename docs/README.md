@@ -2,6 +2,9 @@
 
 ## 使用与实践
 
+- [回归任务样例](../evaluations/cases/README.md)：真实工具故障与合成 trace，标注验证层级。
+- [任务契约与验证报告](task-evidence.md)：结果格式、性能环境与人工晋级。
+
 - [工程实践标准](engineering-standards.md)：协作、实现与验证原则。
 
 - [RSI 设计](RSI_DESIGN.md)：架构、共享资源、客户端适配与实践标准。

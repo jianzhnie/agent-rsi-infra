@@ -238,6 +238,23 @@ class InstallerTests(unittest.TestCase):
         self.assertEqual(status, 0, error)
         self.assertFalse((self.dest / "root-skill/.git").exists())
 
+    def test_reserved_provenance_cannot_overwrite_source_metadata(self):
+        source = self.repo / "skills/one/INSTALL_SOURCE.json"
+        source.write_text('{"original": true}')
+        status, _, _, _ = self.install("--repo", "example/repo", "--path", "skills/one")
+        self.assertEqual(status, 1)
+        self.assertFalse((self.dest / "one").exists())
+        self.assertEqual(source.read_text(), '{"original": true}')
+
+    def test_source_directory_symlink_is_rejected(self):
+        alias = self.repo / "skills/alias"
+        alias.symlink_to(self.repo / "skills/one", target_is_directory=True)
+        status, _, _, _ = self.install(
+            "--repo", "example/repo", "--path", "skills/alias"
+        )
+        self.assertEqual(status, 1)
+        self.assertFalse((self.dest / "alias").exists())
+
     def test_git_can_fetch_an_older_commit(self):
         def git(*args):
             return subprocess.check_output(

@@ -95,6 +95,15 @@ class CheckFlowTests(unittest.TestCase):
         self.assertIn("FAIL lint:", result.stderr)
         self.assertIn("Shell verification completed", result.stdout)
 
+    def test_failed_shell_check_returns_failure_after_python_checks(self):
+        self.source.write_text("value = 1\n")
+        shell = self.project / ".agents/skills/shell-check/scripts/check.sh"
+        shell.write_text("exit 7\n")
+        result = self.run_checks("--check")
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("1 passed", result.stdout)
+        self.assertIn("Failed checks: shell", result.stderr)
+
     def test_conflicting_modes_do_not_run_tools(self):
         result = self.run_checks("--check", "--fix")
         self.assertEqual(result.returncode, 2)
