@@ -3,7 +3,7 @@
 import argparse
 import json
 import re
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from urllib.parse import unquote, urlsplit
 
 import yaml
@@ -18,10 +18,70 @@ CONTRACT_FIELDS = (
 )
 
 
+class _UniqueKeyLoader(yaml.SafeLoader):
+    """Safe YAML loader that rejects ambiguous duplicate mapping keys."""
+
+
+def _construct_unique_mapping(loader, node, deep=False):
+    # Check keys before SafeLoader flattens YAML merge keys. Explicit values
+    # may override merged defaults, but duplicate keys in the authored mapping
+    # itself are almost certainly an authoring error.
+    seen = set()
+    for key_node, _value_node in node.value:
+        if key_node.tag == "tag:yaml.org,2002:merge":
+            continue
+        key = loader.construct_object(key_node, deep=deep)
+        try:
+            duplicate = key in seen
+        except TypeError:
+            # Let SafeLoader raise its normal error for an unhashable key.
+            continue
+        if duplicate:
+            raise yaml.constructor.ConstructorError(
+                "while constructing a mapping",
+                node.start_mark,
+                f"found duplicate key {key!r}",
+                key_node.start_mark,
+            )
+        seen.add(key)
+    return yaml.SafeLoader.construct_mapping(loader, node, deep=deep)
+
+
+_UniqueKeyLoader.add_constructor(
+    yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG, _construct_unique_mapping
+)
+
+
+def _unique_json_object(pairs):
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError(f"Duplicate JSON key: {key!r}")
+        result[key] = value
+    return result
+
+
+def _load_json_object(path):
+    """Load a JSON object and reject duplicate keys or unexpected top-level types."""
+    try:
+        value = json.loads(path.read_text(), object_pairs_hook=_unique_json_object)
+    except json.JSONDecodeError as error:
+        raise ValueError(f"Invalid JSON: {error.msg}") from error
+    if not isinstance(value, dict):
+        raise ValueError("Expected a JSON object")
+    return value
+
+
 def check(root=ROOT):
     errors = []
     skills = root / ".agents/skills"
-    catalog = json.loads((root / ".agents/skill-contracts.json").read_text())
+    catalog_path = root / ".agents/skill-contracts.json"
+    try:
+        catalog = _load_json_object(catalog_path)
+    except (OSError, ValueError) as error:
+        errors.append(f"{catalog_path}: {error}")
+        catalog = {}
+
     names = set()
     entries = sorted(skills.glob("*/SKILL.md"))
     if not entries:
@@ -34,7 +94,7 @@ def check(root=ROOT):
             match = re.match(r"\A---\r?\n(.*?)\r?\n---(?:\r?\n|$)", text, re.S)
             if not match:
                 raise ValueError("Missing frontmatter")
-            metadata = yaml.safe_load(match[1])
+            metadata = yaml.load(match[1], Loader=_UniqueKeyLoader)
             if not isinstance(metadata, dict):
                 raise ValueError("Frontmatter must be a mapping")
             name = metadata.get("name")
@@ -67,14 +127,48 @@ def check(root=ROOT):
         ]
         if provenance.exists():
             try:
-                data = json.loads(provenance.read_text())
-                commit = data.get("resolved_commit")
-                if commit is not None and not re.fullmatch(r"[0-9a-fA-F]{40}", commit):
-                    raise ValueError("Invalid resolved_commit")
-                if not isinstance(data.get("repository"), str) or not data[
-                    "repository"
-                ].startswith("https://github.com/"):
+                data = _load_json_object(provenance)
+                repository = data.get("repository")
+                parsed_repository = (
+                    urlsplit(repository) if isinstance(repository, str) else None
+                )
+                repository_parts = (
+                    [part for part in parsed_repository.path.split("/") if part]
+                    if parsed_repository
+                    else []
+                )
+                if (
+                    parsed_repository is None
+                    or parsed_repository.scheme != "https"
+                    or parsed_repository.netloc != "github.com"
+                    or len(repository_parts) != 2
+                ):
                     raise ValueError("Invalid provenance repository")
+                source_path = data.get("path")
+                normalized_path = (
+                    PurePosixPath(source_path)
+                    if isinstance(source_path, str)
+                    else None
+                )
+                if (
+                    normalized_path is None
+                    or not source_path.strip()
+                    or "\\" in source_path
+                    or normalized_path.is_absolute()
+                    or ".." in normalized_path.parts
+                ):
+                    raise ValueError("Invalid provenance path")
+                requested_ref = data.get("requested_ref")
+                if not isinstance(requested_ref, str) or not requested_ref.strip():
+                    raise ValueError("Invalid requested_ref")
+                if "resolved_commit" not in data:
+                    raise ValueError("Missing resolved_commit")
+                commit = data["resolved_commit"]
+                if commit is not None and (
+                    not isinstance(commit, str)
+                    or not re.fullmatch(r"[0-9a-fA-F]{40}", commit)
+                ):
+                    raise ValueError("Invalid resolved_commit")
                 for doc in upstreams:
                     if doc.exists() and commit:
                         stated = re.findall(r"`([0-9a-fA-F]{40})`", doc.read_text())
@@ -82,7 +176,7 @@ def check(root=ROOT):
                             errors.append(
                                 f"{doc}: source snapshot differs from INSTALL_SOURCE.json; review adaptation history"
                             )
-            except (ValueError, TypeError) as error:
+            except (OSError, ValueError, TypeError) as error:
                 errors.append(f"{provenance}: {error}")
     if set(catalog) != names:
         errors.append("Sidecar catalog differs from discovered skills")
