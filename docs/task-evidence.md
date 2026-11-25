@@ -10,7 +10,7 @@
 
 性能证据另行记录 baseline/candidate、模型与输入 revision、硬件数量和拓扑、驱动/runtime/compiler/framework 版本、dtype、shape、并发与并行配置、计时边界、缓存和 graph 模式、warmup、重复次数、原始样本及波动。禁止把 profiler 数据直接代替正式 benchmark。环境指纹只采集明确列出的非敏感字段，不保存全部环境变量或凭证。
 
-性能记录的可执行格式见 `tests/fixtures/benchmark/synthetic.json`，该文件明确为虚构测试数据。运行 `python scripts/validate_benchmark.py <report.json>`，校验 latency 记录的单位、重复样本、版本及固定环境字段，输出 median、范围和环境 SHA-256。当前仅支持延迟，不将吞吐量倒数当加速比。环境 hash 表示字段一致性，不证明环境真实或完整；硬件证据仍需实际采集。
+性能记录字段的合成示例见 `tests/test_benchmark.py` 的 `sample()`，仅用于格式测试，不是硬件测量。运行 `python scripts/validate_benchmark.py <report.json>`，校验 latency 记录的单位、重复样本、版本及固定环境字段，输出 median、范围和环境 SHA-256。当前仅支持延迟，不将吞吐量倒数当加速比。环境 hash 表示字段一致性，不证明环境真实或完整；硬件证据仍需实际采集。
 
 ## Skill 回归与人工晋级
 
@@ -25,7 +25,7 @@
 | P0 任务与证据格式 | 结构验证器及负例测试 | 真实任务中的格式试用与证据复核 |
 | P0 Skill 和适配回归 | YAML 解析、发现名称、资源链接、索引、共享链接及生成一致性测试 | 新客户端版本的实际加载验证 |
 | P0 工具边界 | 检查失败聚合、安装路径和 ZIP 边界、回滚、保留元数据冲突与链接拒绝回归 | 随实际缺陷继续增加有效用例，不宣称穷尽 |
-| P1 真实任务回归集 | 已定义样例输入、资源与评价要求 | [回归样例](../evaluations/cases/README.md)已有真实工具故障与合成 trace 任务；真实 AI Infra 设备失败与 Agent 对照仍待采集 |
+| P1 真实任务回归集 | 已定义样例输入、资源与评价要求 | 可复现样例文件与真实 AI Infra 设备失败、Agent 对照仍待采集 |
 | P1 性能环境规范 | 已实现 latency 记录校验、原始样本汇总与固定环境字段 hash | 在目标硬件上验证与归档报告 |
 | P2 人工晋级 | 已定义对照、成本与退化审查原则 | 真实候选的独立评估记录；尚无自动晋级服务 |
 
@@ -33,7 +33,7 @@
 
 ## 固定验收与候选比较
 
-执行前独立保存 contract：`task_id`、`objective` 和仅含 `id`、`expected` 的 criteria。执行报告不得省略或改写约定条目。可参考 `evaluations/contracts/recipe-fence.json`，对真实任务还须另行记录授权范围、输入、资源和失败依据。
+执行前独立保存 contract：`task_id`、`objective` 和仅含 `id`、`expected` 的 criteria。执行报告不得省略或改写约定条目。契约文件由具体任务提供；当前仓库未提供可用的任务契约样例，真实任务还须记录授权范围、输入、资源和失败依据。
 
 ```bash
 python scripts/validate_task_result.py result.json --contract contract.json

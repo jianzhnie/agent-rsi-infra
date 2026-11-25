@@ -34,6 +34,7 @@ def main(argv: list[str] | None = None) -> int:
         [
             ("lint", ["ruff", "check", "--no-fix", *PYTHON_PATHS]),
             ("format", ["ruff", "format", "--check", *PYTHON_PATHS]),
+            ("skills", [sys.executable, "scripts/check_skills.py"]),
             (
                 "tests",
                 [sys.executable, "-m", "pytest", "tests", "-q"],

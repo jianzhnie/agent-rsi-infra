@@ -2,7 +2,10 @@
 
 ## 使用与实践
 
-- [回归任务样例](../evaluations/cases/README.md)：真实工具故障与合成 trace，标注验证层级。
+- [Agent 能力矩阵](agent-compatibility.md)：静态检查、真实客户端状态与加载 Smoke Test。
+
+- [Skill 最小契约](skill-contract.md)：发现信息、侧车元数据与静态检查边界。
+
 - [任务契约与验证报告](task-evidence.md)：结果格式、性能环境与人工晋级。
 
 - [工程实践标准](engineering-standards.md)：协作、实现与验证原则。

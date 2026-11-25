@@ -19,6 +19,9 @@ class CheckFlowTests(unittest.TestCase):
         scripts = self.project / "scripts"
         scripts.mkdir()
         shutil.copyfile(ROOT / "scripts/check.py", scripts / "check.py")
+        (scripts / "check_skills.py").write_text(
+            "print('Skill verification completed')\n"
+        )
         self.source = scripts / "example.py"
         self.source.write_text("value=1\n")
         tests = self.project / "tests"

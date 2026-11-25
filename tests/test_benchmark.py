@@ -1,17 +1,35 @@
 """Benchmark records reject ambiguous or invalid measurements."""
 
-import json
-from pathlib import Path
-
 import pytest
 
 from scripts.validate_benchmark import validate
 
-FIXTURE = Path(__file__).parent / "fixtures/benchmark/synthetic.json"
-
 
 def sample():
-    return json.loads(FIXTURE.read_text())
+    # Synthetic unit-test input, never a hardware measurement.
+    return {
+        "version": 1,
+        "task_id": "synthetic",
+        "command": "not executed",
+        "metric": "latency",
+        "unit": "us",
+        "timing_boundary": "synthetic op",
+        "cache": "synthetic",
+        "graph": "synthetic",
+        "workload": "synthetic",
+        "warmup": 0,
+        "environment": {
+            "device": "synthetic",
+            "device_count": 1,
+            "topology": "single",
+            "driver": "n/a",
+            "runtime": "n/a",
+            "compiler": "n/a",
+            "framework": "n/a",
+        },
+        "baseline": {"revision": "synthetic-base", "samples": [12, 14, 13]},
+        "candidate": {"revision": "synthetic-candidate", "samples": [10, 11, 9]},
+    }
 
 
 def test_summary_and_fingerprint_are_stable():
