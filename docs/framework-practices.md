@@ -13,7 +13,7 @@
 | DeepSpeed | 既有严格审查的设备接口、异步 buffer、collective 契约；训练参考补充 offload、状态与跨并行配置验证 | 不在其他框架禁止 torch.cuda/torch.distributed；不强制全硬件组合 |
 | TorchTitan | 训练参考的实验/稳定核心边界、配置 recipe、数值与模型级验证 | 不照搬 experiments 目录或把实验成功当核心 API 已验收 |
 | ms-swift | 训练参考的新模型注册、模板、文档与 smoke/unit 层级；[代码规范](../CONTRIBUTING.md#代码规范与依赖)补充命名、缩进、依赖选择及 lint/行为测试分离，记录固定来源 | 不新增重复 formatter 或复刻模型注册表；不迁入首次贡献 Issue、Fork 或算力政策 |
-| slime | RL 参考的 training、rollout、data buffer 和扩展接口边界；可复现优化与维护成本 | 不为本仓库维护 Megatron fork 或大型通用 RL 抽象 |
+| slime | RL 参考的 training、rollout、data buffer 边界；[配置与状态归属](../.agents/skills/training-inference-change/references/training.md#配置与运行状态)、Hook 兼容及严格审查；[CI 接入](../CONTRIBUTING.md#测试接入-ci)；[固定来源](../.agents/skills/training-inference-change/references/slime/UPSTREAM.md) | 不维护 Megatron fork 或大型 RL 抽象，不复制专用 GPU 常量、workflow 路径与 README 编辑限制 |
 | vime | RL 参考的 backend 隔离、generation/reward/environment、GPU/NPU 影响与日志约定 | 不复制硬件分支、签名或 PR 标签政策 |
 | Unsloth | 训练参考中 LoRA/量化、patch、logits/loss/梯度与显存风险，作为待核实验证方向 | 原报告缺少足够 Agent 配置证据，不声称已迁入上游指令或发布支持承诺 |
 | Liger Kernel | 训练参考的 correctness、模型 convergence、独立 benchmark 三层；复用已有微基准 Skill | 模型验证按训练数值影响执行，不要求所有文档变化运行训练 |

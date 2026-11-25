@@ -20,3 +20,5 @@
 长期资源复用的聚合保留量、负载变化及应用显存余量检查，提炼自 FlashInfer 同版本 [AGENTS.md](https://github.com/flashinfer-ai/flashinfer/blob/4d5a6ce322587d247fb192f97a0d23eeba9e3412/AGENTS.md)；许可见[已保留全文](../../flashinfer-add-cuda-kernel/LICENSE)，不将局部预热结果外推为完整服务可用性。
 
 问题必要性和归属审查提炼自 [TorchTitan pr-review](https://github.com/pytorch/torchtitan/blob/72e5566782bbdafaa9bafd422733a307319213c5/.claude/skills/pr-review/SKILL.md)，固定 revision `72e5566782bbdafaa9bafd422733a307319213c5`，许可见[保留的 BSD-3-Clause](../../training-inference-change/references/torchtitan/LICENSE)。仅补充 strict 的证据判断，不复制自动发布、固定裁决、委派或无 BC 政策。
+
+配置与运行状态分离、状态生命周期归属和内部重构保持 Hook 契约，选择性提炼自 slime-code-review-preferences；固定 revision、上游链接、本地范围与保留版权的 Apache-2.0 许可见 [slime 来源记录](../../training-inference-change/references/slime/UPSTREAM.md)。不迁入整个 Skill 或重复的抽象原则。

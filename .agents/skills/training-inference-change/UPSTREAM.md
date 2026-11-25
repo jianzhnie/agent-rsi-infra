@@ -10,3 +10,5 @@
 适配采用本仓库的共享源、按需参考和客户端分层；不复制其他项目的权限、提交、签名、fork、CI bot 或设备运行命令。本地验证不证明目标框架或硬件行为，真实任务应记录目标代码 revision 与实际结果。
 
 后续适配：迁入 TorchTitan 离线数值比较脚本并补充训练/配置参考，固定来源、BSD 许可、本地修正与验证边界见 [TorchTitan 来源记录](references/torchtitan/UPSTREAM.md)。此工具不是原始原创流程的一部分。
+
+后续提炼 slime 的配置/运行状态边界与自定义 Hook 兼容方法，固定来源、许可及范围见 [slime 来源记录](references/slime/UPSTREAM.md)。测试与 CI 方法补入根贡献指南，不新增同名 Skill。
