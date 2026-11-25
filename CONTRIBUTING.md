@@ -106,3 +106,5 @@ PR 自查流程补充参考 FlashInfer [self-review](https://github.com/flashinf
 训练与推理报告的项目实践按 [迁移记录](docs/framework-practices.md) 落地到共享工作流及按需参考；架构遵循 [RSI 设计](docs/RSI_DESIGN.md)，不自动创建目标框架配置或代替设备验证。
 
 跨 Agent 或 Skill 比较结果时采用[任务契约与验证报告](docs/task-evidence.md)，保留未执行项及原始证据。报告结构检查不代表实际行为已验证。
+
+检查入口保持顺序编排：`--only lint,tests` 运行选定项，`--timeout 300` 设置每项超时，`--json <path>` 保存命令、执行环境和状态。`--fix` 要求完整验证，不能与 `--only` 合用。缺依赖标记 blocked，执行非零或超时标记 failed；未选中项不宣称通过。JSON 仅含已选项，CI 继续运行完整入口。工具版本探测有独立短超时，不作为检查通过证据。

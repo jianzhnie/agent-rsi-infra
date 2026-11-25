@@ -1,5 +1,6 @@
 """Exercise check/fix behavior with local tools and a temporary source tree."""
 
+import json
 import os
 import shutil
 import subprocess
@@ -38,6 +39,8 @@ class CheckFlowTests(unittest.TestCase):
         self.bin = self.project / "bin"
         self.bin.mkdir()
         (self.bin / "bash").symlink_to(shutil.which("bash"))
+        (self.bin / "shellcheck").write_text("#!/bin/sh\nexit 0\n")
+        (self.bin / "shellcheck").chmod(0o755)
         self.ruff = self.bin / "ruff"
         self.ruff.write_text(
             f"#!{sys.executable}\n"
@@ -79,7 +82,11 @@ class CheckFlowTests(unittest.TestCase):
         self.assertEqual(self.source.read_text(), "value = 1\n")
         self.assertIn("1 passed", result.stdout)
         self.assertIn("Shell verification completed", result.stdout)
-        commands = (self.project / "tool-log").read_text().splitlines()
+        commands = [
+            line
+            for line in (self.project / "tool-log").read_text().splitlines()
+            if line != "--version"
+        ]
         self.assertIn("--no-unsafe-fixes", commands[0])
         self.assertTrue(any("--no-fix" in command for command in commands[1:]))
 
@@ -95,7 +102,7 @@ class CheckFlowTests(unittest.TestCase):
         self.ruff.unlink()
         result = self.run_checks()
         self.assertEqual(result.returncode, 1)
-        self.assertIn("FAIL lint:", result.stderr)
+        self.assertIn("BLOCKED lint:", result.stderr)
         self.assertIn("Shell verification completed", result.stdout)
 
     def test_failed_shell_check_returns_failure_after_python_checks(self):
@@ -112,6 +119,55 @@ class CheckFlowTests(unittest.TestCase):
         self.assertEqual(result.returncode, 2)
         self.assertFalse((self.project / "tool-log").exists())
         self.assertEqual(self.source.read_text(), "value=1\n")
+
+    def test_only_runs_selected_check_and_writes_json(self):
+        result = self.run_checks("--only", "shell", "--json", "result.json")
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn("Shell verification completed", result.stdout)
+        self.assertNotIn("[lint]", result.stdout)
+        payload = json.loads((self.project / "result.json").read_text())
+        self.assertEqual([item["name"] for item in payload["results"]], ["shell"])
+        self.assertEqual(payload["results"][0]["status"], "passed")
+
+    def test_timeout_is_reported_as_failure(self):
+        self.ruff.write_text("#!" + sys.executable + "\nimport time; time.sleep(1)\n")
+        self.ruff.chmod(0o755)
+        result = self.run_checks("--only", "lint", "--timeout", "0.01")
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("Timed out", result.stderr)
+
+    def test_non_root_call_and_multiple_failures(self):
+        result = subprocess.run(
+            [
+                sys.executable,
+                str(self.project / "scripts/check.py"),
+                "--only",
+                "lint,format",
+            ],
+            cwd=self.project.parent,
+            env=self.env,
+            capture_output=True,
+            text=True,
+            timeout=15,
+        )
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("Failed checks: lint, format", result.stderr)
+        self.assertTrue((self.project / "tool-log").exists())
+
+    def test_empty_selection_and_partial_fix_are_rejected(self):
+        for args in (
+            ("--only", ","),
+            ("--fix", "--only", "lint"),
+            ("--timeout", "nan"),
+        ):
+            self.assertEqual(self.run_checks(*args).returncode, 2)
+
+    def test_missing_shellcheck_is_blocked(self):
+        (self.bin / "shellcheck").unlink()
+        result = self.run_checks("--only", "shell", "--json", "report.json")
+        self.assertEqual(result.returncode, 1)
+        payload = json.loads((self.project / "report.json").read_text())
+        self.assertEqual(payload["results"][0]["status"], "blocked")
 
 
 if __name__ == "__main__":

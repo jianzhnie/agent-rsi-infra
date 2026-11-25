@@ -19,3 +19,9 @@
 `python scripts/check_skills.py` 已接入统一检查入口，检查发现、YAML、侧车章节、Markdown 内联/引用式本地资源和索引完整性。未知扩展字段允许保留，代码围栏内的示例不作资源引用。纯文本中的路径、动态生成资源、链接锚点和外部 URL 可达性不在此检查范围。
 
 非空侧车字段不能证明文字充分或流程正确；适用性、排除场景、验证方法及证据质量仍需 Review 和真实任务对照。客户端适配生成一致性也不代表真实客户端已加载。
+
+## 来源职责
+
+`INSTALL_SOURCE.json` 是安装器的机器快照，记录 repository、path、requested_ref 和 resolved_commit；无法解析 commit 时使用 null。`UPSTREAM.md` 是人工适配说明，记录本地修改、许可与验证边界。快照不证明当前文件未修改，人工说明也不能伪称可变分支是固定版本。本仓库按既有偏好可不保留安装 JSON，保留时检查器会核对其格式与显式 commit 是否明显冲突；不同版本的适配历史需人工判断。LICENSE/NOTICE 不从 commit 推断，继续保留并审查。
+
+当前自动检查不推断 Markdown 自由文本中的 shell 命令是否可执行，也不验证所有脚本权限和来源法律一致性；这些仍是迁入 Review 项。客户端适配由布局回归和 `sync_agents.py --check` 验证。

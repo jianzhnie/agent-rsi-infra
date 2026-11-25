@@ -20,7 +20,7 @@ import zipfile
 from dataclasses import dataclass
 from pathlib import Path
 
-from github_utils import github_request
+from github_utils import github_request, redact_credentials
 
 DEFAULT_REF = "main"
 
@@ -423,7 +423,7 @@ def main(argv: list[str]) -> int:
     ) as exc:
         for dest in reversed(created):
             shutil.rmtree(dest)
-        print(f"Error: {exc}", file=sys.stderr)
+        print(f"Error: {redact_credentials(str(exc))}", file=sys.stderr)
         return 1
 
 

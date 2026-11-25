@@ -2,6 +2,8 @@
 
 ## 使用与实践
 
+- [Skill 使用样例](skill-examples.md)：任务输入、反例、Kernel 优化交付与验证边界。
+
 - [Agent 能力矩阵](agent-compatibility.md)：静态检查、真实客户端状态与加载 Smoke Test。
 
 - [Skill 最小契约](skill-contract.md)：发现信息、侧车元数据与静态检查边界。

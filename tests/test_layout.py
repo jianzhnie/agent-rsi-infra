@@ -39,7 +39,7 @@ class LayoutTests(unittest.TestCase):
         # Index tables contain one local file link per configuration entry.
         links = [
             target
-            for line in text.splitlines()
+            for line in text.split("## 维护状态与验证边界", 1)[0].splitlines()
             if line.startswith("| ")
             for target in re.findall(r"\]\(([^)]+)\)", line)
             if not target.startswith("https://")

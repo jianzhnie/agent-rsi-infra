@@ -255,6 +255,30 @@ class InstallerTests(unittest.TestCase):
         self.assertEqual(status, 1)
         self.assertFalse((self.dest / "alias").exists())
 
+    def test_git_failure_redacts_tokens(self):
+        with (
+            patch.dict(os.environ, {"GH_TOKEN": "private-fixture-token"}),
+            patch.object(
+                installer,
+                "_prepare_repo",
+                side_effect=installer.InstallError("auth private-fixture-token"),
+            ),
+            contextlib.redirect_stderr(io.StringIO()) as error,
+        ):
+            status = installer.main(
+                [
+                    "--repo",
+                    "example/repo",
+                    "--path",
+                    "skills/one",
+                    "--dest",
+                    str(self.dest),
+                ]
+            )
+        self.assertEqual(status, 1)
+        self.assertNotIn("private-fixture-token", error.getvalue())
+        self.assertIn("[REDACTED]", error.getvalue())
+
     def test_git_can_fetch_an_older_commit(self):
         def git(*args):
             return subprocess.check_output(

@@ -2,45 +2,35 @@
 
 面向 Coding Agent 递归自我改进（Recursive Self-Improvement，RSI）的工程基础设施，集中维护共享规范、Skills、工具适配与验证流程。
 
-Engineering infrastructure for recursive self-improvement of coding agents: shared standards, skills, tool adapters, and validation workflows.
+本仓库提供共享规则、Skill 资源和客户端适配，不提供 Agent Runtime、训练框架或自动规则晋级服务。改进由任务证据、回归测试和人工审查驱动。
 
-当前提供 Claude Code、Codex 与 Gemini 入口，以及面向 AI Infra 开发的验证流程。通过实际结果、人工审查和回归测试改进工具与 Skills。
+## 从这里开始
 
-## 目录
-
-| 路径 | 内容 |
+| 你要做什么 | 入口 |
 | --- | --- |
-| [RSI 设计](docs/RSI_DESIGN.md) | 架构、职责与改进闭环 |
-| [AGENTS.md](AGENTS.md) | 共享开发指令 |
-| [.agents/skills/](.agents/skills/install-skill-from-github/SKILL.md) | GitHub 技能迁入、Shell 检查与领域流程 |
-| [.agents/](.agents/README.md) | 角色、Skills 与适配资源索引 |
-| `.claude/` | Claude 专用角色适配、Skills 链接、Hooks 与设置示例 |
-| [docs/](docs/README.md) | 规划、部署、调研资料 |
-| `scripts/`、`tests/` | 可重复运行的检查与隔离回归 |
-| [CONTRIBUTING.md](CONTRIBUTING.md) | 贡献流程、证据要求与调研实践的落地 |
+| 配置 Claude Code | 根 `CLAUDE.md` 导入 `AGENTS.md`，`.claude/skills` 共享技能；Hooks 按需启用 |
+| 配置 Codex | 根 `AGENTS.md`、`.agents/skills/` 与生成的 `.codex/` 角色配置 |
+| 配置 Gemini | 根 `GEMINI.md` 提供导入入口；目标版本的导入与技能发现仍需验证 |
+| 选择 Skill 完成任务 | [任务路由](docs/component-skills.md) → [使用样例](docs/skill-examples.md) → 对应 `SKILL.md` |
+| 检查并交付结果 | 下方检查命令与[任务契约、验证报告](docs/task-evidence.md)；逐项记录未执行原因 |
 
-## 现有资源
+具体部署步骤见[部署说明](docs/deployment.md)。[兼容矩阵](docs/agent-compatibility.md)区分静态检查和真实加载；当前未记录已验证的客户端精确版本。
 
-- `install-skill-from-github`：从 GitHub 迁入完整技能，保留许可和来源，默认安装到本仓库。
-- `training-inference-change`：按训练、RL 或推理契约组织变更和验证；[逐项目迁移记录](docs/framework-practices.md)。
-- `shell-check`：脚本化选择文件、执行语法和静态检查，失败后继续并汇总。
-- `add-or-fix-type-checking`：迁入 Transformers 的类型检查流程；[来源与适用范围](.agents/skills/add-or-fix-type-checking/UPSTREAM.md)。
-- `pt2-bug-basher`：显式调用的 PyTorch 2 编译器排障；[来源与适配](.agents/skills/pt2-bug-basher/UPSTREAM.md)。
-- `code-reviewer`：只读代码审查，默认 light、按需 strict，使用共享清单。
-- vLLM 来源 Skills：Kernel 微基准、Triton 开发、模型部署配置查询与模型前向微基准，见[资源索引](.agents/README.md)。
-- SGLang 来源 Skills：分布式挂起诊断、离线 trace 分析、机械重构验证、代码清理、Kernel 组织与 KL 一致性测试，见[资源索引](.agents/README.md)。
-- `flashinfer-add-cuda-kernel`：FlashInfer CUDA Kernel 集成；调试与 benchmark 方法复用现有流程。
-- 2 个共享角色：调试、性能分析。
-- Python 检查配置与 Git 提交约定。
-- Claude 可选资源：会话与工具 Hooks、通知、状态栏和设置示例。
+## 典型任务：优化一个 Triton Kernel
 
-训练、推理、分布式和 Kernel 的参考资料集中在 [AI Infra 工程实践](docs/ai_infra_agent.md)。领域 Skills 按真实任务逐步补充。
+1. 阅读目标项目指令、相关实现和调用方，加载 `triton-kernel-writing`；测量时再加载 `kernel-microbenchmark`。若目标为 SGLang，先用 `kernel-organization` 查找相同契约的实现。
+2. 固定目标 revision、输入 shape/dtype、设备和优化范围；定义独立 reference、误差容限及边界输入，先约定验收条目。
+3. 运行 baseline 数值测试，再实现候选并重跑相同测试，检查越界、尾块及不支持的输入。
+4. 在相同环境、计时边界和缓存策略下预热并重复测量双方，保留原始样本；profiler 只用于诊断。
+5. 按[完整示例](docs/skill-examples.md#kernel-优化交付示例)生成 Validation Report，记录失败、未执行项和原因；没有 GPU 结果时不宣称加速。
+6. 人工核对代码、数值和性能证据，决定接受、继续试验或拒绝。读取 Skill、报告结构通过都不等于优化验收通过。
 
-## 使用
+## 资源与设计
 
-先阅读 [部署说明](docs/deployment.md)，按所用客户端选取入口与资源。跨工具目录布局不代表各客户端都已完成加载验证。
-
-Claude 的 `settings.example.json` 保留为模板。选择需要的 Hook 事件与状态栏配置，再合并到目标项目设置；不要直接覆盖已有设置。
+- [资源索引](.agents/README.md)：角色、Skills、来源与维护入口。
+- [RSI 设计](docs/RSI_DESIGN.md)：架构边界与改进闭环。
+- [文档索引](docs/README.md)：工程标准、领域实践、调研与部署。
+- [贡献指南](CONTRIBUTING.md)：变更、审查与验证要求。
 
 ## 本地检查
 

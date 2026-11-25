@@ -40,6 +40,38 @@ Claude 角色适配生成到 `.claude/agents/`，Codex 角色配置生成到 `.c
 
 `code-reviewer` 与两档清单统一维护在 `.agents/skills/code-reviewer/`，通过 `skills` 链接供 Claude 使用；不再维护重复 Agent。
 
+## 维护状态与验证边界
+
+`active` 表示当前维护并接受缺陷反馈；`experimental` 表示适用边界仍在试用；`deprecated` 必须注明替代入口与退出计划。状态不代表任务成功率或真实客户端兼容性。目前未标记弃用资源，领域 Skills 按 experimental 管理，待真实任务报告支持后逐项调整。
+
+目标客户端为 Claude Code、Codex，以及待核实发现机制的 Gemini；精确版本与逐能力状态统一维护在[兼容矩阵](../docs/agent-compatibility.md)，此处不重复版本事实。下表资源的真实客户端版本和最近真实任务验证日期均未记录；静态检查日期见兼容矩阵，不能代替任务执行日期。
+
+上游 URL、revision 和本地适配以各资源的来源说明为准，不在表内复制 commit。存在来源说明不表示已验证上游当前版本；更新时同时复核许可和适配边界。
+
+| Skill | 维护状态 | 来源 / revision / 本地适配记录 | 任务资源需求（依目标任务确认） |
+| --- | --- | --- | --- |
+| add-or-fix-type-checking | experimental | [来源与适配](skills/add-or-fix-type-checking/UPSTREAM.md) | 目标 Transformers 及类型检查依赖 |
+| code-cleanup | experimental | [来源与适配](skills/code-cleanup/UPSTREAM.md) | 目标源码与测试环境；设备依受影响路径 |
+| code-reviewer | active | [来源与适配](skills/code-reviewer/references/UPSTREAM.md) | 代码与 diff；通常不需 GPU |
+| debug-distributed-hang | experimental | [来源与适配](skills/debug-distributed-hang/UPSTREAM.md) | 多 rank 日志；复现需目标多卡/通信环境 |
+| flashinfer-add-cuda-kernel | experimental | [来源与适配](skills/flashinfer-add-cuda-kernel/UPSTREAM.md) | CUDA 工具链、目标 FlashInfer 和 GPU |
+| install-skill-from-github | active | [来源与适配](skills/install-skill-from-github/UPSTREAM.md) | Git、GitHub 网络/按需凭证；无需执行下载代码 |
+| kernel-microbenchmark | experimental | [来源与适配](skills/kernel-microbenchmark/UPSTREAM.md) | 目标 GPU、编译器与框架；不一定需要权重 |
+| kernel-organization | experimental | [来源与适配](skills/kernel-organization/UPSTREAM.md) | 目标 SGLang；数值/性能验证需相应 GPU |
+| kl-consistency-test | experimental | [来源与适配](skills/kl-consistency-test/UPSTREAM.md) | 目标 SGLang、模型权重和设备 |
+| llm-torch-profiler-analysis | experimental | [来源与适配](skills/llm-torch-profiler-analysis/UPSTREAM.md) | 已有 trace 和分析依赖；离线分析不需 GPU |
+| mechanical-refactor-verify | experimental | [来源与适配](skills/mechanical-refactor-verify/UPSTREAM.md) | Git、Python、目标格式化工具；业务测试按项目 |
+| model-microbenchmark | experimental | [来源与适配](skills/model-microbenchmark/UPSTREAM.md) | CUDA、目标 vLLM、模型权重及足够显存 |
+| model-recipes | experimental | [来源与适配](skills/model-recipes/UPSTREAM.md) | 查询需网络及脚本依赖；部署另需 GPU/权重 |
+| pt2-bug-basher | experimental | [来源与适配](skills/pt2-bug-basher/UPSTREAM.md) | 目标 PyTorch 环境；复现可能需要 GPU |
+| shell-check | active | 本仓维护，revision 与改动见 Git 历史 | Bash、ShellCheck；无需 GPU |
+| training-inference-change | experimental | [来源与适配](skills/training-inference-change/UPSTREAM.md) | 目标训练/推理环境；按契约需要设备与权重 |
+| triton-kernel-writing | experimental | [来源与适配](skills/triton-kernel-writing/UPSTREAM.md) | 目标 GPU、Triton 与 reference |
+
+共享角色、Claude Hooks 与设置模板为 active；生成适配随源文件维护。角色执行、Hook 事件和通知的真实验证仍按兼容矩阵分别记录。通知可选依赖桌面命令或外部服务，不能由隔离测试推定已接通。
+
+[使用样例](../docs/skill-examples.md)提供任务输入、反例与交付要求。维护进展以可复现失败、回归结果、真实任务证据和兼容性记录衡量，不以 Skill/角色数量、Prompt 长度或配置文件数衡量。
+
 ## 部署
 
 参见 [部署说明](../docs/deployment.md)。`settings.example.json` 仅保留 Hooks 和状态栏，不预设模型、权限豁免、插件或外部工具授权；选择需要的事件再合并到目标设置。

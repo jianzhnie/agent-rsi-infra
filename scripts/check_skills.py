@@ -59,6 +59,31 @@ def check(root=ROOT):
                     raise ValueError(f"Missing contract section: {field}")
         except (ValueError, yaml.YAMLError) as error:
             errors.append(f"{entry}: {error}")
+    for entry in entries:
+        provenance = entry.parent / "INSTALL_SOURCE.json"
+        upstreams = [
+            entry.parent / "UPSTREAM.md",
+            entry.parent / "references/UPSTREAM.md",
+        ]
+        if provenance.exists():
+            try:
+                data = json.loads(provenance.read_text())
+                commit = data.get("resolved_commit")
+                if commit is not None and not re.fullmatch(r"[0-9a-fA-F]{40}", commit):
+                    raise ValueError("Invalid resolved_commit")
+                if not isinstance(data.get("repository"), str) or not data[
+                    "repository"
+                ].startswith("https://github.com/"):
+                    raise ValueError("Invalid provenance repository")
+                for doc in upstreams:
+                    if doc.exists() and commit:
+                        stated = re.findall(r"`([0-9a-fA-F]{40})`", doc.read_text())
+                        if stated and commit not in stated:
+                            errors.append(
+                                f"{doc}: source snapshot differs from INSTALL_SOURCE.json; review adaptation history"
+                            )
+            except (ValueError, TypeError) as error:
+                errors.append(f"{provenance}: {error}")
     if set(catalog) != names:
         errors.append("Sidecar catalog differs from discovered skills")
     if set(indexed) != names or len(indexed) != len(set(indexed)):
@@ -75,6 +100,12 @@ def check(root=ROOT):
             if parsed.scheme or not parsed.path:
                 continue
             resource = (doc.parent / unquote(parsed.path)).resolve()
+            if parsed.path.startswith((".claude/", ".codex/")) or any(
+                part in (".claude", ".codex") for part in Path(parsed.path).parts
+            ):
+                errors.append(
+                    f"{doc}: Shared skill links to client-private resource {target}"
+                )
             if not resource.is_relative_to(root.resolve()) or not resource.exists():
                 errors.append(f"{doc}: Missing or escaping resource {target}")
     return errors
