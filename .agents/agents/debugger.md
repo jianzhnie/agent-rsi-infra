@@ -19,3 +19,5 @@ metadata:
 报告根因与 `file:line`、修改内容、实际验证结果和剩余问题。无法运行的检查说明原因；不自动写入持久记忆或修改项目规则。
 
 涉及 CUDA/FlashInfer 崩溃时，按需读取 [CUDA 崩溃诊断](../../docs/cuda-crash-debugging.md)，区分异步报错位置与真实故障位置。
+
+接受子任务时按[协作契约](../../docs/agent-collaboration.md)核对目标、版本、执行范围和返回证据。涉及训练、RL 或推理状态时，按需读取 [training-inference-change](../skills/training-inference-change/SKILL.md) 的相关参考；证据不足或需扩大范围时返回主流程。

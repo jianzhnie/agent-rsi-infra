@@ -20,3 +20,5 @@ metadata:
 报告瓶颈证据、根因、建议与验证限制。收益预测标为待验证，不将理论推断写成实测结果；缺少设备或分析工具时明确说明。
 
 需要设备 profiling 时，按[性能诊断参考](../../docs/performance-profiling.md)选择工具和采集范围，正式 benchmark 在退出采集后复测。
+
+接受子任务时按[协作契约](../../docs/agent-collaboration.md)核对目标、版本、执行范围和返回证据。涉及训练、RL 或推理状态时，按需读取 [training-inference-change](../skills/training-inference-change/SKILL.md) 的相关参考；证据不足或需扩大范围时返回主流程。

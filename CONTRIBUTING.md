@@ -78,7 +78,7 @@ pytest 统一组织回归，已有 unittest 用例由 pytest 收集，无需为�
 
 | 参考 | 采用的实践 | 本仓库实现 |
 | --- | --- | --- |
-| [工程规范总览](docs/research/github-ai-infra-engineering-standards.md) | 指令、Skill、Hooks 和 CI 分工 | 根指令、共享 Skills、可选 Claude Hooks、[CI](.github/workflows/check.yml) |
+| [工程实践标准](docs/engineering-standards.md) | 指令、Skill、Hooks 和 CI 分工 | 根指令、共享 Skills、可选 Claude Hooks、[CI](.github/workflows/check.yml) |
 | [Megatron-LM 与训练框架](docs/research/training-frameworks-agent-engineering.md) | 先读取任务依据，按影响选择验证 | [AI Infra 验证要求](docs/ai_infra_agent.md#validation) |
 | [SGLang 与推理框架](docs/research/inference-frameworks-agent-engineering.md) | Kernel 去重、契约、并发和多阶段验证 | [AI Infra 验证要求](docs/ai_infra_agent.md#validation) |
 | [Liger Kernel 与训练验证](docs/research/training-frameworks-agent-engineering.md) | 正确性、模型行为与 benchmark 分开 | 验证要求中的训练、Kernel 与性能条目 |
@@ -102,3 +102,5 @@ TRL 规范于 2026-11-24 读取，链接指向可变的 `main`。采用其工程
 DeepSpeed checklist 采用固定 commit `039bfc9f3f493ae5bf3f99582b4e4e593660d98d` 的方法性提炼；[上游 Apache-2.0 许可](https://github.com/deepspeedai/DeepSpeed/blob/039bfc9f3f493ae5bf3f99582b4e4e593660d98d/LICENSE)。不采用其代码行数门槛、专用 accelerator/comm API、全量设备验证要求、格式工具或发布操作。
 
 PR 自查流程补充参考 FlashInfer [self-review](https://github.com/flashinfer-ai/flashinfer/blob/4d5a6ce322587d247fb192f97a0d23eeba9e3412/.claude/skills/self-review/SKILL.md)，固定 commit `4d5a6ce322587d247fb192f97a0d23eeba9e3412`，许可见[保留全文](.agents/skills/flashinfer-add-cuda-kernel/LICENSE)。不复制自动修复、PR 发布动作或强制发现问题的要求。
+
+训练与推理报告的项目实践按 [迁移记录](docs/framework-practices.md) 落地到共享工作流及按需参考；架构遵循 [RSI 设计](docs/RSI_DESIGN.md)，不自动创建目标框架配置或代替设备验证。

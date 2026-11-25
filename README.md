@@ -22,6 +22,7 @@ Engineering infrastructure for recursive self-improvement of coding agents: shar
 ## 现有资源
 
 - `install-skill-from-github`：从 GitHub 迁入完整技能，保留许可和来源，默认安装到本仓库。
+- `training-inference-change`：按训练、RL 或推理契约组织变更和验证；[逐项目迁移记录](docs/framework-practices.md)。
 - `shell-check`：脚本化选择文件、执行语法和静态检查，失败后继续并汇总。
 - `add-or-fix-type-checking`：迁入 Transformers 的类型检查流程；[来源与适用范围](.agents/skills/add-or-fix-type-checking/UPSTREAM.md)。
 - `pt2-bug-basher`：显式调用的 PyTorch 2 编译器排障；[来源与适配](.agents/skills/pt2-bug-basher/UPSTREAM.md)。

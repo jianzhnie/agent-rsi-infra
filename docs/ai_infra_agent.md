@@ -306,6 +306,8 @@ repo/
 
 ## 7. 验证要求
 
+训练、RL 和推理行为变更的执行流程见 [training-inference-change](../.agents/skills/training-inference-change/SKILL.md)，逐项目采用内容与边界见[迁移记录](framework-practices.md)。
+
 本节是本文建议的检查清单。按变更影响选择适用项，并遵守目标项目的最低要求；不必为每次改动运行全部测试。
 
 ### 7.1 训练与 RL

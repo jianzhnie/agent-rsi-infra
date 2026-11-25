@@ -4,6 +4,7 @@
 
 | 任务 | 先读的 Skill | 适用边界 |
 | --- | --- | --- |
+| 训练、RL rollout、Serving 或多阶段模型行为变更 | [training-inference-change](../.agents/skills/training-inference-change/SKILL.md) | 只读取相关参考；框架契约在目标 checkout 核实 |
 | SGLang Kernel API 新增、迁移、注册或去重 | [kernel-organization](../.agents/skills/kernel-organization/SKILL.md) | 命名空间与注册要求按目标 SGLang 版本核实 |
 | FlashInfer CUDA Kernel 新增或集成 | [flashinfer-add-cuda-kernel](../.agents/skills/flashinfer-add-cuda-kernel/SKILL.md) | FFI、JIT、trace 与打包按目标版本核实 |
 | Triton Kernel 实现、特化或预热 | [triton-kernel-writing](../.agents/skills/triton-kernel-writing/SKILL.md) | JIT 预热细节按需读取附属参考 |

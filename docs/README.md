@@ -8,6 +8,8 @@
 
 - [贡献与验证](../CONTRIBUTING.md)：调研实践的落地、检查入口与证据要求。
 
+- [Agent 协作契约](agent-collaboration.md)：任务交接、角色边界与证据返回。
+- [框架实践迁移](framework-practices.md)：训练与推理报告的逐项目落点及边界。
 - [任务与 Skill 路由](component-skills.md)：组件变更与诊断任务的阅读入口。
 - [部署说明](deployment.md)：共享入口、各工具适配与验证边界。
 - [CUDA 崩溃诊断](cuda-crash-debugging.md)：API 日志、异步错误与最小复现。
@@ -16,7 +18,7 @@
 
 ## 调研资料
 
-- [AI Infra 工程规范与 Coding Agent 配置](research/github-ai-infra-engineering-standards.md)。
+- [Agent Kernel 工程调研](research/agent-kernel-engineering.md)。
 - [推理框架调研](research/inference-frameworks-agent-engineering.md)。
 - [训练框架调研](research/training-frameworks-agent-engineering.md)。
 
