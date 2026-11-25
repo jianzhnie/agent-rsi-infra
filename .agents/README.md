@@ -27,6 +27,18 @@
 | kl-consistency-test | [上游适配 Skill](skills/kl-consistency-test/SKILL.md) | SGLang prefill/decode 与缓存状态一致性 |
 | flashinfer-add-cuda-kernel | [上游适配 Skill](skills/flashinfer-add-cuda-kernel/SKILL.md) | FlashInfer CUDA、FFI、JIT 与 trace 集成 |
 | training-inference-change | [共享 Skill](skills/training-inference-change/SKILL.md) | 训练、RL 与推理变更的契约和分层验证 |
+| choose-parallel-layout | [上游适配 Skill](skills/choose-parallel-layout/SKILL.md) | 选择并行布局、微批次与梯度累积 |
+| discover-training-system | [上游适配 Skill](skills/discover-training-system/SKILL.md) | 核对训练硬件、拓扑、有效环境及执行路径 |
+| learn-optimization-skills | [上游适配 Skill](skills/learn-optimization-skills/SKILL.md) | 从可复现任务中提炼候选 Skill 改进 |
+| manage-memory-lifetimes | [上游适配 Skill](skills/manage-memory-lifetimes/SKILL.md) | 诊断训练 OOM、延迟初始化与恢复内存 |
+| moe-ep-communication | [上游适配 Skill](skills/moe-ep-communication/SKILL.md) | 诊断与优化 MoE 专家布局和通信 |
+| optimize-data-path | [上游适配 Skill](skills/optimize-data-path/SKILL.md) | 优化保持既定数据契约的预取与传输 |
+| optimize-training-kernels | [上游适配 Skill](skills/optimize-training-kernels/SKILL.md) | 评估训练融合与 Kernel 替换 |
+| profile-whole-update | [上游适配 Skill](skills/profile-whole-update/SKILL.md) | 分析训练完整 update 耗时和收益 |
+| recompute-policy | [上游适配 Skill](skills/recompute-policy/SKILL.md) | 评估激活重计算的内存时间权衡 |
+| validate-training-lifecycle | [上游适配 Skill](skills/validate-training-lifecycle/SKILL.md) | 验证训练保存、恢复与适用的导出路径 |
+| verify-training-semantics | [上游适配 Skill](skills/verify-training-semantics/SKILL.md) | 审查训练优化是否保持约定语义 |
+| weak-model-protocol | [上游适配 Skill](skills/weak-model-protocol/SKILL.md) | 设计受预算约束的结构化模型动作协议 |
 | context | [脚本](../.claude/hooks/session/context.sh) | 初始化会话，compact/resume 时保留已有记录 |
 | record-event | [脚本](../.claude/hooks/logging/record-event.sh) | 命令、Agent、配置及异常日志 |
 | guard-tool | [脚本](../.claude/hooks/tools/guard-tool.sh) | 工具调用前的补充拦截 |
@@ -68,6 +80,19 @@ Claude 角色适配生成到 `.claude/agents/`，Codex 角色配置生成到 `.c
 | training-inference-change | experimental | [来源与适配](skills/training-inference-change/UPSTREAM.md) | 目标训练/推理环境；按契约需要设备与权重 |
 | triton-kernel-writing | experimental | [来源与适配](skills/triton-kernel-writing/UPSTREAM.md) | 目标 GPU、Triton 与 reference |
 
+| choose-parallel-layout | experimental | [来源与适配](skills/choose-parallel-layout/UPSTREAM.md) | 目标训练环境、设备及按需模型/数据；本仓未验证 |
+| discover-training-system | experimental | [来源与适配](skills/discover-training-system/UPSTREAM.md) | 目标训练环境、设备及按需模型/数据；本仓未验证 |
+| learn-optimization-skills | experimental | [来源与适配](skills/learn-optimization-skills/UPSTREAM.md) | 日志/历史产物；真实结论需目标训练环境 |
+| manage-memory-lifetimes | experimental | [来源与适配](skills/manage-memory-lifetimes/UPSTREAM.md) | 目标训练环境、设备及按需模型/数据；本仓未验证 |
+| moe-ep-communication | experimental | [来源与适配](skills/moe-ep-communication/UPSTREAM.md) | 目标训练环境、设备及按需模型/数据；本仓未验证 |
+| optimize-data-path | experimental | [来源与适配](skills/optimize-data-path/UPSTREAM.md) | 目标训练环境、设备及按需模型/数据；本仓未验证 |
+| optimize-training-kernels | experimental | [来源与适配](skills/optimize-training-kernels/UPSTREAM.md) | 目标训练环境、设备及按需模型/数据；本仓未验证 |
+| profile-whole-update | experimental | [来源与适配](skills/profile-whole-update/UPSTREAM.md) | 目标训练环境、设备及按需模型/数据；本仓未验证 |
+| recompute-policy | experimental | [来源与适配](skills/recompute-policy/UPSTREAM.md) | 目标训练环境、设备及按需模型/数据；本仓未验证 |
+| validate-training-lifecycle | experimental | [来源与适配](skills/validate-training-lifecycle/UPSTREAM.md) | 目标训练环境、设备及按需模型/数据；本仓未验证 |
+| verify-training-semantics | experimental | [来源与适配](skills/verify-training-semantics/UPSTREAM.md) | 目标训练环境、设备及按需模型/数据；本仓未验证 |
+| weak-model-protocol | experimental | [来源与适配](skills/weak-model-protocol/UPSTREAM.md) | 日志/历史产物；真实结论需目标训练环境 |
+
 共享角色、Claude Hooks 与设置模板为 active；生成适配随源文件维护。角色执行、Hook 事件和通知的真实验证仍按兼容矩阵分别记录。通知可选依赖桌面命令或外部服务，不能由隔离测试推定已接通。
 
 [使用样例](../docs/skill-examples.md)提供任务输入、反例与交付要求。维护进展以可复现失败、回归结果、真实任务证据和兼容性记录衡量，不以 Skill/角色数量、Prompt 长度或配置文件数衡量。
@@ -97,3 +122,7 @@ Claude 角色适配生成到 `.claude/agents/`，Codex 角色配置生成到 `.c
 | training-inference-change | [离线数值比较](skills/training-inference-change/references/offline-numerics.md) | [固定来源与许可](skills/training-inference-change/references/torchtitan/UPSTREAM.md)；合成日志回归，真实模型/GPU 未测 |
 
 编译优化方法见[性能诊断](../docs/performance-profiling.md#编译优化先测量再选择区域)，分布式与配置边界补充到训练参考，测试及 PR 方法补充到贡献指南。相关 Skill 保持 experimental，真实客户端版本与任务验证日期仍未记录。
+
+## InfraRSI 训练优化资源
+
+全部 12 个 Skill 及负结果目录按固定版本迁入。先读[本地适配边界](skills/_catalogue/infrarsi-adaptation.md)，历史案例见[负结果目录](skills/_catalogue/negative-results.md)。不提供上游 harness 或训练执行服务；许可声明与本地补充文本的区别见[共享来源记录](skills/_catalogue/UPSTREAM.md)。真实客户端版本、GPU/框架任务和最近真实任务验证日期均未记录，保持 experimental。

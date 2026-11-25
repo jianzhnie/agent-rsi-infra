@@ -27,6 +27,8 @@
 
 离线诊断还提供 [CUDA Graph trace 整理](.agents/skills/llm-torch-profiler-analysis/references/cuda-graph-trace.md)与[逐算子数值日志比较](.agents/skills/training-inference-change/references/offline-numerics.md)，均无需启动模型；真实设备与客户端验证边界见各参考。
 
+训练优化还可按[专项路由](docs/component-skills.md#训练优化专项路由)选用 InfraRSI 的完整 update、内存、并行、语义与恢复等技能；它们均为 experimental，上游 harness 与设备任务未在本仓库验证。
+
 ## 资源与设计
 
 - [资源索引](.agents/README.md)：角色、Skills、来源与维护入口。

@@ -58,3 +58,9 @@
 ## SGLang-Omni 审查与评测结果适配
 
 选择性合并 code-review/coding-style 到[贡献规范](../CONTRIBUTING.md#接口配置与模块边界)、严格审查和推理参考；running-eval-suite 只提炼到[批量评测结果管理](task-evidence.md#批量评测的结果管理)。固定 revision、许可、原始文件和未采用项统一见[来源记录](../.agents/skills/code-reviewer/references/sglang-omni/UPSTREAM.md)。未新增 Skill、评测 runner、模型配置或客户端适配；仅完成文档与资源检查，未验证实际 Agent 行为或模型评测。
+
+## InfraRSI 全量 Skill 迁入
+
+固定 revision `512f8ea784054f4ca3331d03cc6589267a4cbdf5`：12 个 Skill 和 `_catalogue/negative-results.md` 全量迁入，保留元数据、署名与原始正文，新增本地边界入口、逐 Skill 来源记录、最低契约和使用样例。完整列表见[训练优化路由](component-skills.md#训练优化专项路由)。
+
+[共享来源](../.agents/skills/_catalogue/UPSTREAM.md)明确上游 Frontmatter 的 Apache-2.0 声明及独立许可文件缺失事实；附带文本由本地提供，不伪称上游原件。未迁入业务实现、harness、memory 数据库或训练执行服务；历史报告和硬件常数不作为本仓验证结果。所有新资源为 experimental。

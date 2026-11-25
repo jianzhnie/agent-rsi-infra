@@ -16,6 +16,25 @@
 | 清理死代码、重复实现或兼容层 | [code-cleanup](../.agents/skills/code-cleanup/SKILL.md) | 案例来自 SGLang，先核对目标契约 |
 | 证明文件拆分、移动或重命名是机械变换 | [mechanical-refactor-verify](../.agents/skills/mechanical-refactor-verify/SKILL.md) | 先审查脚本与 hooks；仍需行为验证 |
 
+## 训练优化专项路由
+
+以下 InfraRSI 迁入资源均为 experimental，先读[共同适配边界](../.agents/skills/_catalogue/infrarsi-adaptation.md)。它们提供方法，不提供上游 harness 或 GPU 执行授权；只选与当前问题相关的一项。
+
+| 任务 | Skill | 关键边界 |
+| --- | --- | --- |
+| 硬件、拓扑、NUMA 或开关不生效 | [discover-training-system](../.agents/skills/discover-training-system/SKILL.md) | 从实际进程和执行证据确认 |
+| 并行布局、微批次与累积 | [choose-parallel-layout](../.agents/skills/choose-parallel-layout/SKILL.md) | 公式和合法组合按目标框架 |
+| 完整 update 计时与慢 rank | [profile-whole-update](../.agents/skills/profile-whole-update/SKILL.md) | 同 rank/step 归因，阶段最大值不相加 |
+| OOM、延迟初始化与状态驻留 | [manage-memory-lifetimes](../.agents/skills/manage-memory-lifetimes/SKILL.md) | 第二步、恢复与 allocator 外内存 |
+| 重计算范围与开销 | [recompute-policy](../.agents/skills/recompute-policy/SKILL.md) | 目标版本互斥关系与生命周期 |
+| MoE 布局、dispatch/combine | [moe-ep-communication](../.agents/skills/moe-ep-communication/SKILL.md) | 路由语义、数值与通信成本 |
+| 数据预取、传输和 offload | [optimize-data-path](../.agents/skills/optimize-data-path/SKILL.md) | 保持约定的数据契约并验证依赖 |
+| 训练融合和 Kernel 替换 | [optimize-training-kernels](../.agents/skills/optimize-training-kernels/SKILL.md) | 复用现有 Kernel 实现与测量技能 |
+| 性能优化的语义审查 | [verify-training-semantics](../.agents/skills/verify-training-semantics/SKILL.md) | 任务定义不变量与容差 |
+| 保存、新进程恢复及导出 | [validate-training-lifecycle](../.agents/skills/validate-training-lifecycle/SKILL.md) | 支持导出时才验证导出路径 |
+| 从优化任务提炼资源改进 | [learn-optimization-skills](../.agents/skills/learn-optimization-skills/SKILL.md) | 回归与人工审查，不自动写全局规则 |
+| 结构化模型动作与预算协议 | [weak-model-protocol](../.agents/skills/weak-model-protocol/SKILL.md) | 协议参考，不引入执行引擎 |
+
 PT2 编译器排障技能 `pt2-bug-basher` 保持显式调用策略，不作为自动必读项。上游针对 speculative naming、冻结类、环境变量和 Rust processor 的专项规则尚未迁入；修改那些组件时读取目标仓库当前指令，不假设本仓库已提供对应技能。
 
 ## 来源

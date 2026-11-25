@@ -67,3 +67,24 @@
 本仓库验证资源路径、元数据、生成一致性和部分工具的隔离行为，不因此证明上表领域流程有效。当前没有归档的真实 GPU 任务回放或完整客户端加载记录；没有已验证的 GPU/框架版本清单。目标项目中执行的报告应记录精确版本，未测平台保持未验证。
 
 复现成功的使用样例应保留脱敏输入、目标 revision、执行命令、日志和验收结果，再链接到本页。维护状态、依赖和来源入口见[资源索引](../.agents/README.md#维护状态与验证边界)。
+
+## InfraRSI 使用样例
+
+以下请求是输入模板，不是已完成的训练案例。共同前提是目标 revision、日志/配置、允许改动和资源预算已确定；没有 GPU 时只做证据分析并报告未验证。
+
+| Skill | 典型请求 | 反例/排除范围 | 交付证据 |
+| --- | --- | --- | --- |
+| discover-training-system | “解释这些 rank 的 NUMA/拓扑与实际 backend 差异” | 仅凭机器型号推荐 NCCL 参数 | 有效环境、进程配置和路径证据 |
+| choose-parallel-layout | “固定全局 batch，比较可行布局” | 直接照搬 TP≤8 或显存常数 | 合法性、逐 rank 预算、完整 update 与语义对照 |
+| profile-whole-update | “组件变快但训练没快，按同 rank/step 对比” | 将阶段最大耗时相加 | 原始窗口、慢 rank、墙钟及噪声 |
+| manage-memory-lifetimes | “第一步成功、第二步 OOM，分析分配时序” | reserved-allocated 直接判碎片 | 时序、allocator/驱动与错误记录 |
+| recompute-policy | “按当前内存预算比较 full/selective/none” | 不验证就关闭重计算 | 策略、生命周期、数值与时间/显存 |
+| moe-ep-communication | “固定路由语义，分析 dispatch/combine 与热点专家” | 减少 top-k 冒充等价加速 | 分布、通信路径、合并数值和完整 update |
+| optimize-data-path | “保持样本分配，比较 pinned prefetch” | 跳过数据或移出计时窗口 | 数据契约、copy/buffer 依赖、时间/内存 |
+| optimize-training-kernels | “评估当前版本融合开关及逐行梯度误差” | 只报告单 Kernel 加速 | reference、数值、精度及模型/完整 update |
+| verify-training-semantics | “核对候选是否保持约定工作量与训练行为” | 套用上游固定容差 | 不变量、实际路径、容差依据与失败项 |
+| validate-training-lifecycle | “比较连续训练与新进程恢复，验证适用的导出” | 加载成功即宣布恢复通过 | 状态、轨迹、峰值和 reload/forward |
+| learn-optimization-skills | “从失败记录提炼带反例的候选规则” | 自动修改全局规则或训练评测标准 | 根因、条件、反例、固定任务对照与待审结论 |
+| weak-model-protocol | “为现有驱动设计动作校验与重试预算” | 自动搭建 runtime 或替换模型 | schema、错误处理、预算记账及验证缺口 |
+
+上游案例见[负结果目录](../.agents/skills/_catalogue/negative-results.md)，本地边界和未验证范围见[适配说明](../.agents/skills/_catalogue/infrarsi-adaptation.md)。本仓库未复现其案例收益，也未验证真实客户端自动发现这些新增 Skill。

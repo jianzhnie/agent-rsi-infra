@@ -70,3 +70,9 @@ Codex 格式依据：[官方多 Agent 文档](https://developers.openai.com/code
 ## TorchTitan 离线诊断资源
 
 `llm-torch-profiler-analysis` 增加 CUDA Graph trace 整理，`training-inference-change` 增加已有 activation 日志的 HTML 比较。脚本随原 Skill 部署，使用 Python 3.10+ 标准库，不安装 TorchTitan/PyTorch、不启用在线采集。分别按 [trace 参考](../.agents/skills/llm-torch-profiler-analysis/references/cuda-graph-trace.md)和[数值比较参考](../.agents/skills/training-inference-change/references/offline-numerics.md)调用，保留对应 `references/torchtitan/` 的来源与 BSD 许可。客户端适配路径不变，未新增真实客户端加载验证。
+
+## InfraRSI 资源
+
+12 个 Skill 仍放在共享 `.agents/skills/`，客户端沿用现有发现方式，无需新增角色或配置。完整复制资源时保留兄弟目录 `_catalogue/`（适配说明、负结果、来源与许可），单独复制一个 Skill 时也需带上该目录并保持相对路径。它不是额外的 Skill 入口。
+
+[适配边界](../.agents/skills/_catalogue/infrarsi-adaptation.md)说明哪些接口只存在于上游 harness；本仓库没有安装该 runtime、GPU 工具链或模型，也未自动改写系统环境。所有资源为 experimental；实际客户端发现、目标版本数值与性能必须另行验证。

@@ -6,6 +6,13 @@
     "validation": "运行目标 Transformers 的类型检查和受影响测试，报告残余类型错误；不套用到其他类型工具。",
     "deliverables": "交付准确命令、结果、代码版本、日志/产物位置、适用设备及未执行项和原因；纯分析报告证据来源与覆盖范围。"
   },
+  "choose-parallel-layout": {
+    "when_to_use": "选择并行布局、微批次与梯度累积；不用于无关文档/配置任务，不自动启动训练或接入上游 harness。",
+    "preconditions": "目标 checkout/revision、输入、资源预算、硬件/框架和预先约定的验收；先读 _catalogue/infrarsi-adaptation.md。",
+    "workflow": "读取 skills/choose-parallel-layout/SKILL.md 和来源；按目标环境适配方法，保留对照与失败记录，不照搬固定阈值。",
+    "validation": "逐 rank 内存、进程组合法性、全局 batch 和数据语义不变；完整 update 与数值验证；无环境时列出 not_run/blocked，不以结构验证替代实际结果。",
+    "deliverables": "实际命令、双方版本与环境、原始日志/样本、结果与限制、未执行原因；候选改进需人工审查，不自动提交发布。"
+  },
   "code-cleanup": {
     "when_to_use": "按 code-cleanup 的 SKILL.md description 和正文选择任务；排除正文未支持的框架与运行模式，不用于无关改动。",
     "preconditions": "读取目标代码 revision、任务输入与项目指令；依赖、设备和允许操作以该 Skill 正文为准，缺失时报告而非自动安装。",
@@ -26,6 +33,13 @@
     "workflow": "先读取 skills/debug-distributed-hang/SKILL.md，只加载其与当前任务相关的附属参考，遵守本地适配和用户授权。",
     "validation": "逐 rank 核对堆栈、进程退出和 collective 顺序；真实设备复现不可用时只报告证据边界。",
     "deliverables": "交付准确命令、结果、代码版本、日志/产物位置、适用设备及未执行项和原因；纯分析报告证据来源与覆盖范围。"
+  },
+  "discover-training-system": {
+    "when_to_use": "核对训练硬件、拓扑、有效环境及执行路径；不用于无关文档/配置任务，不自动启动训练或接入上游 harness。",
+    "preconditions": "目标 checkout/revision、输入、资源预算、硬件/框架和预先约定的验收；先读 _catalogue/infrarsi-adaptation.md。",
+    "workflow": "读取 skills/discover-training-system/SKILL.md 和来源；按目标环境适配方法，保留对照与失败记录，不照搬固定阈值。",
+    "validation": "实际进程 affinity、NUMA、版本和 backend 路径证据；不以配置存在证明执行；无环境时列出 not_run/blocked，不以结构验证替代实际结果。",
+    "deliverables": "实际命令、双方版本与环境、原始日志/样本、结果与限制、未执行原因；候选改进需人工审查，不自动提交发布。"
   },
   "flashinfer-add-cuda-kernel": {
     "when_to_use": "按 flashinfer-add-cuda-kernel 的 SKILL.md description 和正文选择任务；排除正文未支持的框架与运行模式，不用于无关改动。",
@@ -62,12 +76,26 @@
     "validation": "固定后端、样本和 cache 路径，对比 logprob 与尾部误差，区分批量数值差异和状态错误，不随意放宽阈值。",
     "deliverables": "交付准确命令、结果、代码版本、日志/产物位置、适用设备及未执行项和原因；纯分析报告证据来源与覆盖范围。"
   },
+  "learn-optimization-skills": {
+    "when_to_use": "从可复现任务中提炼候选 Skill 改进；不用于无关文档/配置任务，不自动启动训练或接入上游 harness。",
+    "preconditions": "目标 checkout/revision、输入、资源预算、硬件/框架和预先约定的验收；先读 _catalogue/infrarsi-adaptation.md。",
+    "workflow": "读取 skills/learn-optimization-skills/SKILL.md 和来源；按目标环境适配方法，保留对照与失败记录，不照搬固定阈值。",
+    "validation": "根因、条件、反例、固定任务对照及人工审查；不修改评测标准或泄漏保留答案；无环境时列出 not_run/blocked，不以结构验证替代实际结果。",
+    "deliverables": "实际命令、双方版本与环境、原始日志/样本、结果与限制、未执行原因；候选改进需人工审查，不自动提交发布。"
+  },
   "llm-torch-profiler-analysis": {
     "when_to_use": "按 llm-torch-profiler-analysis 的 SKILL.md description 和正文选择任务；排除正文未支持的框架与运行模式，不用于无关改动。",
     "preconditions": "读取目标代码 revision、任务输入与项目指令；依赖、设备和允许操作以该 Skill 正文为准，缺失时报告而非自动安装。",
     "workflow": "先读取 skills/llm-torch-profiler-analysis/SKILL.md，只加载其与当前任务相关的附属参考，遵守本地适配和用户授权。",
     "validation": "离线 trace 解析及单位核对；融合与重叠仅作线索，不启动在线采集或宣称实测优化收益。",
     "deliverables": "交付准确命令、结果、代码版本、日志/产物位置、适用设备及未执行项和原因；纯分析报告证据来源与覆盖范围。"
+  },
+  "manage-memory-lifetimes": {
+    "when_to_use": "诊断训练 OOM、延迟初始化与恢复内存；不用于无关文档/配置任务，不自动启动训练或接入上游 harness。",
+    "preconditions": "目标 checkout/revision、输入、资源预算、硬件/框架和预先约定的验收；先读 _catalogue/infrarsi-adaptation.md。",
+    "workflow": "读取 skills/manage-memory-lifetimes/SKILL.md 和来源；按目标环境适配方法，保留对照与失败记录，不照搬固定阈值。",
+    "validation": "逐 rank/时点 allocated/reserved/free、allocator 外内存、第二步与恢复压力；无环境时列出 not_run/blocked，不以结构验证替代实际结果。",
+    "deliverables": "实际命令、双方版本与环境、原始日志/样本、结果与限制、未执行原因；候选改进需人工审查，不自动提交发布。"
   },
   "mechanical-refactor-verify": {
     "when_to_use": "按 mechanical-refactor-verify 的 SKILL.md description 和正文选择任务；排除正文未支持的框架与运行模式，不用于无关改动。",
@@ -90,12 +118,47 @@
     "validation": "核对官方配置来源、硬件/拓扑和验证状态，查询不启动服务；改写 recipe 需目标环境验证。",
     "deliverables": "交付准确命令、结果、代码版本、日志/产物位置、适用设备及未执行项和原因；纯分析报告证据来源与覆盖范围。"
   },
+  "moe-ep-communication": {
+    "when_to_use": "诊断与优化 MoE 专家布局和通信；不用于无关文档/配置任务，不自动启动训练或接入上游 harness。",
+    "preconditions": "目标 checkout/revision、输入、资源预算、硬件/框架和预先约定的验收；先读 _catalogue/infrarsi-adaptation.md。",
+    "workflow": "读取 skills/moe-ep-communication/SKILL.md 和来源；按目标环境适配方法，保留对照与失败记录，不照搬固定阈值。",
+    "validation": "目标版本 dispatcher/分组约束、路由与合并数值、负载分布和完整 update；无环境时列出 not_run/blocked，不以结构验证替代实际结果。",
+    "deliverables": "实际命令、双方版本与环境、原始日志/样本、结果与限制、未执行原因；候选改进需人工审查，不自动提交发布。"
+  },
+  "optimize-data-path": {
+    "when_to_use": "优化保持既定数据契约的预取与传输；不用于无关文档/配置任务，不自动启动训练或接入上游 harness。",
+    "preconditions": "目标 checkout/revision、输入、资源预算、硬件/框架和预先约定的验收；先读 _catalogue/infrarsi-adaptation.md。",
+    "workflow": "读取 skills/optimize-data-path/SKILL.md 和来源；按目标环境适配方法，保留对照与失败记录，不照搬固定阈值。",
+    "validation": "数据与 token/loss-mask 契约、copy 依赖、buffer 复用、显存和完整 update；无环境时列出 not_run/blocked，不以结构验证替代实际结果。",
+    "deliverables": "实际命令、双方版本与环境、原始日志/样本、结果与限制、未执行原因；候选改进需人工审查，不自动提交发布。"
+  },
+  "optimize-training-kernels": {
+    "when_to_use": "评估训练融合与 Kernel 替换；不用于无关文档/配置任务，不自动启动训练或接入上游 harness。",
+    "preconditions": "目标 checkout/revision、输入、资源预算、硬件/框架和预先约定的验收；先读 _catalogue/infrarsi-adaptation.md。",
+    "workflow": "读取 skills/optimize-training-kernels/SKILL.md 和来源；按目标环境适配方法，保留对照与失败记录，不照搬固定阈值。",
+    "validation": "独立 reference、forward/backward 逐行与边界验证、精度和模型级对照；无环境时列出 not_run/blocked，不以结构验证替代实际结果。",
+    "deliverables": "实际命令、双方版本与环境、原始日志/样本、结果与限制、未执行原因；候选改进需人工审查，不自动提交发布。"
+  },
+  "profile-whole-update": {
+    "when_to_use": "分析训练完整 update 耗时和收益；不用于无关文档/配置任务，不自动启动训练或接入上游 harness。",
+    "preconditions": "目标 checkout/revision、输入、资源预算、硬件/框架和预先约定的验收；先读 _catalogue/infrarsi-adaptation.md。",
+    "workflow": "读取 skills/profile-whole-update/SKILL.md 和来源；按目标环境适配方法，保留对照与失败记录，不照搬固定阈值。",
+    "validation": "完整计时边界、墙钟、同 rank/step 对照、独立运行与噪声；阶段最大值不可相加；无环境时列出 not_run/blocked，不以结构验证替代实际结果。",
+    "deliverables": "实际命令、双方版本与环境、原始日志/样本、结果与限制、未执行原因；候选改进需人工审查，不自动提交发布。"
+  },
   "pt2-bug-basher": {
     "when_to_use": "按 pt2-bug-basher 的 SKILL.md description 和正文选择任务；排除正文未支持的框架与运行模式，不用于无关改动。",
     "preconditions": "读取目标代码 revision、任务输入与项目指令；依赖、设备和允许操作以该 Skill 正文为准，缺失时报告而非自动安装。",
     "workflow": "先读取 skills/pt2-bug-basher/SKILL.md，只加载其与当前任务相关的附属参考，遵守本地适配和用户授权。",
     "validation": "仅显式调用，按目标 PyTorch 编译器问题复现与缩小范围；保存日志和版本，不自动扩大任务。",
     "deliverables": "交付准确命令、结果、代码版本、日志/产物位置、适用设备及未执行项和原因；纯分析报告证据来源与覆盖范围。"
+  },
+  "recompute-policy": {
+    "when_to_use": "评估激活重计算的内存时间权衡；不用于无关文档/配置任务，不自动启动训练或接入上游 harness。",
+    "preconditions": "目标 checkout/revision、输入、资源预算、硬件/框架和预先约定的验收；先读 _catalogue/infrarsi-adaptation.md。",
+    "workflow": "读取 skills/recompute-policy/SKILL.md 和来源；按目标环境适配方法，保留对照与失败记录，不照搬固定阈值。",
+    "validation": "目标版本策略合法性、缓存生命周期、forward/backward、峰值与完整 update；无环境时列出 not_run/blocked，不以结构验证替代实际结果。",
+    "deliverables": "实际命令、双方版本与环境、原始日志/样本、结果与限制、未执行原因；候选改进需人工审查，不自动提交发布。"
   },
   "shell-check": {
     "when_to_use": "按 shell-check 的 SKILL.md description 和正文选择任务；排除正文未支持的框架与运行模式，不用于无关改动。",
@@ -117,5 +180,26 @@
     "workflow": "先读取 skills/triton-kernel-writing/SKILL.md，只加载其与当前任务相关的附属参考，遵守本地适配和用户授权。",
     "validation": "验证边界索引、dtype、布局和特化变体，性能对照覆盖代表形状，缺设备时不宣称已验证。",
     "deliverables": "交付准确命令、结果、代码版本、日志/产物位置、适用设备及未执行项和原因；纯分析报告证据来源与覆盖范围。"
+  },
+  "validate-training-lifecycle": {
+    "when_to_use": "验证训练保存、恢复与适用的导出路径；不用于无关文档/配置任务，不自动启动训练或接入上游 harness。",
+    "preconditions": "目标 checkout/revision、输入、资源预算、硬件/框架和预先约定的验收；先读 _catalogue/infrarsi-adaptation.md。",
+    "workflow": "读取 skills/validate-training-lifecycle/SKILL.md 和来源；按目标环境适配方法，保留对照与失败记录，不照搬固定阈值。",
+    "validation": "连续与新进程恢复轨迹、状态/RNG、内存峰值；支持导出时 reload/forward；无环境时列出 not_run/blocked，不以结构验证替代实际结果。",
+    "deliverables": "实际命令、双方版本与环境、原始日志/样本、结果与限制、未执行原因；候选改进需人工审查，不自动提交发布。"
+  },
+  "verify-training-semantics": {
+    "when_to_use": "审查训练优化是否保持约定语义；不用于无关文档/配置任务，不自动启动训练或接入上游 harness。",
+    "preconditions": "目标 checkout/revision、输入、资源预算、硬件/框架和预先约定的验收；先读 _catalogue/infrarsi-adaptation.md。",
+    "workflow": "读取 skills/verify-training-semantics/SKILL.md 和来源；按目标环境适配方法，保留对照与失败记录，不照搬固定阈值。",
+    "validation": "固定数据/工作量/loss/优化器/精度/参数与计时边界，按目标契约验证；无环境时列出 not_run/blocked，不以结构验证替代实际结果。",
+    "deliverables": "实际命令、双方版本与环境、原始日志/样本、结果与限制、未执行原因；候选改进需人工审查，不自动提交发布。"
+  },
+  "weak-model-protocol": {
+    "when_to_use": "设计受预算约束的结构化模型动作协议；不用于无关文档/配置任务，不自动启动训练或接入上游 harness。",
+    "preconditions": "目标 checkout/revision、输入、资源预算、硬件/框架和预先约定的验收；先读 _catalogue/infrarsi-adaptation.md。",
+    "workflow": "读取 skills/weak-model-protocol/SKILL.md 和来源；按目标环境适配方法，保留对照与失败记录，不照搬固定阈值。",
+    "validation": "动作 schema 独立校验、失败与费用记账、模型身份和预算；不在本仓执行上游 harness；无环境时列出 not_run/blocked，不以结构验证替代实际结果。",
+    "deliverables": "实际命令、双方版本与环境、原始日志/样本、结果与限制、未执行原因；候选改进需人工审查，不自动提交发布。"
   }
 }
