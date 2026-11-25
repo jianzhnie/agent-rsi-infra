@@ -56,6 +56,31 @@ def test_duplicate_frontmatter_keys_are_rejected(tmp_path):
     assert any("duplicate key 'name'" in error for error in errors)
 
 
+def test_duplicate_nested_frontmatter_keys_are_rejected(tmp_path):
+    folder = fixture(tmp_path)
+    (folder / "SKILL.md").write_text(
+        "---\nname: example\ndescription: Example skill.\n"
+        "vendor_extension:\n  nested:\n    enabled: true\n    enabled: false\n"
+        "---\n"
+    )
+
+    errors = check(tmp_path)
+
+    assert any("duplicate key 'enabled'" in error for error in errors)
+
+
+def test_yaml_merge_key_can_be_overridden_explicitly(tmp_path):
+    folder = fixture(tmp_path)
+    (folder / "SKILL.md").write_text(
+        "---\nname: example\ndescription: Example skill.\n"
+        "defaults: &defaults\n  nested: {enabled: true}\n"
+        "vendor_extension:\n  <<: *defaults\n  nested: {enabled: false}\n"
+        "---\n"
+    )
+
+    assert check(tmp_path) == []
+
+
 @pytest.mark.parametrize(
     ("content", "expected"),
     [
@@ -100,6 +125,17 @@ def test_sidecar_catalog_rejects_invalid_json_objects(tmp_path, content, expecte
                 }
             ),
             "Missing resolved_commit",
+        ),
+        (
+            json.dumps(
+                {
+                    "repository": "https://github.com/example/repo",
+                    "path": "skills/example",
+                    "requested_ref": "main",
+                    "resolved_commit": None,
+                }
+            ).replace('"requested_ref": "main"', '"requested_ref": "main", "requested_ref": "shadow"'),
+            "Duplicate JSON key",
         ),
     ],
 )
