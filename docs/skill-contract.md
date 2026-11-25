@@ -22,6 +22,6 @@
 
 ## 来源职责
 
-`INSTALL_SOURCE.json` 是安装器的机器快照，记录 repository、path、requested_ref 和 resolved_commit；无法解析 commit 时使用 null。它必须能被解析为 JSON 对象，字段与路径结构由自动检查验证。它不证明当前文件未修改。 `UPSTREAM.md` 是人工适配说明，记录本地修改、许可与验证边界。快照不证明当前文件未修改，人工说明也不能伪称可变分支是固定版本。本仓库按既有偏好可不保留安装 JSON，保留时检查器会核对其格式与显式 commit 是否明显冲突；不同版本的适配历史需人工判断。LICENSE/NOTICE 不从 commit 推断，继续保留并审查。
+`INSTALL_SOURCE.json` 是安装器的机器快照，记录 repository、path、requested_ref 和 resolved_commit；无法解析 commit 时使用 null。它必须能被解析为 JSON 对象，字段与路径结构由自动检查验证，但它不证明当前文件内容未修改。`UPSTREAM.md` 是人工适配说明，记录本地修改、许可与验证边界。它不能伪称可变分支是固定版本。本仓库按既有偏好可不保留安装 JSON；保留时，检查器核对其格式与显式 commit 是否明显冲突，不同版本的适配历史仍需人工判断。LICENSE/NOTICE 不从 commit 推断，继续保留并审查。
 
 当前自动检查不推断 Markdown 自由文本中的 shell 命令是否可执行，也不验证所有脚本权限和来源法律一致性；这些仍是迁入 Review 项。客户端适配由布局回归和 `sync_agents.py --check` 验证。

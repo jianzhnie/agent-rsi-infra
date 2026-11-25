@@ -127,14 +127,9 @@ def test_sidecar_catalog_rejects_invalid_json_objects(tmp_path, content, expecte
             "Missing resolved_commit",
         ),
         (
-            json.dumps(
-                {
-                    "repository": "https://github.com/example/repo",
-                    "path": "skills/example",
-                    "requested_ref": "main",
-                    "resolved_commit": None,
-                }
-            ).replace('"requested_ref": "main"', '"requested_ref": "main", "requested_ref": "shadow"'),
+            '{"repository": "https://github.com/example/repo", '
+            '"path": "skills/example", "requested_ref": "main", '
+            '"requested_ref": "shadow", "resolved_commit": null}',
             "Duplicate JSON key",
         ),
     ],
