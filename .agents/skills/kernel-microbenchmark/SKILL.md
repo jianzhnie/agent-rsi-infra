@@ -8,7 +8,9 @@ description: Build, debug, and interpret GPU kernel microbenchmarks for CUDA, RO
 ## Workflow
 
 1. Create an isolated repro or benchmark when the existing harness is noisy.
-2. Check correctness before timing. Keep tolerances explicit.
+2. Check correctness before timing. Keep tolerances explicit. For low-precision
+   forward/backward, use the [three-way numerics reference](../triton-kernel-writing/references/kernel-numerics.md);
+   its diagnostic examples do not replace the target project tolerance.
 3. Time only the operation under study. Exclude allocation, compilation, random
    input generation, logging, and host-device transfers unless those are the
    target.

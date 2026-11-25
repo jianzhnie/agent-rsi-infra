@@ -10,3 +10,5 @@
 迁入时验证文档链接、格式与可在本机运行的辅助脚本。未执行 GPU、CUDA/ROCm、多卡、模型或真实服务验证；未重新核实上游引用的全部安全公告、性能结论及外部服务可用性。
 
 后续适配：补充 `references/jit-kernel-warmup.md`，提炼同版本上游 JIT 预热方法并保留专用 API 链接。
+
+后续补充：TorchTitan 三方 Kernel 数值验证参考，固定来源及独立 BSD 许可见 [TorchTitan 来源记录](references/torchtitan/UPSTREAM.md)。

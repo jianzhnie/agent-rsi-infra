@@ -18,3 +18,5 @@
 完整 diff 与性能证据自查补充参考 FlashInfer [self-review](https://github.com/flashinfer-ai/flashinfer/blob/4d5a6ce322587d247fb192f97a0d23eeba9e3412/.claude/skills/self-review/SKILL.md)，固定 commit `4d5a6ce322587d247fb192f97a0d23eeba9e3412`；许可见[保留全文](../../flashinfer-add-cuda-kernel/LICENSE)，不迁入自动修复或强制发现问题的规则。
 
 长期资源复用的聚合保留量、负载变化及应用显存余量检查，提炼自 FlashInfer 同版本 [AGENTS.md](https://github.com/flashinfer-ai/flashinfer/blob/4d5a6ce322587d247fb192f97a0d23eeba9e3412/AGENTS.md)；许可见[已保留全文](../../flashinfer-add-cuda-kernel/LICENSE)，不将局部预热结果外推为完整服务可用性。
+
+问题必要性和归属审查提炼自 [TorchTitan pr-review](https://github.com/pytorch/torchtitan/blob/72e5566782bbdafaa9bafd422733a307319213c5/.claude/skills/pr-review/SKILL.md)，固定 revision `72e5566782bbdafaa9bafd422733a307319213c5`，许可见[保留的 BSD-3-Clause](../../training-inference-change/references/torchtitan/LICENSE)。仅补充 strict 的证据判断，不复制自动发布、固定裁决、委派或无 BC 政策。

@@ -58,6 +58,10 @@ registration, compilation, and execution.
 
 ## Validation
 
+For low-precision forward/backward verification, read the
+[three-way numerics reference](references/kernel-numerics.md). Declare the
+reference, supported cases, and tolerance before benchmarking.
+
 - Check correctness at boundary shapes and at sizes that exercise masks and
   large offsets. Include offset tensor views, not only fresh allocations.
   Warm aligned buffers, then exercise offset views and inspect compilation

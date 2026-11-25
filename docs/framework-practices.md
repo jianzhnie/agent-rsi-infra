@@ -12,7 +12,7 @@
 | verl | 工程标准与贡献流程的重复工作排查、人工责任、AI 参与和有效测试；[RL 参考](../.agents/skills/training-inference-change/references/rl.md)的样本和权重版本检查 | 不复制禁止一切小修复的政策，不自动回复或发布 PR |
 | DeepSpeed | 既有严格审查的设备接口、异步 buffer、collective 契约；训练参考补充 offload、状态与跨并行配置验证 | 不在其他框架禁止 torch.cuda/torch.distributed；不强制全硬件组合 |
 | TorchTitan | 训练参考的实验/稳定核心边界、配置 recipe、数值与模型级验证 | 不照搬 experiments 目录或把实验成功当核心 API 已验收 |
-| ms-swift | 训练参考的新模型注册、模板、文档与 smoke/unit 层级；格式复用已有工具 | 不新增重复 formatter 或复刻目标项目模型注册表 |
+| ms-swift | 训练参考的新模型注册、模板、文档与 smoke/unit 层级；[代码规范](../CONTRIBUTING.md#代码规范与依赖)补充命名、缩进、依赖选择及 lint/行为测试分离，记录固定来源 | 不新增重复 formatter 或复刻模型注册表；不迁入首次贡献 Issue、Fork 或算力政策 |
 | slime | RL 参考的 training、rollout、data buffer 和扩展接口边界；可复现优化与维护成本 | 不为本仓库维护 Megatron fork 或大型通用 RL 抽象 |
 | vime | RL 参考的 backend 隔离、generation/reward/environment、GPU/NPU 影响与日志约定 | 不复制硬件分支、签名或 PR 标签政策 |
 | Unsloth | 训练参考中 LoRA/量化、patch、logits/loss/梯度与显存风险，作为待核实验证方向 | 原报告缺少足够 Agent 配置证据，不声称已迁入上游指令或发布支持承诺 |
@@ -42,3 +42,15 @@
 此次不新增空 Agent 角色：训练与推理任务先由现有共享角色和上述工作流承接，出现明确、重复的分工需求后再扩展。`.codex/` 与 `.claude/` 仍是专用适配，角色正文只在 `.agents/agents/` 维护。
 
 本次验证范围是文件结构、引用、技能发现、生成一致性与仓库测试；未运行目标框架、训练、模型评测、GPU/NPU 或多节点实验。迁移条目不等于设备能力已验证。
+
+## TorchTitan `.claude` 后续适配
+
+固定 revision `72e5566782bbdafaa9bafd422733a307319213c5`：
+
+- Kernel 三方数值对照 → [Triton 数值参考](../.agents/skills/triton-kernel-writing/references/kernel-numerics.md)，微基准复用此入口。
+- CUDA Graph trace 整理 → [已有 profiler Skill](../.agents/skills/llm-torch-profiler-analysis/references/cuda-graph-trace.md)，附上游 CPU 测试及本地文件保护回归。
+- activation 日志比较 → [训练变更 Skill 的离线诊断](../.agents/skills/training-inference-change/references/offline-numerics.md)，未迁入在线捕获及临时 patch。
+- 编译区域选择、重编译预算与普通 launch/graph replay 对照 → [性能诊断](performance-profiling.md#编译优化先测量再选择区域)。
+- mesh/梯度 placement、配置所有权、实验边界 → 训练参考；测试成本、golden 更新和 PR 必要性 → 贡献指南及 strict 审查。
+
+各资源的 `references/torchtitan/UPSTREAM.md` 保留文件映射、本地修正和 BSD-3-Clause 许可。不迁入 fake 后端、torch_bisect、当前模型迁移清单、内部工具配置、无 BC 政策、自动提交或对外发布动作。只验证 CPU 合成产物及资源结构，不声明真实训练或 GPU 收益。

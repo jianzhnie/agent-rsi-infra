@@ -85,3 +85,15 @@ Claude 角色适配生成到 `.claude/agents/`，Codex 角色配置生成到 `.c
 ## 维护来源
 
 本地脚本、状态栏和原始设置可追溯到仓库 Git 历史，如 `80faff2`、`a241329`、`1cf2354`、`65be515`、`f52ed88`。共享资源保留各自署名与许可；不因目录迁移改写来源。
+
+## TorchTitan 补充资源
+
+本次在已有 Skill 内补充，不新增发现入口：
+
+| 所属 Skill | 新资源 | 来源与验证状态 |
+| --- | --- | --- |
+| triton-kernel-writing | [三方数值验证](skills/triton-kernel-writing/references/kernel-numerics.md) | [固定来源与许可](skills/triton-kernel-writing/references/torchtitan/UPSTREAM.md)；GPU 未测 |
+| llm-torch-profiler-analysis | [CUDA Graph trace 整理](skills/llm-torch-profiler-analysis/references/cuda-graph-trace.md) | [固定来源与许可](skills/llm-torch-profiler-analysis/references/torchtitan/UPSTREAM.md)；合成 trace 回归，真实 trace/客户端未测 |
+| training-inference-change | [离线数值比较](skills/training-inference-change/references/offline-numerics.md) | [固定来源与许可](skills/training-inference-change/references/torchtitan/UPSTREAM.md)；合成日志回归，真实模型/GPU 未测 |
+
+编译优化方法见[性能诊断](../docs/performance-profiling.md#编译优化先测量再选择区域)，分布式与配置边界补充到训练参考，测试及 PR 方法补充到贡献指南。相关 Skill 保持 experimental，真实客户端版本与任务验证日期仍未记录。

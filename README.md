@@ -25,6 +25,8 @@
 5. 按[完整示例](docs/skill-examples.md#kernel-优化交付示例)生成 Validation Report，记录失败、未执行项和原因；没有 GPU 结果时不宣称加速。
 6. 人工核对代码、数值和性能证据，决定接受、继续试验或拒绝。读取 Skill、报告结构通过都不等于优化验收通过。
 
+离线诊断还提供 [CUDA Graph trace 整理](.agents/skills/llm-torch-profiler-analysis/references/cuda-graph-trace.md)与[逐算子数值日志比较](.agents/skills/training-inference-change/references/offline-numerics.md)，均无需启动模型；真实设备与客户端验证边界见各参考。
+
 ## 资源与设计
 
 - [资源索引](.agents/README.md)：角色、Skills、来源与维护入口。

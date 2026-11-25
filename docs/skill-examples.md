@@ -55,6 +55,13 @@
 
 需要机器校验时，另按[任务报告 schema](task-evidence.md)保存 JSON，用 `scripts/validate_task_result.py` 检查；性能 JSON 用 `scripts/validate_benchmark.py` 检查。上述 Markdown 不是 JSON schema，结构校验不会执行 GPU 测试或核实日志真实性。
 
+## 已有离线产物的诊断
+
+- CUDA Graph trace 泳道过多：给出原始 `.json/.json.gz`、采集 run 和 rank 配置，使用[整理工具](../.agents/skills/llm-torch-profiler-analysis/references/cuda-graph-trace.md)生成新副本，交付命令、JSON 摘要与显示限制；不要从显示泳道推断真实 stream。
+- 两次训练出现数值漂移：给出同 dtype/seed/输入的逐算子日志、代码和捕获版本，使用[离线比较器](../.agents/skills/training-inference-change/references/offline-numerics.md)生成 HTML，交付排除/未配对项及候选分歧；统计匹配不能代替逐元素或模型级验证。
+
+这两项工具仅有 CPU 合成输入回归，无真实 GPU、模型或客户端加载证据。
+
 ## 已验证范围
 
 本仓库验证资源路径、元数据、生成一致性和部分工具的隔离行为，不因此证明上表领域流程有效。当前没有归档的真实 GPU 任务回放或完整客户端加载记录；没有已验证的 GPU/框架版本清单。目标项目中执行的报告应记录精确版本，未测平台保持未验证。

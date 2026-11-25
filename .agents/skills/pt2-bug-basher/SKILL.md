@@ -279,3 +279,5 @@ For accuracy issues, use level 4:
 ```bash
 TORCHDYNAMO_REPRO_AFTER=aot TORCHDYNAMO_REPRO_LEVEL=4 python your_script.py
 ```
+
+For compile performance investigations, use the [measurement reference](../../../docs/performance-profiling.md#编译优化先测量再选择区域): separate cold compile, recompilation, steady-state device time, and host launch overhead. Torchtitan-specific region APIs are not provided here.

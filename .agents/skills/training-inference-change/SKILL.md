@@ -11,6 +11,7 @@ license: Apache-2.0
 ## 按影响选择参考
 
 - 训练、Checkpoint、并行策略、LoRA/量化或训练 Kernel：[训练验证](references/training.md)。
+- 已有逐算子 activation 日志的数值偏差：[离线数值诊断](references/offline-numerics.md)，不自动接入在线捕获。
 - Rollout、reward、权重同步与异步训练：[RL 边界](references/rl.md)。
 - Serving、配置 API、调度、缓存及多阶段多模态：[推理验证](references/inference.md)。
 

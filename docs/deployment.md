@@ -66,3 +66,7 @@ CI 使用显式 `--check` 入口验证 Linux 与 macOS；实际客户端加载�
 将适配用于其他项目时保持共享参考路径，检查目标客户端支持的配置格式；合并 `.codex/config.toml` 的角色表到已有配置，不直接覆盖。角色可用不等于自动委派已获授权；工具与 sandbox 是客户端边界，Bash 工具列表也不是完整的只读保障。
 
 Codex 格式依据：[官方多 Agent 文档](https://developers.openai.com/codex/multi-agent) 与 [配置 schema](https://github.com/openai/codex/blob/main/codex-rs/core/config.schema.json)。本仓库仅验证生成一致性与格式，未启动真实客户端验证角色发现。
+
+## TorchTitan 离线诊断资源
+
+`llm-torch-profiler-analysis` 增加 CUDA Graph trace 整理，`training-inference-change` 增加已有 activation 日志的 HTML 比较。脚本随原 Skill 部署，使用 Python 3.10+ 标准库，不安装 TorchTitan/PyTorch、不启用在线采集。分别按 [trace 参考](../.agents/skills/llm-torch-profiler-analysis/references/cuda-graph-trace.md)和[数值比较参考](../.agents/skills/training-inference-change/references/offline-numerics.md)调用，保留对应 `references/torchtitan/` 的来源与 BSD 许可。客户端适配路径不变，未新增真实客户端加载验证。

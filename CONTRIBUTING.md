@@ -2,6 +2,17 @@
 
 仓库结构与执行要求见 [AGENTS.md](AGENTS.md)。本仓库维护工程流程和工具适配，目标项目的业务代码、模型测试与 GPU benchmark 仍在对应仓库执行。
 
+## 协作行为
+
+以下要求适用于 Issue、PR、代码审查及其他项目协作：
+
+- 围绕问题、代码和证据讨论，尊重不同背景、经验与观点；不使用侮辱、歧视、人身攻击或骚扰表达。
+- 提供具体、可行动的反馈，认真核对不同意见；确认错误后说明影响、及时更正，并对受影响者承担责任。
+- 未经明确许可，不公开他人的邮箱、地址等私人信息；提交日志、截图和复现材料前移除个人信息。
+- 遇到不当行为时保留必要事实供维护者核实，不通过公开传播私人信息或攻击当事人的方式处理。
+
+本节参考 [ms-swift CODE_OF_CONDUCT.md](https://github.com/modelscope/ms-swift/blob/9a1155e53a0ba136c4cbeebf4dd9fb7e9b80b541/CODE_OF_CONDUCT.md)，固定 revision `9a1155e53a0ba136c4cbeebf4dd9fb7e9b80b541`。上游基于 [Contributor Covenant 2.1](https://www.contributor-covenant.org/version/2/1/code_of_conduct.html)，其执法分级参考 Mozilla；本节为中文原则摘要，未复制完整准则、上游联系地址或处罚承诺。该文件是社区行为准则，不作为代码风格或技术验证要求的来源。
+
 ## 修改流程
 
 1. 明确需求、现有契约和受影响的入口；先查是否已有同类实现。
@@ -12,6 +23,16 @@
 本地开发环境需 Python 3.10+、Bash、Git、jq、shellcheck；Python 工具通过 `python3 -m pip install -e '.[dev]'` 安装。Shell 脚本兼容 macOS 自带 Bash，文件选择需要支持 `git ls-files --deduplicate` 的 Git。
 
 提交说明包含动机、兼容性、验证结果，以及 AI 工具的参与范围。不把格式检查通过当作模型行为或性能已验证。
+
+## 代码规范与依赖
+
+- 新增 Python 变量和函数使用 `snake_case`，类名使用 `PascalCase`。遵循所在模块的既有约定；外部 API、协议字段和迁入代码不为统一命名而破坏兼容或制造无关重命名。
+- Python 缩进使用四个空格，不使用 Tab。格式与 lint 由 [pyproject.toml](pyproject.toml) 中的 Ruff 配置执行，不另建平行工具配置。
+- 实现前先检查标准库、现有依赖及已有模块能否满足需求。需要新增依赖时，优先采用维护活跃、接口稳定、许可兼容的开源库，说明实际用途与维护成本，不为简单功能引入重型依赖。
+- 行为变更使用现有或新增测试保护：冒烟测试验证主要路径，必要的边界与失败用例验证契约。沿用下文的[测试准入要求](#测试与注释审查)，不为普通文档修改机械增加测试。
+- 提交前分别完成[静态检查](#检查与修复)与相关行为测试；lint 通过不能代替测试，尚未执行的 CI 或设备检查不能写成通过。
+
+本节提炼自 [ms-swift CONTRIBUTING_CN.md](https://github.com/modelscope/ms-swift/blob/9a1155e53a0ba136c4cbeebf4dd9fb7e9b80b541/CONTRIBUTING_CN.md) 的“代码规范和开发方式”“Running CI Tests”，固定 revision `9a1155e53a0ba136c4cbeebf4dd9fb7e9b80b541`，上游仓库许可为 [Apache-2.0](https://github.com/modelscope/ms-swift/blob/9a1155e53a0ba136c4cbeebf4dd9fb7e9b80b541/LICENSE)，本仓库保留同许可[全文](LICENSE)。本地适配复用 Ruff、pytest 和统一检查入口，补充既有接口与依赖成本边界；未迁入其首次贡献必须关联 Issue、Fork 流程或算力支持政策。AI 贡献的人类责任沿用现有要求，不重复维护。
 
 ## 外部代码来源
 
@@ -36,13 +57,17 @@ pytest 统一组织回归，已有 unittest 用例由 pytest 收集，无需为�
 
 测试应说明它能防住哪种后续回归。优先覆盖真实故障、需要推导的边界或不变量，以及容易漏同步的注册、字段生命周期和协议契约。并发故障尽量用受控调度复现具体交错，不把无法触发原故障的压力循环当作回归证据。
 
-区分实现镜像与独立契约：仅复述实现的断言价值有限；外部规范常量、注册完整性、负分支和缺省行为，即使实现很短，也可能是唯一的静默失败防线。合并或删除测试前，检查是否仍有其他用例保护同一故障；新增用例优先放入相关测试文件。
+区分实现镜像与独立契约：仅复述实现的断言价值有限；外部规范常量、注册完整性、负分支和缺省行为，即使实现很短，也可能是唯一的静默失败防线。合并或删除测试前，指出保留的具体用例及其保护的同一故障；新增用例优先放入相关测试文件。
 
 注释保留从当前代码无法直接恢复的信息：跨文件调用顺序、单位与张量布局、特殊常量的来源、workaround 的依据和退出条件。清理时先核实这些事实，不因注释短或看似重复就删除。修改代码时同步更新相关注释；变更历史放 Git 或 PR，当前仍有效的约束留在代码旁。语言、长度和 docstring 格式沿用目标仓库要求。
+
+GPU 测试需由实际设备作业选中并执行，不能长期放在纯 CPU suite 中静默跳过。更新 golden 数值时解释预期变化，重新生成受影响 backend/suite 的结果，不放宽容差使失败通过；按实际运行报告覆盖范围。
 
 ## 提交 PR 前的自查
 
 按目标分支与任务范围确定基准，审查完整 diff，覆盖已提交、已暂存、未暂存改动及属于本次任务的新增文件，排除无关变更。目标仓库有 PR 模板时保留其结构；非显然设计应有可解释的依据，兼容性变化、已知限制和有意偏离写入说明。
+
+PR 说明先给出具体输入或用户工作流、已有行为与预期行为，解释根因所属层及选择该修复的依据。机械移动与逻辑修改分别标明；若临时绕过上游问题，记录上游 Issue 和退出条件。先确认目标分支及进行中的迁移/PR 是否已解决该问题，不把缺少 Issue 本身视为拒绝依据。
 
 性能声明同时提供优化前后的绝对数据、设备与输入规模、复现命令和波动，不能只有加速比。发现的问题按实际影响处理，已接受的限制供审查者参考；没有确认问题时如实说明覆盖范围，不为凑结果继续制造发现。自查不授权发布 PR，也不改变只读审查 Skill 的操作边界。
 
@@ -108,3 +133,5 @@ PR 自查流程补充参考 FlashInfer [self-review](https://github.com/flashinf
 跨 Agent 或 Skill 比较结果时采用[任务契约与验证报告](docs/task-evidence.md)，保留未执行项及原始证据。报告结构检查不代表实际行为已验证。
 
 检查入口保持顺序编排：`--only lint,tests` 运行选定项，`--timeout 300` 设置每项超时，`--json <path>` 保存命令、执行环境和状态。`--fix` 要求完整验证，不能与 `--only` 合用。缺依赖标记 blocked，执行非零或超时标记 failed；未选中项不宣称通过。JSON 仅含已选项，CI 继续运行完整入口。工具版本探测有独立短超时，不作为检查通过证据。
+
+TorchTitan 的测试成本、golden 数值与 PR 必要性审查方法分别提炼自固定版本的 [tests.md](https://github.com/pytorch/torchtitan/blob/72e5566782bbdafaa9bafd422733a307319213c5/.claude/rules/tests.md)、[pr-review](https://github.com/pytorch/torchtitan/blob/72e5566782bbdafaa9bafd422733a307319213c5/.claude/skills/pr-review/SKILL.md) 和 [pr-description](https://github.com/pytorch/torchtitan/blob/72e5566782bbdafaa9bafd422733a307319213c5/.claude/skills/pr-description/SKILL.md)，revision `72e5566782bbdafaa9bafd422733a307319213c5`，许可见[保留的 BSD-3-Clause](.agents/skills/training-inference-change/references/torchtitan/LICENSE)。不迁入自动发布、强制人工摘要占位、固定审查裁决或无向后兼容政策。
