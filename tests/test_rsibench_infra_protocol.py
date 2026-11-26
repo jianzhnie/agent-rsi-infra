@@ -183,3 +183,11 @@ def test_training_replay_rejects_missing_or_reordered_update_contract():
         evaluate_quality("training_curve_16", {
             "admission_checks_passed": True, "updates": rows,
         })
+
+
+
+def test_aggregate_rejects_mixed_agent_configurations():
+    first = score_result(passing_row(task_id="a", agent_model="agent-a"))
+    second = score_result(passing_row(task_id="b", agent_model="agent-b"))
+    with pytest.raises(ValueError, match="exactly one agent"):
+        aggregate_results([first, second], ["a", "b"])
