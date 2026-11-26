@@ -91,6 +91,9 @@ def main():
         if not args.check:
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text(content)
+    if not args.check:
+        for path in obsolete:
+            path.unlink()
     if args.check and stale:
         parser.exit(1, "Stale agent adapters: " + ", ".join(stale) + "\n")
 
