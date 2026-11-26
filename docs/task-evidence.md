@@ -6,6 +6,8 @@
 
 运行 `python scripts/validate_task_result.py <report.json>` 检查结构。验证器不会执行命令、打开产物或证明证据真实性；人工需核对日志与实际代码版本。工作区未提交时记录基准 commit、diff 或源码 hash，不能仅以分支名代表候选。
 
+训练性能任务可从[任务描述模板](templates/training-optimization-task.md)填写输入、授权和预算；模板不替代执行前固定的验收契约。
+
 ## 性能与环境
 
 性能证据另行记录 baseline/candidate、模型与输入 revision、硬件数量和拓扑、驱动/runtime/compiler/framework 版本、dtype、shape、并发与并行配置、计时边界、缓存和 graph 模式、warmup、重复次数、原始样本及波动。禁止把 profiler 数据直接代替正式 benchmark。环境指纹只采集明确列出的非敏感字段，不保存全部环境变量或凭证。

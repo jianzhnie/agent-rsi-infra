@@ -12,7 +12,7 @@ SCRIPT = ROOT / ".agents/skills/shell-check/scripts/check.sh"
 
 
 class ShellCheckTests(unittest.TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.project = Path(self.temp.name) / "project with spaces"
@@ -42,7 +42,7 @@ class ShellCheckTests(unittest.TestCase):
             timeout=10,
         )
 
-    def test_repository_selection_from_subdirectory(self):
+    def test_repository_selection_from_subdirectory(self) -> None:
         subprocess.run(
             [str(self.bin / "git"), "init", "-q"], cwd=self.project, check=True
         )
@@ -62,7 +62,7 @@ class ShellCheckTests(unittest.TestCase):
         self.assertIn(b"line\nbreak.sh", arguments)
         self.assertNotIn(b"ignored.sh", arguments)
 
-    def test_failures_do_not_stop_later_files(self):
+    def test_failures_do_not_stop_later_files(self) -> None:
         (self.project / "bad-static.sh").write_text("echo ok\n")
         (self.project / "bad-syntax.sh").write_text("if\n")
         (self.project / "valid.sh").write_text("echo ok\n")
@@ -73,7 +73,7 @@ class ShellCheckTests(unittest.TestCase):
         )
         self.assertIn(b"valid.sh", self.capture.read_bytes())
 
-    def test_missing_shellcheck_is_not_success(self):
+    def test_missing_shellcheck_is_not_success(self) -> None:
         self.mock.unlink()
         (self.project / "valid.sh").write_text("echo ok\n")
         result = self.run_check(self.project / "valid.sh")
@@ -83,7 +83,7 @@ class ShellCheckTests(unittest.TestCase):
         self.assertIn("SKIPPED shellcheck", result.stderr)
 
     @unittest.skipUnless(shutil.which("shellcheck"), "shellcheck is not installed")
-    def test_follows_local_sourced_library(self):
+    def test_follows_local_sourced_library(self) -> None:
         executable = shutil.which("shellcheck")
         self.mock.unlink()
         self.mock.symlink_to(executable)
@@ -96,13 +96,13 @@ class ShellCheckTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         self.assertIn("PASS shellcheck", result.stdout)
 
-    def test_invalid_or_empty_target_is_not_success(self):
+    def test_invalid_or_empty_target_is_not_success(self) -> None:
         for target in (self.project / "missing", self.project):
             with self.subTest(target=target):
                 result = self.run_check(target)
                 self.assertEqual(result.returncode, 2)
 
-    def test_default_requires_repository(self):
+    def test_default_requires_repository(self) -> None:
         result = self.run_check()
         self.assertEqual(result.returncode, 2)
         self.assertIn("Not in a Git repository", result.stderr)

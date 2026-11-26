@@ -4,7 +4,8 @@ from copy import deepcopy
 
 import pytest
 
-from scripts.validate_task_result import validate
+from scripts.compare_task_results import compare
+from scripts.validate_task_result import validate, validate_contract
 
 
 def report():
@@ -28,7 +29,7 @@ def report():
     }
 
 
-def test_valid_and_unexecuted_results():
+def test_valid_and_unexecuted_results() -> None:
     value = report()
     assert validate(value) is value
     value["criteria"][0] = {
@@ -41,10 +42,10 @@ def test_valid_and_unexecuted_results():
 
 
 @pytest.mark.parametrize("mutation", ["evidence", "reason", "duplicate", "empty"])
-def test_invalid_results(mutation):
+def test_invalid_results(mutation) -> None:
     value = deepcopy(report())
     if mutation == "evidence":
-        del value["criteria"][0]["evidence"]
+        value["criteria"][0].pop("evidence")
     elif mutation == "reason":
         value["criteria"][0]["status"] = "not_run"
     elif mutation == "duplicate":
@@ -55,9 +56,7 @@ def test_invalid_results(mutation):
         validate(value)
 
 
-def test_contract_detects_omitted_or_rewritten_criteria():
-    from scripts.validate_task_result import validate_contract
-
+def test_contract_detects_omitted_or_rewritten_criteria() -> None:
     value = report()
     contract = {
         "task_id": value["task_id"],
@@ -74,9 +73,7 @@ def test_contract_detects_omitted_or_rewritten_criteria():
         validate_contract(value, contract)
 
 
-def test_comparison_exposes_regression_without_promoting():
-    from scripts.compare_task_results import compare
-
+def test_comparison_exposes_regression_without_promoting() -> None:
     baseline = report()
     candidate = deepcopy(baseline)
     candidate["revision"] = "candidate-hash"

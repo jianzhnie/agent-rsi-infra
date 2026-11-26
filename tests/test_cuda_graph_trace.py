@@ -13,9 +13,13 @@ package, so run it directly:
     python3 -m pytest tests/test_cuda_graph_trace.py
 """
 
+import gzip
 import importlib.util
+import json
 import math
+import subprocess
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 from typing import Any
@@ -725,8 +729,6 @@ class TestCompactCudaGraphTrace(unittest.TestCase):
 # Local regression coverage for input preservation and invalid trace timing.
 class TestTraceCli(unittest.TestCase):
     def run_cli(self, *args):
-        import subprocess
-
         return subprocess.run(
             [sys.executable, str(SCRIPT), *map(str, args)],
             capture_output=True,
@@ -734,11 +736,7 @@ class TestTraceCli(unittest.TestCase):
             timeout=10,
         )
 
-    def test_file_roundtrip_preserves_input_and_refuses_overwrite(self):
-        import gzip
-        import json
-        import tempfile
-
+    def test_file_roundtrip_preserves_input_and_refuses_overwrite(self) -> None:
         with tempfile.TemporaryDirectory() as folder:
             source = Path(folder) / "原始 trace.json.gz"
             trace = {
@@ -775,7 +773,7 @@ class TestTraceCli(unittest.TestCase):
                 self.assertNotEqual(result.returncode, 0)
                 self.assertEqual(source.read_bytes(), original)
 
-    def test_invalid_timing_is_rejected(self):
+    def test_invalid_timing_is_rejected(self) -> None:
         for timestamp, duration in ((math.nan, 1), (0, math.inf), (0, -1)):
             with self.subTest(timestamp=timestamp, duration=duration):
                 trace = {

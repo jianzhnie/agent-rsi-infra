@@ -52,7 +52,7 @@
 
 ## 验证分层
 
-pytest 统一组织回归，已有 unittest 用例由 pytest 收集，无需为迁移改写断言。Python 使用 Ruff，Shell 使用语法与静态分析；未来引入 C/C++ 实现时再接入 clang-format、编译和必要的 API 审计，不给当前纯配置仓库增加空门禁。正确性、设备覆盖和性能结果分别呈现。
+pytest 统一组织根 tests/ 与 mechanical-refactor-verify 的附属回归，已有 unittest 用例由 pytest 收集，无需为迁移改写断言。Python 使用 Ruff，Shell 使用语法与静态分析；未来引入 C/C++ 实现时再接入 clang-format、编译和必要的 API 审计，不给当前纯配置仓库增加空门禁。正确性、设备覆盖和性能结果分别呈现。
 
 ## 检查与修复
 

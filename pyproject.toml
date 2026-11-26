@@ -25,10 +25,11 @@ classifiers = [
 dependencies = []
 
 [project.optional-dependencies]
+profiler = ["numpy>=1.24"]
 dev = [
     "pytest>=7.0.0",
     "PyYAML>=6.0",
-    "ruff>=0.6.0",
+    "ruff==0.15.12",
     "pre-commit>=4.0.0",
 ]
 
@@ -40,6 +41,7 @@ Homepage = "https://github.com/jianzhnie/agent-rsi-infra"
 py-modules = []
 
 [tool.ruff]
+required-version = "==0.15.12"
 line-length = 88
 target-version = "py310"
 
@@ -69,7 +71,7 @@ ignore = [
 keep-runtime-typing = true
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = ["tests", ".agents/skills/mechanical-refactor-verify/scripts/tests"]
 python_files = ["test_*.py"]
 addopts = ["-v", "--tb=short", "--strict-markers"]
 markers = [

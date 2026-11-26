@@ -3,9 +3,44 @@
 import argparse
 import json
 from pathlib import Path
+from typing import Literal, TypedDict
 
 
-def validate(report):
+class TaskEvidence(TypedDict):
+    command: str
+    result: str
+    artifact: str
+
+
+class AcceptanceCriterion(TypedDict):
+    id: str
+    expected: str
+
+
+class CriterionStatus(AcceptanceCriterion):
+    status: Literal["passed", "failed", "not_run", "not_applicable"]
+
+
+class CriterionResult(CriterionStatus, total=False):
+    evidence: TaskEvidence
+    reason: str
+
+
+class TaskContract(TypedDict):
+    task_id: str
+    objective: str
+    criteria: list[AcceptanceCriterion]
+
+
+class TaskReport(TypedDict):
+    version: Literal[1]
+    task_id: str
+    objective: str
+    revision: str
+    criteria: list[CriterionResult]
+
+
+def validate(report: TaskReport) -> TaskReport:
     if (
         not isinstance(report, dict)
         or type(report.get("version")) is not int
@@ -46,7 +81,7 @@ def validate(report):
     return report
 
 
-def validate_contract(report, contract):
+def validate_contract(report: TaskReport, contract: TaskContract) -> TaskReport:
     """Match a result to independently recorded acceptance criteria."""
     validate(report)
     if not isinstance(contract, dict) or contract.get("task_id") != report["task_id"]:
@@ -72,7 +107,7 @@ def validate_contract(report, contract):
     return report
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("report", type=Path)
     parser.add_argument(

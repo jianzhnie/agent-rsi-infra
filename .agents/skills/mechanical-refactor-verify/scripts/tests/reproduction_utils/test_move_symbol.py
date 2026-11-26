@@ -1,3 +1,4 @@
+import subprocess
 import sys
 from pathlib import Path
 
@@ -428,3 +429,24 @@ def test_move_symbol_relocates_a_top_level_class(tmp_path: Path) -> None:
 
 
 # --- adversarial audit: leave_delegate stubs -------------------------------------
+
+
+def test_conflicting_move_anchors_are_rejected_with_python_optimization() -> None:
+    """Python -O must not disable validation of contradictory relocation anchors."""
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-O",
+            "-c",
+            "from mechanical_refactor_reproduction_utils import Repro; "
+            "Repro('base', 'tip').move_symbol('helper', src='src.py', dst='dst.py', "
+            "into_class=None, before='first', after='last')",
+        ],
+        cwd=Path(__file__).resolve().parents[2],
+        capture_output=True,
+        text=True,
+        timeout=10,
+    )
+    assert result.returncode != 0
+    assert "AssertionError" in result.stderr
+    assert "before" in result.stderr and "after" in result.stderr

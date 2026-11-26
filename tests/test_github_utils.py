@@ -15,7 +15,7 @@ helpers = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(helpers)
 
 
-def test_contents_url_encodes_query_and_unicode():
+def test_contents_url_encodes_query_and_unicode() -> None:
     url = helpers.github_api_contents_url(
         "owner/repo", "目录 with space/SKILL.md", "feature/a&b"
     )
@@ -23,7 +23,7 @@ def test_contents_url_encodes_query_and_unicode():
     assert " " not in url
 
 
-def test_request_uses_timeout_and_auth_without_printing():
+def test_request_uses_timeout_and_auth_without_printing() -> None:
     with (
         patch.dict(helpers.os.environ, {"GITHUB_TOKEN": "secret-value"}),
         patch.object(helpers.urllib.request, "urlopen") as open_url,
@@ -49,7 +49,7 @@ def test_request_uses_timeout_and_auth_without_printing():
         "https://user:pass@api.github.com/x",
     ],
 )
-def test_invalid_hosts_are_rejected_before_request(url):
+def test_invalid_hosts_are_rejected_before_request(url) -> None:
     with patch.object(helpers.urllib.request, "urlopen") as request:
         with pytest.raises(ValueError):
             helpers.github_request(url, "test")

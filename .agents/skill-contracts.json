@@ -6,6 +6,13 @@
     "validation": "运行目标 Transformers 的类型检查和受影响测试，报告残余类型错误；不套用到其他类型工具。",
     "deliverables": "交付准确命令、结果、代码版本、日志/产物位置、适用设备及未执行项和原因；纯分析报告证据来源与覆盖范围。"
   },
+  "autotune-training-throughput": {
+    "when_to_use": "固定训练工作负载的吞吐诊断、离线分析与候选对比；不提供调度或任务执行器。",
+    "preconditions": "基线、数据/模型版本、工作负载、本地日志或 trace、设备信息及验收协议；先读 UPSTREAM.md。",
+    "workflow": "阅读目标项目与适用 stack，固定基线，通过目标项目入口运行授权实验，离线测量并独立验证。",
+    "validation": "核对配置语义、完整计时窗口、数值与受影响行为，独立复验；无环境则报告 blocked/not_run。",
+    "deliverables": "命令、版本、原始日志、指标、成本、失败原因与未验证项；经验只提案，不自动提交部署。"
+  },
   "choose-parallel-layout": {
     "when_to_use": "选择并行布局、微批次与梯度累积；不用于无关文档/配置任务，不自动启动训练或接入上游 harness。",
     "preconditions": "目标 checkout/revision、输入、资源预算、硬件/框架和预先约定的验收；先读 _catalogue/infrarsi-adaptation.md。",

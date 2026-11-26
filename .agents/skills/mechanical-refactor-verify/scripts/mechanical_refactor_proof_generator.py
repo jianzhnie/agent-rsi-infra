@@ -35,8 +35,6 @@ import sys
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
-
 import mechanical_refactor_reproduction_utils as rr
 
 
@@ -431,7 +429,7 @@ def _wants_future_import(files: dict[str, dict], src: str, dst: str) -> bool:
 
 
 def _next_sibling_def_name(
-    dst_tree: ast.AST, name: str, into_class: str | None
+    dst_tree: ast.Module, name: str, into_class: str | None
 ) -> str | None:
     """The name of the def that immediately follows ``name`` at its scope in the destination
     (module level, or inside ``into_class``), or None when ``name`` is the last def there. Lets
@@ -442,7 +440,7 @@ def _next_sibling_def_name(
         cls = rr._find_class(dst_tree, into_class)
         container = cls.body if cls is not None else []
     else:
-        container = getattr(dst_tree, "body", [])
+        container = dst_tree.body
     defs = [
         n
         for n in container
@@ -454,7 +452,7 @@ def _next_sibling_def_name(
     return None
 
 
-def _next_sibling_assign_or_def(dst_tree: ast.AST, name: str) -> str | None:
+def _next_sibling_assign_or_def(dst_tree: ast.Module, name: str) -> str | None:
     """The name of the top-level statement (def/class/single-Name assign) that immediately
     follows the assignment ``name`` in the destination, or None when it is last."""
 
@@ -471,7 +469,7 @@ def _next_sibling_assign_or_def(dst_tree: ast.AST, name: str) -> str | None:
             return node.target.id
         return None
 
-    named = [(stmt_name(n), n) for n in getattr(dst_tree, "body", []) if stmt_name(n)]
+    named = [(stmt_name(n), n) for n in dst_tree.body if stmt_name(n)]
     for i, (nm, _) in enumerate(named):
         if nm == name:
             return named[i + 1][0] if i + 1 < len(named) else None
@@ -496,7 +494,7 @@ def _stmt_symbol_name(node: ast.AST) -> str | None:
 
 
 def _module_move_anchor(
-    dst_tree: ast.AST, name: str, into_class: str | None
+    dst_tree: ast.Module, name: str, into_class: str | None
 ) -> tuple[str | None, str | None]:
     """The ``(before, after)`` anchor for reinserting the moved def ``name``. Normally
     ``before=<next sibling def>``. But when a module-level def lands immediately above an
@@ -506,7 +504,7 @@ def _module_move_anchor(
     before = _next_sibling_def_name(dst_tree, name, into_class)
     if into_class is not None:
         return before, None
-    body = list(getattr(dst_tree, "body", []))
+    body = list(dst_tree.body)
     idx = next(
         (
             i
@@ -596,13 +594,13 @@ def _scatter_extract_layout(dst_after: str, symbols: list[str]) -> dict | None:
 
 
 def _iter_defs_with_container(
-    tree: ast.AST,
+    tree: ast.Module,
 ) -> list[tuple[str | None, ast.AST]]:
     """(container_class_name_or_None, def_node) for every module-level function and every
     method one class deep -- the two nesting depths an extract_function helper can land at.
     """
     out: list[tuple[str | None, ast.AST]] = []
-    for node in getattr(tree, "body", []):
+    for node in tree.body:
         if isinstance(node, ast.FunctionDef | ast.AsyncFunctionDef):
             out.append((None, node))
         elif isinstance(node, ast.ClassDef):
@@ -1034,7 +1032,7 @@ def infer_recipe(commit: str, root: str) -> Recipe:
             try:
                 after_tree = ast.parse(_git_output(["show", f"{commit}:{p}"], root))
                 before_tree = ast.parse(_git_output(["show", f"{commit}^:{p}"], root))
-            except Exception:
+            except SyntaxError:
                 continue
             stub = _delegate_stub_attr(after_tree, name)
             if stub is None:
@@ -1095,7 +1093,7 @@ def infer_recipe(commit: str, root: str) -> Recipe:
                 "" if files[p]["new"] else _git_output(["show", f"{commit}^:{p}"], root)
             )
             texts_after[p] = _git_output(["show", f"{commit}:{p}"], root)
-        except Exception:
+        except (OSError, UnicodeError):
             continue
     for p_src in changed_paths:
         if p_src not in texts_before:
@@ -1527,7 +1525,8 @@ def _main(argv: list[str]) -> int:
         return 2
     target = argv[0]
     if ".." in target:
-        assert out_dir, "--out DIR is required for a range"
+        if not (out_dir):
+            raise AssertionError("--out DIR is required for a range")
         results = generate_range(target, match=match, out_dir=out_dir)
         n = sum(1 for r in results if r.passed)
         print(f"{n}/{len(results)} reproduced; folder: {out_dir}")

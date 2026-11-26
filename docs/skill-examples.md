@@ -88,3 +88,9 @@
 | weak-model-protocol | “为现有驱动设计动作校验与重试预算” | 自动搭建 runtime 或替换模型 | schema、错误处理、预算记账及验证缺口 |
 
 上游案例见[负结果目录](../.agents/skills/_catalogue/negative-results.md)，本地边界和未验证范围见[适配说明](../.agents/skills/_catalogue/infrarsi-adaptation.md)。本仓库未复现其案例收益，也未验证真实客户端自动发现这些新增 Skill。
+
+## ATTUNE 训练吞吐调优
+
+请求示例：“固定训练版本、数据与设备，对比基线和候选的本地日志及 trace，报告吞吐、波动和数值验证结果。”先读 UPSTREAM.md；训练通过目标项目入口执行。交付原始证据、失败原因与未验证项。
+
+本次离线验证：profiler 合成 trace 24 项通过；三个数据工具测试 46 项通过、2 项跳过。整组脚本测试不能脱离完整 harness 直接运行；真实 GPU、模型、Kubernetes/Ray 和客户端加载均未验证。

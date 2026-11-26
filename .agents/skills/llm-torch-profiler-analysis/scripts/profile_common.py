@@ -15,8 +15,10 @@ from collections import Counter, defaultdict
 from collections.abc import Callable, Iterable, Sequence
 from dataclasses import dataclass
 from functools import lru_cache
+from http.client import HTTPException
 from pathlib import Path
 from urllib import request
+from urllib.error import HTTPError
 
 STAGE_ORDER = {"extend": 0, "prefill": 0, "decode": 1, "all": 2}
 FRAMEWORK_LABELS = {
@@ -226,7 +228,7 @@ def try_get_json(url: str, timeout: float = 60.0) -> object | None:
     try:
         with request.urlopen(url, timeout=timeout) as response:
             raw = response.read()
-    except Exception:
+    except (OSError, HTTPException):
         return None
     if not raw:
         return None
@@ -401,13 +403,13 @@ def detect_framework_from_path(path: Path) -> str | None:
     if path.is_file():
         try:
             return detect_framework_from_trace(load_trace_json(path))
-        except Exception:
+        except (OSError, ValueError, EOFError):
             return None
     trace_files = discover_trace_files(path, recursive=True, limit=3)
     for trace_file in trace_files:
         try:
             hint = detect_framework_from_trace(load_trace_json(trace_file))
-        except Exception:
+        except (OSError, ValueError, EOFError):
             hint = None
         if hint:
             return hint
@@ -501,7 +503,7 @@ def file_looks_like_trace(path: Path) -> bool:
         return False
     try:
         trace = load_trace_json(path)
-    except Exception:
+    except (OSError, ValueError, EOFError):
         return False
     if isinstance(trace, dict):
         return isinstance(trace.get("traceEvents"), list)
@@ -661,7 +663,9 @@ def send_probe_request(
     try:
         post_json(url.rstrip("/") + "/v1/chat/completions", chat_payload, timeout=300.0)
         return
-    except Exception:
+    except HTTPError as error:
+        if error.code not in (404, 405, 501):
+            raise
         completion_payload = {
             "model": resolved_model,
             "prompt": prompt,
@@ -833,7 +837,7 @@ def start_remote_profiler(
 ) -> None:
     try:
         post_json(url.rstrip("/") + "/start_profile", payload=payload, timeout=60.0)
-    except Exception as exc:
+    except (OSError, ValueError, HTTPException) as exc:
         if framework == "vllm":
             raise RuntimeError(
                 "vLLM live torch profiling requires the server to be launched with "
@@ -885,7 +889,7 @@ def stop_remote_profiler(url: str, framework: str) -> None:
             timeout=300.0,
             headers=sglang_admin_headers() if framework == "sglang" else None,
         )
-    except Exception as exc:
+    except (OSError, ValueError, HTTPException) as exc:
         raise RuntimeError(
             f"Failed to stop {framework_display_name(framework)} profiler via "
             f"{url.rstrip('/')}/stop_profile"

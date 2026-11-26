@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class AgentAdapterSyncTests(unittest.TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.project = Path(self.temp.name)
@@ -40,7 +40,7 @@ class AgentAdapterSyncTests(unittest.TestCase):
             timeout=10,
         )
 
-    def test_check_reports_removed_role_adapters_without_deleting(self):
+    def test_check_reports_removed_role_adapters_without_deleting(self) -> None:
         self.assertEqual(self.run_sync().returncode, 0)
         generated = [
             self.claude_dir / "sample-role.md",
@@ -57,7 +57,7 @@ class AgentAdapterSyncTests(unittest.TestCase):
         self.assertTrue(all(path.is_file() for path in generated))
         self.assertTrue(self.manual.is_file())
 
-    def test_sync_removes_only_generator_owned_orphan_files(self):
+    def test_sync_removes_only_generator_owned_orphan_files(self) -> None:
         self.assertEqual(self.run_sync().returncode, 0)
         self.source.unlink()
 

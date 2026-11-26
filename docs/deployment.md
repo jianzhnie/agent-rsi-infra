@@ -76,3 +76,7 @@ Codex 格式依据：[官方多 Agent 文档](https://developers.openai.com/code
 12 个 Skill 仍放在共享 `.agents/skills/`，客户端沿用现有发现方式，无需新增角色或配置。完整复制资源时保留兄弟目录 `_catalogue/`（适配说明、负结果、来源与许可），单独复制一个 Skill 时也需带上该目录并保持相对路径。它不是额外的 Skill 入口。
 
 [适配边界](../.agents/skills/_catalogue/infrarsi-adaptation.md)说明哪些接口只存在于上游 harness；本仓库没有安装该 runtime、GPU 工具链或模型，也未自动改写系统环境。所有资源为 experimental；实际客户端发现、目标版本数值与性能必须另行验证。
+
+## ATTUNE Skill
+
+`autotune-training-throughput` 提供本地日志测量、trace 分析和数值检查，通过共享目录发现；训练由目标项目现有入口执行。先读[来源与边界](../.agents/skills/autotune-training-throughput/UPSTREAM.md)。

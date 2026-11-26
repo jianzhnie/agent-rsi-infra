@@ -22,20 +22,20 @@ def fixture(root):
     return folder
 
 
-def test_upstream_extensions_and_sidecar_are_supported(tmp_path):
+def test_upstream_extensions_and_sidecar_are_supported(tmp_path) -> None:
     fixture(tmp_path)
     assert check(tmp_path) == []
 
 
 @pytest.mark.parametrize("fault", ["resource", "section", "index", "yaml"])
-def test_invalid_skill_resources_or_contracts_are_reported(tmp_path, fault):
+def test_invalid_skill_resources_or_contracts_are_reported(tmp_path, fault) -> None:
     folder = fixture(tmp_path)
     if fault == "resource":
         (folder / "detail.md").unlink()
     elif fault == "section":
         p = tmp_path / ".agents/skill-contracts.json"
         data = json.loads(p.read_text())
-        del data["example"]["validation"]
+        data["example"].pop("validation")
         p.write_text(json.dumps(data))
     elif fault == "index":
         (tmp_path / ".agents/README.md").write_text("")
@@ -44,11 +44,10 @@ def test_invalid_skill_resources_or_contracts_are_reported(tmp_path, fault):
     assert check(tmp_path)
 
 
-def test_duplicate_frontmatter_keys_are_rejected(tmp_path):
+def test_duplicate_frontmatter_keys_are_rejected(tmp_path) -> None:
     folder = fixture(tmp_path)
     (folder / "SKILL.md").write_text(
-        "---\nname: example\nname: shadow\n"
-        "description: Example skill.\n---\n"
+        "---\nname: example\nname: shadow\ndescription: Example skill.\n---\n"
     )
 
     errors = check(tmp_path)
@@ -56,7 +55,7 @@ def test_duplicate_frontmatter_keys_are_rejected(tmp_path):
     assert any("duplicate key 'name'" in error for error in errors)
 
 
-def test_duplicate_nested_frontmatter_keys_are_rejected(tmp_path):
+def test_duplicate_nested_frontmatter_keys_are_rejected(tmp_path) -> None:
     folder = fixture(tmp_path)
     (folder / "SKILL.md").write_text(
         "---\nname: example\ndescription: Example skill.\n"
@@ -69,7 +68,7 @@ def test_duplicate_nested_frontmatter_keys_are_rejected(tmp_path):
     assert any("duplicate key 'enabled'" in error for error in errors)
 
 
-def test_yaml_merge_key_can_be_overridden_explicitly(tmp_path):
+def test_yaml_merge_key_can_be_overridden_explicitly(tmp_path) -> None:
     folder = fixture(tmp_path)
     (folder / "SKILL.md").write_text(
         "---\nname: example\ndescription: Example skill.\n"
@@ -88,7 +87,9 @@ def test_yaml_merge_key_can_be_overridden_explicitly(tmp_path):
         ('{"example": {}, "example": {}}', "Duplicate JSON key"),
     ],
 )
-def test_sidecar_catalog_rejects_invalid_json_objects(tmp_path, content, expected):
+def test_sidecar_catalog_rejects_invalid_json_objects(
+    tmp_path, content, expected
+) -> None:
     fixture(tmp_path)
     (tmp_path / ".agents/skill-contracts.json").write_text(content)
 
@@ -134,7 +135,9 @@ def test_sidecar_catalog_rejects_invalid_json_objects(tmp_path, content, expecte
         ),
     ],
 )
-def test_install_source_requires_valid_snapshot_shape(tmp_path, metadata, expected):
+def test_install_source_requires_valid_snapshot_shape(
+    tmp_path, metadata, expected
+) -> None:
     folder = fixture(tmp_path)
     (folder / "INSTALL_SOURCE.json").write_text(metadata)
 

@@ -157,7 +157,8 @@ def _find_unique_def(
     root: ast.AST = tree
     if from_class is not None:
         cls = _find_class(tree, from_class)
-        assert cls is not None, f"class {from_class} not found in {where}"
+        if not (cls is not None):
+            raise AssertionError(f"class {from_class} not found in {where}")
         root = cls
     elif isinstance(tree, ast.Module):
         top_level = [
@@ -172,10 +173,12 @@ def _find_unique_def(
         for node in ast.walk(root)
         if isinstance(node, definition) and node.name == name
     ]
-    assert matches, f"{name} not found in {where}"
-    assert len(matches) == 1, (
-        f"{len(matches)} defs named {name} in {where}; pass from_class to disambiguate"
-    )
+    if not (matches):
+        raise AssertionError(f"{name} not found in {where}")
+    if not (len(matches) == 1):
+        raise AssertionError(
+            f"{len(matches)} defs named {name} in {where}; pass from_class to disambiguate"
+        )
     return matches[0]
 
 
@@ -287,9 +290,10 @@ def _lowered_call_text(text: str, node: ast.Call) -> str:
     """
     receiver = node.args[0]
     receiver_src = _node_slice(text, receiver)
-    assert "\n" not in receiver_src and "#" not in receiver_src, (
-        f"receiver {receiver_src!r} must be single-line and comment-free"
-    )
+    if not ("\n" not in receiver_src and "#" not in receiver_src):
+        raise AssertionError(
+            f"receiver {receiver_src!r} must be single-line and comment-free"
+        )
     opener = _slice_span(
         text,
         node.func.end_lineno,
@@ -297,7 +301,8 @@ def _lowered_call_text(text: str, node: ast.Call) -> str:
         receiver.lineno,
         receiver.col_offset,
     )
-    assert "#" not in opener, f"comment before the receiver in {opener!r}"
+    if not ("#" not in opener):
+        raise AssertionError(f"comment before the receiver in {opener!r}")
     seg = _slice_span(
         text,
         receiver.end_lineno,
@@ -306,12 +311,15 @@ def _lowered_call_text(text: str, node: ast.Call) -> str:
         node.end_col_offset,
     )
     head, comma, rest = seg.partition(",")
-    assert "#" not in head, f"comment after the receiver in {head!r}"
+    if not ("#" not in head):
+        raise AssertionError(f"comment after the receiver in {head!r}")
     if comma:
-        assert head.strip() == "", f"unexpected text {head!r} after the receiver"
+        if not (head.strip() == ""):
+            raise AssertionError(f"unexpected text {head!r} after the receiver")
         rest = rest.lstrip(" \t")
     else:
-        assert head.strip() == ")", f"unexpected text {head!r} after the receiver"
+        if not (head.strip() == ")"):
+            raise AssertionError(f"unexpected text {head!r} after the receiver")
         rest = head.lstrip(" \t")
     return f"{receiver_src}.{node.func.attr}({rest}"
 
@@ -402,10 +410,11 @@ def _audit_extract_header(
             f"neither scaffolding nor a relocated source assignment"
         )
     missing = set(removed_assigns) - header_assigned
-    assert not missing, (
-        f"drop_assigns {sorted(missing)} deleted from the source but not reproduced "
-        f"in the header of {where}"
-    )
+    if missing:
+        raise AssertionError(
+            f"drop_assigns {sorted(missing)} deleted from the source but not reproduced "
+            f"in the header of {where}"
+        )
 
 
 class Repro:
@@ -564,7 +573,8 @@ class Repro:
                     )
                     if pattern.search(seg):
                         matched.append(node)
-            assert matched, f"import {import_text!r} not found in {rel}"
+            if not (matched):
+                raise AssertionError(f"import {import_text!r} not found in {rel}")
             whole: list[tuple[int, int]] = []
             shared: list[ast.stmt] = []
             for node in matched:
@@ -681,7 +691,10 @@ class Repro:
                     keyword = "import " if module is None else f"from {module} import "
                     rebuilt = keyword + ", ".join(alias_text(a) for a in kept) + nl
                     edits.append((node.lineno, node.end_lineno, rebuilt))
-            assert edits, f"import of {name!r} from {module!r} not found in {rel}"
+            if not (edits):
+                raise AssertionError(
+                    f"import of {name!r} from {module!r} not found in {rel}"
+                )
             for lo, hi, repl in sorted(edits, reverse=True):
                 if repl is None:
                     del lines[lo - 1 : hi]
@@ -722,9 +735,10 @@ class Repro:
                     )
                 existing = [alias_text(a.name, a.asname) for a in node.names]
                 added = alias_text(name, asname)
-                assert added not in existing, (
-                    f"{name!r} already imported from {module!r} in {rel}"
-                )
+                if not (added not in existing):
+                    raise AssertionError(
+                        f"{name!r} already imported from {module!r} in {rel}"
+                    )
                 rebuilt = f"from {module} import " + ", ".join(existing + [added]) + nl
                 lines[node.lineno - 1 : node.end_lineno] = [rebuilt]
                 _write_source(path, "".join(lines))
@@ -825,9 +839,10 @@ class Repro:
                 for node in tree.body
                 if isinstance(node, ast.Import | ast.ImportFrom)
             ]
-            assert imports, (
-                f"no imports to anchor a new `if TYPE_CHECKING:` block in {rel}"
-            )
+            if not (imports):
+                raise AssertionError(
+                    f"no imports to anchor a new `if TYPE_CHECKING:` block in {rel}"
+                )
             insert_at = imports[-1].end_lineno
             lines[insert_at:insert_at] = [
                 nl,
@@ -864,12 +879,16 @@ class Repro:
                     replaced = lines[node.lineno - 1].replace(
                         f"from {spelled} import", f"from {new_module} import", 1
                     )
-                    assert replaced != lines[node.lineno - 1], (
-                        f"import spelling {spelled!r} not found on its line in {rel}"
-                    )
+                    if not (replaced != lines[node.lineno - 1]):
+                        raise AssertionError(
+                            f"import spelling {spelled!r} not found on its line in {rel}"
+                        )
                     lines[node.lineno - 1] = replaced
                     changed = True
-            assert changed, f"nested import of {name} from {old_module} not in {rel}"
+            if not (changed):
+                raise AssertionError(
+                    f"nested import of {name} from {old_module} not in {rel}"
+                )
             _write_source(path, "".join(lines))
 
         self.ops.append(op)
@@ -905,7 +924,8 @@ class Repro:
                     and cand.target.id == name
                 ):
                     node = cand
-            assert node is not None, f"module assignment {name} not found in {src}"
+            if not (node is not None):
+                raise AssertionError(f"module assignment {name} not found in {src}")
             block = "".join(src_lines[node.lineno - 1 : node.end_lineno])
             _write_source(
                 src_path,
@@ -918,7 +938,13 @@ class Repro:
             at = None
             if before is not None:
                 for cand in dst_tree.body:
-                    cand_name = getattr(cand, "name", None) or (
+                    cand_name = (
+                        cand.name
+                        if isinstance(
+                            cand, ast.FunctionDef | ast.AsyncFunctionDef | ast.ClassDef
+                        )
+                        else None
+                    ) or (
                         cand.targets[0].id
                         if isinstance(cand, ast.Assign)
                         and len(cand.targets) == 1
@@ -928,13 +954,21 @@ class Repro:
                     if cand_name == before:
                         at = (
                             min(
-                                [d.lineno for d in getattr(cand, "decorator_list", [])],
+                                [d.lineno for d in cand.decorator_list]
+                                if isinstance(
+                                    cand,
+                                    ast.FunctionDef
+                                    | ast.AsyncFunctionDef
+                                    | ast.ClassDef,
+                                )
+                                else [],
                                 default=cand.lineno,
                             )
                             - 1
                         )
                         break
-                assert at is not None, f"before={before!r} not found in {dst}"
+                if not (at is not None):
+                    raise AssertionError(f"before={before!r} not found in {dst}")
                 dst_lines[at:at] = [block, dst_nl]
             else:
                 imports = [
@@ -974,9 +1008,8 @@ class Repro:
         ``self: Target`` annotation is dropped (redundant inside the class). The body is moved
         verbatim; the formatter normalises the surrounding blank lines.
         """
-        assert before is None or after is None, (
-            "move_symbol: before and after are mutually exclusive"
-        )
+        if not (before is None or after is None):
+            raise AssertionError("move_symbol: before and after are mutually exclusive")
 
         def op(root: Path) -> None:
             src_path = root / src
@@ -1000,10 +1033,11 @@ class Repro:
                     and arg_list[0].arg == "self"
                     and arg_list[0].annotation is not None
                 )
-                assert not has_move_decorator or self_annotated, (
-                    f"leave_delegate on a {_MOVE_DECORATORS} method has no self to "
-                    "forward (a de-self'd staticmethod must annotate its self param)"
-                )
+                if not (not has_move_decorator or self_annotated):
+                    raise AssertionError(
+                        f"leave_delegate on a {_MOVE_DECORATORS} method has no self to "
+                        "forward (a de-self'd staticmethod must annotate its self param)"
+                    )
                 parts = [p.arg for p in args.posonlyargs + args.args if p.arg != "self"]
                 if args.vararg is not None:
                     parts.append(f"*{args.vararg.arg}")
@@ -1036,7 +1070,8 @@ class Repro:
                     sig_indent = len(signature_text) - len(signature_text.lstrip(" "))
                     parsable = signature_text + " " * sig_indent + "    pass" + src_nl
                     stripped = _drop_self_annotation(parsable, name)
-                    assert stripped.endswith(" " * sig_indent + "    pass" + src_nl)
+                    if not (stripped.endswith(" " * sig_indent + "    pass" + src_nl)):
+                        raise AssertionError
                     signature_text = stripped[
                         : -len(" " * sig_indent + "    pass" + src_nl)
                     ]
@@ -1082,7 +1117,8 @@ class Repro:
             container = dst_tree.body
             if into_class is not None:
                 cls = _find_class(dst_tree, into_class)
-                assert cls is not None, f"class {into_class} not found in {dst}"
+                if not (cls is not None):
+                    raise AssertionError(f"class {into_class} not found in {dst}")
                 container = cls.body
             target = None
             if before is not None:
@@ -1097,13 +1133,15 @@ class Repro:
                     ),
                     None,
                 )
-                assert target is not None, f"before={before!r} not found in {dst}"
+                if not (target is not None):
+                    raise AssertionError(f"before={before!r} not found in {dst}")
             if after is not None:
                 anchor = next(
                     (n for n in container if _symbol_named(n, after)),
                     None,
                 )
-                assert anchor is not None, f"after={after!r} not found in {dst}"
+                if not (anchor is not None):
+                    raise AssertionError(f"after={after!r} not found in {dst}")
                 at = anchor.end_lineno
                 _write_source(
                     dst_path,
@@ -1185,9 +1223,16 @@ class Repro:
                     node, ast.FunctionDef | ast.AsyncFunctionDef | ast.ClassDef
                 )
             }
-            assert wanted <= present, f"{wanted - present} not in the cut tail of {src}"
+            if not (wanted <= present):
+                raise AssertionError(f"{wanted - present} not in the cut tail of {src}")
 
-            decorators = getattr(tail[0], "decorator_list", [])
+            decorators = (
+                tail[0].decorator_list
+                if isinstance(
+                    tail[0], ast.FunctionDef | ast.AsyncFunctionDef | ast.ClassDef
+                )
+                else []
+            )
             start = min([tail[0].lineno] + [d.lineno for d in decorators])
             block = "".join(src_lines[start - 1 :])
             _write_source(src_path, "".join(src_lines[: start - 1]))
@@ -1229,7 +1274,8 @@ class Repro:
             src_nl = _newline_style("".join(src_lines))
             wanted = set(symbols)
             dropped = set(drop_assigns or [])
-            assert set(order) == wanted, f"order {order} must permute symbols {symbols}"
+            if not (set(order) == wanted):
+                raise AssertionError(f"order {order} must permute symbols {symbols}")
             tree = ast.parse("".join(src_lines))
             nodes = {
                 node.name: node
@@ -1240,7 +1286,8 @@ class Repro:
                 and node.name in wanted
             }
             missing = wanted - set(nodes)
-            assert not missing, f"{missing} not top-level defs/classes in {src}"
+            if missing:
+                raise AssertionError(f"{missing} not top-level defs/classes in {src}")
             spans = {name: _def_span(node) for name, node in nodes.items()}
             blocks = {
                 name: "".join(src_lines[start - 1 : end])
@@ -1262,9 +1309,10 @@ class Repro:
                 hit = names & dropped
                 if not hit:
                     continue
-                assert len(names) == len(targets), (
-                    f"drop_assigns {sorted(hit)}: non-name targets in {src}"
-                )
+                if not (len(names) == len(targets)):
+                    raise AssertionError(
+                        f"drop_assigns {sorted(hit)}: non-name targets in {src}"
+                    )
                 value_src = ast.unparse(node.value) if node.value is not None else None
                 for dropped_name in hit:
                     removed_assigns[dropped_name] = value_src
@@ -1290,9 +1338,8 @@ class Repro:
                 else:
                     assign_spans.append((node.lineno, node.end_lineno))
                 found_assigns |= hit
-            assert found_assigns == dropped, (
-                f"{dropped - found_assigns} not assigned in {src}"
-            )
+            if not (found_assigns == dropped):
+                raise AssertionError(f"{dropped - found_assigns} not assigned in {src}")
             rederivable: dict[str, str | None] = {}
             for node in tree.body:
                 targets = (
@@ -1384,11 +1431,13 @@ class Repro:
         def op(root: Path) -> None:
             src_path = root / src
             src_text = _read_source(src_path)
-            assert src_text.count(body) == 1, f"block not found uniquely in {src}"
+            if not (src_text.count(body) == 1):
+                raise AssertionError(f"block not found uniquely in {src}")
             at = src_text.find(body)
-            assert at == 0 or src_text[at - 1] == "\n", (
-                f"block matches mid-line in {src}; it must start at a line boundary"
-            )
+            if not (at == 0 or src_text[at - 1] == "\n"):
+                raise AssertionError(
+                    f"block matches mid-line in {src}; it must start at a line boundary"
+                )
             _write_source(src_path, src_text.replace(body, call, 1))
 
             dst_path = root / dst
@@ -1409,7 +1458,8 @@ class Repro:
             container = dst_tree.body
             if into_class is not None:
                 cls = _find_class(dst_tree, into_class)
-                assert cls is not None, f"class {into_class} not found in {dst}"
+                if not (cls is not None):
+                    raise AssertionError(f"class {into_class} not found in {dst}")
                 container = cls.body
             anchor = None
             if before is not None:
@@ -1479,10 +1529,11 @@ class Repro:
                     or is_module_logger(stmt)
                 )
             ]
-            assert not leftover, (
-                f"{path} still holds non-scaffolding code, refusing to delete: "
-                f"{leftover[:3]}"
-            )
+            if leftover:
+                raise AssertionError(
+                    f"{path} still holds non-scaffolding code, refusing to delete: "
+                    f"{leftover[:3]}"
+                )
             target.unlink()
 
         self.ops.append(op)

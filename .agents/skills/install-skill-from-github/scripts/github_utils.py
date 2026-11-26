@@ -22,9 +22,9 @@ def github_request(url: str, user_agent: str) -> bytes:
     token = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
     if token:
         headers["Authorization"] = f"token {token}"
-    req = urllib.request.Request(url, headers=headers)
-    with urllib.request.urlopen(req, timeout=30) as resp:
-        return resp.read()
+    request = urllib.request.Request(url, headers=headers)
+    with urllib.request.urlopen(request, timeout=30) as response:
+        return response.read()
 
 
 def github_api_contents_url(repo: str, path: str, ref: str) -> str:

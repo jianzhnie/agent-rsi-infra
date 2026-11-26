@@ -10,22 +10,23 @@ import sys
 import time
 from dataclasses import asdict, dataclass
 from pathlib import Path
+from typing import Literal
 
 ROOT = Path(__file__).resolve().parents[1]
-PYTHON_PATHS = ["scripts", "tests", ".agents/skills"]
+PYTHON_PATHS = ["scripts", "tests", ".agents/skills", "autotuner"]
 DEFAULT_TIMEOUT = 300.0
 
 
 @dataclass
 class CheckResult:
     name: str
-    status: str
+    status: Literal["passed", "failed", "blocked", "skipped"]
     return_code: int | None = None
     duration_seconds: float | None = None
     message: str | None = None
 
 
-def _commands(fix: bool):
+def _commands(fix: bool) -> list[tuple[str, list[str]]]:
     checks = []
     if fix:
         checks += [
@@ -39,20 +40,28 @@ def _commands(fix: bool):
         ("lint", ["ruff", "check", "--no-fix", *PYTHON_PATHS]),
         ("format", ["ruff", "format", "--check", *PYTHON_PATHS]),
         ("skills", [sys.executable, "scripts/check_skills.py"]),
-        ("tests", [sys.executable, "-m", "pytest", "tests", "-q"]),
+        (
+            "tests",
+            [
+                sys.executable,
+                "-m",
+                "pytest",
+                "tests",
+                ".agents/skills/mechanical-refactor-verify/scripts/tests",
+                "-q",
+            ],
+        ),
         ("shell", ["bash", ".agents/skills/shell-check/scripts/check.sh"]),
     ]
 
 
-def _required_tools(command):
+def run_check(name: str, command: list[str], timeout_seconds: float) -> CheckResult:
     executable = command[0]
-    if executable == sys.executable:
-        return []
-    return [executable]
-
-
-def run_check(name, command, timeout):
-    missing = [tool for tool in _required_tools(command) if shutil.which(tool) is None]
+    missing = (
+        [executable]
+        if executable != sys.executable and shutil.which(executable) is None
+        else []
+    )
     modules = {"tests": "pytest", "skills": "yaml"}
     module = modules.get(name)
     if module and importlib.util.find_spec(module) is None:
@@ -65,14 +74,14 @@ def run_check(name, command, timeout):
         )
     started = time.monotonic()
     try:
-        result = subprocess.run(command, cwd=ROOT, check=False, timeout=timeout)
+        result = subprocess.run(command, cwd=ROOT, check=False, timeout=timeout_seconds)
     except subprocess.TimeoutExpired:
         return CheckResult(
             name,
             "failed",
             None,
             time.monotonic() - started,
-            f"Timed out after {timeout:g}s",
+            f"Timed out after {timeout_seconds:g}s",
         )
     except OSError as error:
         return CheckResult(

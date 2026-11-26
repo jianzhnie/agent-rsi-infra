@@ -6,9 +6,55 @@ import json
 import math
 import statistics
 from pathlib import Path
+from typing import Literal, TypedDict
 
 
-def validate(value):
+class BenchmarkEnvironment(TypedDict):
+    device: str
+    device_count: int
+    topology: str
+    driver: str
+    runtime: str
+    compiler: str
+    framework: str
+
+
+class BenchmarkArm(TypedDict):
+    revision: str
+    samples: list[int | float]
+
+
+class BenchmarkRecord(TypedDict):
+    version: Literal[1]
+    task_id: str
+    command: str
+    metric: Literal["latency"]
+    unit: Literal["ns", "us", "ms", "s"]
+    timing_boundary: str
+    cache: str
+    graph: str
+    workload: str
+    warmup: int
+    environment: BenchmarkEnvironment
+    baseline: BenchmarkArm
+    candidate: BenchmarkArm
+
+
+class SampleStatistics(TypedDict):
+    median: float
+    min: float
+    max: float
+    count: int
+
+
+class BenchmarkSummary(TypedDict):
+    baseline: SampleStatistics
+    candidate: SampleStatistics
+    environment_sha256: str
+    latency_speedup: float
+
+
+def validate(value: BenchmarkRecord) -> BenchmarkSummary:
     if (
         not isinstance(value, dict)
         or type(value.get("version")) is not int
@@ -50,7 +96,7 @@ def validate(value):
             raise ValueError(f"Missing environment {key}")
     if type(environment["device_count"]) is not int or environment["device_count"] < 1:
         raise ValueError("device_count must be positive")
-    summary = {}
+    measurements: dict[str, SampleStatistics] = {}
     for arm in ("baseline", "candidate"):
         record = value.get(arm)
         if (
@@ -67,7 +113,7 @@ def validate(value):
             for x in samples
         ):
             raise ValueError("Samples must be finite positive numbers")
-        summary[arm] = {
+        measurements[arm] = {
             "median": statistics.median(samples),
             "min": min(samples),
             "max": max(samples),
@@ -78,14 +124,16 @@ def validate(value):
     encoded = json.dumps(
         environment, sort_keys=True, separators=(",", ":"), ensure_ascii=False
     )
-    summary["environment_sha256"] = hashlib.sha256(encoded.encode()).hexdigest()
-    summary["latency_speedup"] = (
-        summary["baseline"]["median"] / summary["candidate"]["median"]
-    )
-    return summary
+    return {
+        "baseline": measurements["baseline"],
+        "candidate": measurements["candidate"],
+        "environment_sha256": hashlib.sha256(encoded.encode()).hexdigest(),
+        "latency_speedup": measurements["baseline"]["median"]
+        / measurements["candidate"]["median"],
+    }
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("report", type=Path)
     args = parser.parse_args()

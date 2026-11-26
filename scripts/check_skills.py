@@ -61,7 +61,7 @@ def _unique_json_object(pairs):
     return result
 
 
-def _load_json_object(path):
+def _load_json_object(path: Path) -> dict[str, object]:
     """Load a JSON object and reject duplicate keys or unexpected top-level types."""
     try:
         value = json.loads(path.read_text(), object_pairs_hook=_unique_json_object)
@@ -72,7 +72,7 @@ def _load_json_object(path):
     return value
 
 
-def check(root=ROOT):
+def check(root: Path = ROOT) -> list[str]:
     errors = []
     skills = root / ".agents/skills"
     catalog_path = root / ".agents/skill-contracts.json"
@@ -146,9 +146,7 @@ def check(root=ROOT):
                     raise ValueError("Invalid provenance repository")
                 source_path = data.get("path")
                 normalized_path = (
-                    PurePosixPath(source_path)
-                    if isinstance(source_path, str)
-                    else None
+                    PurePosixPath(source_path) if isinstance(source_path, str) else None
                 )
                 if (
                     normalized_path is None
@@ -205,7 +203,7 @@ def check(root=ROOT):
     return errors
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.parse_args()
     try:

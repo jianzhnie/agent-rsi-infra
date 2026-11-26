@@ -2,6 +2,8 @@
 
 ## 使用与实践
 
+- [训练优化任务模板](templates/training-optimization-task.md)：基线、工作负载、授权、预算和交付要求。
+
 - [Skill 使用样例](skill-examples.md)：任务输入、反例、Kernel 优化交付与验证边界。
 
 - [Agent 能力矩阵](agent-compatibility.md)：静态检查、真实客户端状态与加载 Smoke Test。

@@ -8,6 +8,7 @@ import json
 import math
 import statistics
 import time
+from http.client import HTTPException
 from pathlib import Path
 from typing import Any
 from urllib import request
@@ -194,7 +195,12 @@ def run_probe(args: argparse.Namespace) -> dict[str, Any]:
                     "non_empty": bool(text.strip()),
                 }
             )
-        except Exception as exc:  # pragma: no cover - runtime probe path
+        except (
+            OSError,
+            ValueError,
+            HTTPException,
+            RuntimeError,
+        ) as exc:  # Requests fail independently.
             errors.append({"prompt": prompt, "error": repr(exc)})
 
     return {

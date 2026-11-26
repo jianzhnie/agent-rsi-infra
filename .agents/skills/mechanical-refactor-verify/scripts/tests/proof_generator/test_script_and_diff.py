@@ -12,6 +12,7 @@ from generator_testlib import (  # noqa: F401
     _write,
 )
 from mechanical_refactor_proof_generator import (
+    _per_file_diff,
     infer_recipe,
     recipe_to_script,
 )
@@ -179,7 +180,6 @@ def test_emitted_script_passes_on_move_above_typechecking_guard(
 
 def test_per_file_diff_keeps_content_lines_starting_with_plus_signs(repo: Path) -> None:
     """An added content line beginning with '++' is collected, not mistaken for a header."""
-    from mechanical_refactor_proof_generator import _per_file_diff
 
     _write(repo, **{"notes.py": "a = 1\n"})
     _commit(repo, "base")

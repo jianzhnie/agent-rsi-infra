@@ -11,7 +11,7 @@ SKILLS = ROOT / ".agents" / "skills"
 
 
 class SkillResourcesTests(unittest.TestCase):
-    def test_skill_names_match_discovery_directories(self):
+    def test_skill_names_match_discovery_directories(self) -> None:
         names = []
         entries = sorted(SKILLS.glob("*/SKILL.md"))
         self.assertTrue(entries, "No shared skills were discovered")
@@ -22,7 +22,7 @@ class SkillResourcesTests(unittest.TestCase):
             names.append(name)
         self.assertEqual(len(names), len(set(names)))
 
-    def test_metadata_is_parseable_and_descriptions_are_nonempty(self):
+    def test_metadata_is_parseable_and_descriptions_are_nonempty(self) -> None:
         for entry in SKILLS.glob("*/SKILL.md"):
             with self.subTest(skill=entry.parent.name):
                 metadata = yaml.safe_load(entry.read_text().split("---", 2)[1])
@@ -38,7 +38,7 @@ class SkillResourcesTests(unittest.TestCase):
                     str(entry),
                 )
 
-    def test_reference_style_resource_links_exist(self):
+    def test_reference_style_resource_links_exist(self) -> None:
         for doc in SKILLS.rglob("*.md"):
             for target in re.findall(r"^\[[^]]+\]:\s+(\S+)", doc.read_text(), re.M):
                 if target.startswith(("https://", "http://", "#")):
@@ -47,7 +47,7 @@ class SkillResourcesTests(unittest.TestCase):
                     (doc.parent / target.split("#")[0]).exists(), (doc, target)
                 )
 
-    def test_related_skills_exist(self):
+    def test_related_skills_exist(self) -> None:
         available = {entry.parent.name for entry in SKILLS.glob("*/SKILL.md")}
         entries = [
             *SKILLS.glob("*/SKILL.md"),

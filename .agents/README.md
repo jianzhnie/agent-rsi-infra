@@ -39,6 +39,7 @@
 | validate-training-lifecycle | [上游适配 Skill](skills/validate-training-lifecycle/SKILL.md) | 验证训练保存、恢复与适用的导出路径 |
 | verify-training-semantics | [上游适配 Skill](skills/verify-training-semantics/SKILL.md) | 审查训练优化是否保持约定语义 |
 | weak-model-protocol | [上游适配 Skill](skills/weak-model-protocol/SKILL.md) | 设计受预算约束的结构化模型动作协议 |
+| autotune-training-throughput | [上游适配 Skill](skills/autotune-training-throughput/SKILL.md) | ATTUNE 训练吞吐实验、测量与候选验证 |
 | context | [脚本](../.claude/hooks/session/context.sh) | 初始化会话，compact/resume 时保留已有记录 |
 | record-event | [脚本](../.claude/hooks/logging/record-event.sh) | 命令、Agent、配置及异常日志 |
 | guard-tool | [脚本](../.claude/hooks/tools/guard-tool.sh) | 工具调用前的补充拦截 |
@@ -126,3 +127,5 @@ Claude 角色适配生成到 `.claude/agents/`，Codex 角色配置生成到 `.c
 ## InfraRSI 训练优化资源
 
 全部 12 个 Skill 及负结果目录按固定版本迁入。先读[本地适配边界](skills/_catalogue/infrarsi-adaptation.md)，历史案例见[负结果目录](skills/_catalogue/negative-results.md)。不提供上游 harness 或训练执行服务；许可声明与本地补充文本的区别见[共享来源记录](skills/_catalogue/UPSTREAM.md)。真实客户端版本、GPU/框架任务和最近真实任务验证日期均未记录，保持 experimental。
+
+ATTUNE Skill 为 experimental：[来源与部署边界](skills/autotune-training-throughput/UPSTREAM.md)。提供离线测量与分析，训练通过目标项目入口执行；真实 GPU、模型及客户端版本未验证。

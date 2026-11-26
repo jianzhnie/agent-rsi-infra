@@ -2,15 +2,18 @@
 
 import json
 import re
+import tempfile
 import unittest
 from pathlib import Path
+
+from scripts.sync_agents import render
 
 ROOT = Path(__file__).resolve().parents[1]
 AGENT = ROOT / ".claude"
 
 
 class LayoutTests(unittest.TestCase):
-    def test_registered_runtime_paths_exist(self):
+    def test_registered_runtime_paths_exist(self) -> None:
         settings = json.loads((AGENT / "settings.example.json").read_text())
         commands = [
             hook["command"]
@@ -34,7 +37,7 @@ class LayoutTests(unittest.TestCase):
         } | {"scripts/status-line.sh"}
         self.assertEqual(registered, expected)
 
-    def test_index_covers_all_configuration_entries(self):
+    def test_index_covers_all_configuration_entries(self) -> None:
         text = (ROOT / ".agents/README.md").read_text()
         # Index tables contain one local file link per configuration entry.
         links = [
@@ -65,9 +68,7 @@ class LayoutTests(unittest.TestCase):
         )
         self.assertEqual(set(links), expected)
 
-    def test_agent_adapters_match_shared_definitions(self):
-        from scripts.sync_agents import render
-
+    def test_agent_adapters_match_shared_definitions(self) -> None:
         outputs = render()
         self.assertTrue(outputs)
         self.assertFalse((AGENT / "agents").is_symlink())
@@ -79,11 +80,7 @@ class LayoutTests(unittest.TestCase):
             sources, {p.stem for p in (ROOT / ".codex/agents").glob("*.toml")}
         )
 
-    def test_role_description_with_colon_remains_yaml_string(self):
-        import tempfile
-
-        from scripts.sync_agents import render
-
+    def test_role_description_with_colon_remains_yaml_string(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             source = root / ".agents/agents/debugger.md"
@@ -99,7 +96,7 @@ class LayoutTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "Missing role"):
                 render(root)
 
-    def test_shared_skills_resolve_to_single_source(self):
+    def test_shared_skills_resolve_to_single_source(self) -> None:
         self.assertEqual((AGENT / "skills").resolve(), ROOT / ".agents/skills")
         for skill in (ROOT / ".agents/skills").rglob("*"):
             if not skill.is_file():
@@ -110,7 +107,7 @@ class LayoutTests(unittest.TestCase):
                 ).samefile(skill)
             )
 
-    def test_client_instruction_imports_resolve(self):
+    def test_client_instruction_imports_resolve(self) -> None:
         for name in ("CLAUDE.md", "GEMINI.md"):
             entry = ROOT / name
             imports = re.findall(r"^@(.+)$", entry.read_text(), re.M)
@@ -118,7 +115,7 @@ class LayoutTests(unittest.TestCase):
             for target in imports:
                 self.assertTrue((entry.parent / target).is_file(), (name, target))
 
-    def test_local_document_links_resolve(self):
+    def test_local_document_links_resolve(self) -> None:
         for doc in [
             ROOT / "README.md",
             ROOT / ".agents/README.md",

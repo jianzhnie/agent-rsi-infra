@@ -13,7 +13,7 @@ SCRIPT = (
 
 
 class RecipeTests(unittest.TestCase):
-    def test_nested_fences_preserve_section_and_exclude_following_section(self):
+    def test_nested_fences_preserve_section_and_exclude_following_section(self) -> None:
         for fence in ("````", "~~~~"):
             with self.subTest(fence=fence), tempfile.TemporaryDirectory() as folder:
                 path = Path(folder) / "recipe.json"

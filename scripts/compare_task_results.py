@@ -3,20 +3,40 @@
 import argparse
 import json
 from pathlib import Path
+from typing import Literal, TypedDict
 
-try:
-    from .validate_task_result import validate_contract
-except ImportError:
-    from validate_task_result import validate_contract
+if __package__:
+    from scripts.validate_task_result import TaskContract, TaskReport, validate_contract
+else:
+    from validate_task_result import TaskContract, TaskReport, validate_contract
 
 
-def compare(contract, baseline, candidate):
+class CriterionComparison(TypedDict):
+    id: str
+    baseline: Literal["passed", "failed", "not_run", "not_applicable"]
+    candidate: Literal["passed", "failed", "not_run", "not_applicable"]
+
+
+class TaskComparison(TypedDict):
+    task_id: str
+    baseline_revision: str
+    candidate_revision: str
+    criteria: list[CriterionComparison]
+    regressions: list[str]
+    unverified: list[str]
+    failures: list[str]
+    decision: Literal["human_review_required"]
+
+
+def compare(
+    contract: TaskContract, baseline: TaskReport, candidate: TaskReport
+) -> TaskComparison:
     validate_contract(baseline, contract)
     validate_contract(candidate, contract)
     if baseline["revision"] == candidate["revision"]:
         raise ValueError("Baseline and candidate revisions must differ")
     old = {item["id"]: item["status"] for item in baseline["criteria"]}
-    changes = []
+    changes: list[CriterionComparison] = []
     for item in candidate["criteria"]:
         before, after = old[item["id"]], item["status"]
         changes.append({"id": item["id"], "baseline": before, "candidate": after})
@@ -38,7 +58,7 @@ def compare(contract, baseline, candidate):
     }
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ("contract", "baseline", "candidate"):
         parser.add_argument(name, type=Path)

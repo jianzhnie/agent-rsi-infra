@@ -1,7 +1,7 @@
 # AI Infra 优化 Runtime：调研与设计草案
 
 > 版本：v1.1（设计草案）
-> 调研基准日期：2026-11-25  
+> 调研基准日期：2026-11-25
 > 目标：设计一个面向大模型训练、推理和 GPU Kernel 的自主性能优化平台（Autonomous AI Infrastructure Optimization Platform）。
 
 本文讨论未来独立优化 Runtime 的候选架构，尚未实现，不替代本仓库的 [RSI 设计](RSI_DESIGN.md)。`jianzhnie/agent-rsi-infra` 已更名为 `jianzhnie/ai-infra-rsi`，两者是同一仓库；当前仍维护共享资源、客户端适配和验证工具。Runtime 是否立项，以真实任务、评估成本及维护需求为依据。

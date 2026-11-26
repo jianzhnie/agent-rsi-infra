@@ -29,7 +29,7 @@ finally:
 
 
 class InstallerTests(unittest.TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.base = Path(self.temp.name)
@@ -64,11 +64,11 @@ class InstallerTests(unittest.TestCase):
             status = installer.main([*args, "--dest", str(self.dest)])
         return status, output.getvalue(), error.getvalue(), prepare
 
-    def test_default_destination_is_repository_collection(self):
+    def test_default_destination_is_repository_collection(self) -> None:
         with patch.dict(os.environ, {"CODEX_HOME": str(self.base / "global")}):
             self.assertEqual(Path(installer._default_dest()), ROOT / ".agents/skills")
 
-    def test_blob_link_preserves_resources_and_notices(self):
+    def test_blob_link_preserves_resources_and_notices(self) -> None:
         status, output, error, _ = self.install(
             "--url", "https://github.com/example/repo/blob/main/skills/one/SKILL.md"
         )
@@ -87,7 +87,7 @@ class InstallerTests(unittest.TestCase):
         self.assertIsNone(source["resolved_commit"])
         self.assertIn("Installed one", output)
 
-    def test_zip_install_handles_branch_names_without_network(self):
+    def test_zip_install_handles_branch_names_without_network(self) -> None:
         data = io.BytesIO()
         with zipfile.ZipFile(data, "w") as archive:
             archive.writestr("snapshot/skills/one/SKILL.md", "Skill content\n")
@@ -120,7 +120,7 @@ class InstallerTests(unittest.TestCase):
         metadata = json.loads((self.dest / "one/INSTALL_SOURCE.json").read_text())
         self.assertIsNone(metadata["resolved_commit"])
 
-    def test_file_paths_and_commit_provenance(self):
+    def test_file_paths_and_commit_provenance(self) -> None:
         revision = "a" * 40
         status, _, error, _ = self.install(
             "--repo", "example/repo", "--path", "skills/one/SKILL.md", "--ref", revision
@@ -129,7 +129,7 @@ class InstallerTests(unittest.TestCase):
         source = json.loads((self.dest / "one/INSTALL_SOURCE.json").read_text())
         self.assertEqual(source["resolved_commit"], revision)
 
-    def test_existing_destination_is_not_changed_or_downloaded(self):
+    def test_existing_destination_is_not_changed_or_downloaded(self) -> None:
         (self.dest / "one").mkdir(parents=True)
         sentinel = self.dest / "one/user-content"
         sentinel.write_text("keep")
@@ -140,7 +140,7 @@ class InstallerTests(unittest.TestCase):
         prepare.assert_not_called()
         self.assertEqual(sentinel.read_text(), "keep")
 
-    def test_broken_destination_symlink_is_not_replaced(self):
+    def test_broken_destination_symlink_is_not_replaced(self) -> None:
         self.dest.mkdir()
         target = self.dest / "one"
         target.symlink_to(self.base / "missing")
@@ -151,7 +151,7 @@ class InstallerTests(unittest.TestCase):
         self.assertTrue(target.is_symlink())
         prepare.assert_not_called()
 
-    def test_invalid_paths_and_duplicate_targets_fail_before_download(self):
+    def test_invalid_paths_and_duplicate_targets_fail_before_download(self) -> None:
         for paths in (
             ["../one"],
             ["skills/../one"],
@@ -165,7 +165,7 @@ class InstallerTests(unittest.TestCase):
                 self.assertEqual(status, 1)
                 prepare.assert_not_called()
 
-    def test_name_cannot_silently_rename_a_batch(self):
+    def test_name_cannot_silently_rename_a_batch(self) -> None:
         status, _, _, prepare = self.install(
             "--repo",
             "example/repo",
@@ -178,7 +178,7 @@ class InstallerTests(unittest.TestCase):
         self.assertEqual(status, 1)
         prepare.assert_not_called()
 
-    def test_invalid_second_source_leaves_no_partial_install(self):
+    def test_invalid_second_source_leaves_no_partial_install(self) -> None:
         (self.repo / "skills/two/SKILL.md").unlink()
         status, _, _, _ = self.install(
             "--repo", "example/repo", "--path", "skills/one", "skills/two"
@@ -207,13 +207,13 @@ class InstallerTests(unittest.TestCase):
         self.assertFalse((self.dest / "two").exists())
         self.assertEqual(sentinel.read_text(), "keep")
 
-    def test_escaping_source_link_is_rejected(self):
+    def test_escaping_source_link_is_rejected(self) -> None:
         (self.repo / "skills/one/outside").symlink_to(self.base / "outside")
         status, _, _, _ = self.install("--repo", "example/repo", "--path", "skills/one")
         self.assertEqual(status, 1)
         self.assertFalse((self.dest / "one").exists())
 
-    def test_zip_traversal_is_rejected_before_extraction(self):
+    def test_zip_traversal_is_rejected_before_extraction(self) -> None:
         data = io.BytesIO()
         with zipfile.ZipFile(data, "w") as archive:
             archive.writestr("../escape", "untrusted")
@@ -225,7 +225,7 @@ class InstallerTests(unittest.TestCase):
             installer._safe_extract_zip(archive, str(self.base / "extract"))
         self.assertFalse((self.base / "escape").exists())
 
-    def test_root_skill_does_not_copy_git_state(self):
+    def test_root_skill_does_not_copy_git_state(self) -> None:
         (self.repo / "SKILL.md").write_text("Root skill\n")
         (self.repo / ".git").mkdir()
         (self.repo / ".git/keep").write_text("private Git state")
@@ -238,7 +238,7 @@ class InstallerTests(unittest.TestCase):
         self.assertEqual(status, 0, error)
         self.assertFalse((self.dest / "root-skill/.git").exists())
 
-    def test_reserved_provenance_cannot_overwrite_source_metadata(self):
+    def test_reserved_provenance_cannot_overwrite_source_metadata(self) -> None:
         source = self.repo / "skills/one/INSTALL_SOURCE.json"
         source.write_text('{"original": true}')
         status, _, _, _ = self.install("--repo", "example/repo", "--path", "skills/one")
@@ -246,7 +246,7 @@ class InstallerTests(unittest.TestCase):
         self.assertFalse((self.dest / "one").exists())
         self.assertEqual(source.read_text(), '{"original": true}')
 
-    def test_source_directory_symlink_is_rejected(self):
+    def test_source_directory_symlink_is_rejected(self) -> None:
         alias = self.repo / "skills/alias"
         alias.symlink_to(self.repo / "skills/one", target_is_directory=True)
         status, _, _, _ = self.install(
@@ -255,7 +255,7 @@ class InstallerTests(unittest.TestCase):
         self.assertEqual(status, 1)
         self.assertFalse((self.dest / "alias").exists())
 
-    def test_git_failure_redacts_tokens(self):
+    def test_git_failure_redacts_tokens(self) -> None:
         with (
             patch.dict(os.environ, {"GH_TOKEN": "private-fixture-token"}),
             patch.object(

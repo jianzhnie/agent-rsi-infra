@@ -32,7 +32,7 @@ def sample():
     }
 
 
-def test_summary_and_fingerprint_are_stable():
+def test_summary_and_fingerprint_are_stable() -> None:
     record = sample()
     result = validate(record)
     assert result["latency_speedup"] == 1.3
@@ -46,20 +46,21 @@ def test_summary_and_fingerprint_are_stable():
 @pytest.mark.parametrize(
     "samples", [[1], [0, 1], [-1, 2], [True, 2], [float("nan"), 2], [float("inf"), 2]]
 )
-def test_bad_samples_are_rejected(samples):
+def test_bad_samples_are_rejected(samples) -> None:
     record = sample()
     record["candidate"]["samples"] = samples
     with pytest.raises(ValueError):
         validate(record)
 
-def test_baseline_and_candidate_must_identify_distinct_revisions():
+
+def test_baseline_and_candidate_must_identify_distinct_revisions() -> None:
     record = sample()
     record["candidate"]["revision"] = record["baseline"]["revision"]
     with pytest.raises(ValueError, match="revisions must differ"):
         validate(record)
 
 
-def test_environment_does_not_accept_arbitrary_environment_variables():
+def test_environment_does_not_accept_arbitrary_environment_variables() -> None:
     record = sample()
     record["environment"]["SECRET_TOKEN"] = "must not archive"
     with pytest.raises(ValueError):

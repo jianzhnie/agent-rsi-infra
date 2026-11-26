@@ -1,0 +1,8 @@
+# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+# SPDX-License-Identifier: Apache-2.0
+"""Run the offline profiler analyzer from the repository root."""
+
+from autotuner.profile_analyzer.cli import main
+
+if __name__ == "__main__":
+    raise SystemExit(main())

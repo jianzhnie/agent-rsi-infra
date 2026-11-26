@@ -14,7 +14,7 @@ AGENT = ROOT / ".claude"
 
 
 class RuntimeTests(unittest.TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.project = Path(self.temp.name) / "project with spaces"
@@ -57,13 +57,13 @@ class RuntimeTests(unittest.TestCase):
             check=True,
         )
 
-    def test_notification_missing_key_keeps_desktop_notification(self):
+    def test_notification_missing_key_keeps_desktop_notification(self) -> None:
         (self.project / ".claude/.env").write_text("OTHER=value\n")
         message = 'Text with "quotes" and \\slashes'
         self.run_script("hooks/notifications/notify.sh", {"message": message})
         self.assertIn(message, (self.project / "capture").read_text())
 
-    def test_summary_binary_diff_and_encoded_request(self):
+    def test_summary_binary_diff_and_encoded_request(self) -> None:
         (self.project / ".claude/.env").write_text("SCT_SENDKEY=test-key\n")
         (self.project / "binary.dat").write_bytes(b"\0changed")
         (self.project / ".claude/.session-start").write_text("1\n")
@@ -75,24 +75,24 @@ class RuntimeTests(unittest.TestCase):
         self.assertIn("binary.dat", request)
         self.assertNotIn("00未提交", request)
 
-    def test_summary_clean_repository(self):
+    def test_summary_clean_repository(self) -> None:
         (self.project / ".claude/.env").write_text("SCT_SENDKEY=test-key\n")
         self.run_script("hooks/session/summarize.sh")
         request = (self.project / "capture").read_text()
         self.assertIn("0未提交", request)
         self.assertNotIn("00未提交", request)
 
-    def test_summary_network_failure_does_not_fail_hook(self):
+    def test_summary_network_failure_does_not_fail_hook(self) -> None:
         (self.project / ".claude/.env").write_text("SCT_SENDKEY=test-key\n")
         self.mock("curl", "exit 28")
         self.run_script("hooks/session/summarize.sh")
 
-    def test_summary_missing_key_sends_nothing(self):
+    def test_summary_missing_key_sends_nothing(self) -> None:
         (self.project / ".claude/.env").write_text("OTHER=value\n")
         self.run_script("hooks/session/summarize.sh")
         self.assertFalse((self.project / "capture").exists())
 
-    def test_statusline_clamps_and_normalizes_numbers(self):
+    def test_statusline_clamps_and_normalizes_numbers(self) -> None:
         for percentage, used, expected in [
             (150, "bad", "100%"),
             (-20, None, "0%"),
@@ -114,7 +114,7 @@ class RuntimeTests(unittest.TestCase):
                 self.assertIn("Test Model", text)
                 self.assertNotIn(" |", text)
 
-    def test_log_event_routing(self):
+    def test_log_event_routing(self) -> None:
         for payload in [
             {
                 "hook_event_name": "PostToolUse",
@@ -131,7 +131,7 @@ class RuntimeTests(unittest.TestCase):
         self.assertTrue(lines[0].endswith("echo test"))
         self.assertTrue(lines[1].endswith("agent:spawn reviewer"))
 
-    def test_formatter_uses_project_root_for_relative_paths(self):
+    def test_formatter_uses_project_root_for_relative_paths(self) -> None:
         (self.project / "example.py").write_text("value = 1\n")
         self.mock("pre-commit", 'printf "%s\\n" "$PWD" "$@" > "$TEST_CAPTURE"')
         result = subprocess.run(
@@ -153,7 +153,7 @@ class RuntimeTests(unittest.TestCase):
         )
         self.assertEqual(result.stderr, "")
 
-    def test_deployed_logging_with_and_without_project_variable(self):
+    def test_deployed_logging_with_and_without_project_variable(self) -> None:
         shutil.copytree(AGENT / "hooks", self.project / ".claude/hooks")
         settings = json.loads((AGENT / "settings.example.json").read_text())
         command = settings["hooks"]["SubagentStart"][0]["hooks"][0]["command"]
@@ -183,7 +183,7 @@ class RuntimeTests(unittest.TestCase):
         self.assertEqual(len(lines), 2)
         self.assertTrue(all(line.endswith("agent:spawn reviewer") for line in lines))
 
-    def test_startup_initializes_state_and_compact_preserves_it(self):
+    def test_startup_initializes_state_and_compact_preserves_it(self) -> None:
         state = self.project / ".claude"
         (state / "command-log.txt").write_text("first\nsecond\n")
         self.run_script("hooks/session/context.sh", {"source": "startup"})
@@ -202,7 +202,7 @@ class RuntimeTests(unittest.TestCase):
         for name, content in expected.items():
             self.assertEqual((state / name).read_bytes(), content)
 
-    def test_config_and_failure_logs_remain_separate(self):
+    def test_config_and_failure_logs_remain_separate(self) -> None:
         self.run_script(
             "hooks/logging/record-event.sh",
             {

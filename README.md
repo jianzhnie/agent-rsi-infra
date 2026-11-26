@@ -29,6 +29,8 @@
 
 训练优化还可按[专项路由](docs/component-skills.md#训练优化专项路由)选用 InfraRSI 的完整 update、内存、并行、语义与恢复等技能；它们均为 experimental，上游 harness 与设备任务未在本仓库验证。
 
+ATTUNE [训练吞吐 Skill](.agents/skills/autotune-training-throughput/SKILL.md) 为实验资源，运行依赖和未验证范围见其来源说明。
+
 ## 资源与设计
 
 - [资源索引](.agents/README.md)：角色、Skills、来源与维护入口。
@@ -67,3 +69,5 @@ CI 在 Linux/Python 3.10、Linux/Python 3.13 和 macOS/Python 3.13 上运行同�
 - 修改共享 Skill 时保留元数据和资源相对路径；工具适配层不复制正文。
 
 许可证：[Apache-2.0](LICENSE)。外部资源保留各自声明。
+
+离线 trace 分析见 [autotuner](autotuner/README.md)，按需安装 `.[profiler]` 依赖。
