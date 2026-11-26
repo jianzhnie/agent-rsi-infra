@@ -4,9 +4,9 @@
 
 本仓库提供共享规则、Skill 资源和客户端适配，不提供 Agent Runtime、训练框架或自动规则晋级服务。改进由任务证据、回归测试和人工审查驱动。
 
-##
+## RSIBench-Infra 复现框架
 
-- [RSIBench-Infra 复现框架](docs/RSIBENCH_INFRA_REPRODUCTION.md)：论文任务集、质量门、OCI layer 校验、作业隔离契约与计分协议；生产执行器和实验资产需由部署环境提供。
+- [论文对齐实现与复现缺口](docs/RSIBENCH_INFRA_REPRODUCTION.md)：论文任务集、质量门、OCI layer 校验、作业隔离契约与计分协议；生产执行器和实验资产需由部署环境提供。
 
 ## 从这里开始
 
