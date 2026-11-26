@@ -13,7 +13,7 @@ from pathlib import Path
 from typing import Literal
 
 ROOT = Path(__file__).resolve().parents[1]
-PYTHON_PATHS = ["scripts", "tests", ".agents/skills", "autotuner"]
+PYTHON_PATHS = ["scripts", "tests", ".agents/skills", "autotuner", "rsi_bench"]
 DEFAULT_TIMEOUT = 300.0
 
 
