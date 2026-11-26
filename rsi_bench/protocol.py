@@ -26,7 +26,8 @@ def _string(value: Any, name: str) -> str:
 def _number(value: Any, name: str, *, zero: bool = False) -> float:
     if type(value) not in (int, float) or not math.isfinite(value):
         raise ValueError(f"{name} must be finite numeric data")
-    if value < 0 if zero else value <= 0:
+    invalid = value < 0 if zero else value <= 0
+    if invalid:
         raise ValueError(f"{name} must be {'nonnegative' if zero else 'positive'}")
     return float(value)
 
