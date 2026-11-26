@@ -64,7 +64,7 @@
 
 ## 实践参考
 
-以下是借鉴方向，不作为上游当前规则的逐项声明。原调研入口见 [框架实践迁移](framework-practices.md)，已采用的版本与适配记录见 [贡献说明](../CONTRIBUTING.md)；训练与 RL 相关背景见 [训练框架调研](research/training-frameworks-agent-engineering.md)。未单独核实的归因以调研范围为限。
+以下是借鉴方向，不作为上游当前规则的逐项声明。原调研入口见 [来源与项目映射](../.agents/skills/training-inference-change/UPSTREAM.md#调研方法的项目映射)，已采用的版本与适配记录见 [贡献说明](../CONTRIBUTING.md)；训练与 RL 相关背景见 [训练框架调研](research/training-frameworks-agent-engineering.md)。未单独核实的归因以调研范围为限。
 
 | 参考项目 | 提炼内容 |
 | --- | --- |

@@ -30,7 +30,7 @@ This is an explicitly invoked, adapted upstream skill. Internal paths, APIs, def
 
 ### Prefer direct tools over meta_codesearch
 
-Use `Grep`, `Glob`, and `Read` directly for code exploration. **Do not spawn `meta_codesearch` agents** — they are slow and expensive. The [Architectural Knowledge](#architectural-knowledge) and [Key Source Files](#key-source-files) sections below should give you enough context to know where to look. A targeted `Grep` for a function name is always faster.
+Use `Grep`, `Glob`, and `Read` directly for code exploration. **Do not spawn `meta_codesearch` agents** — they are slow and expensive. The [Key Source Files](#key-source-files) section below should give you enough context to know where to look. A targeted `Grep` for a function name is always faster.
 
 ### Know which compilation mode you're in
 

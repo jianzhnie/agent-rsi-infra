@@ -12,3 +12,7 @@
 后续补充：TorchTitan CUDA Graph trace 整理脚本及回归，固定来源、独立 BSD 许可和适配范围见 [TorchTitan 来源记录](references/torchtitan/UPSTREAM.md)。
 
 代码整理：缩小网络与 trace 读取的异常捕获范围；只有 chat endpoint 返回 HTTP 404、405 或 501 时才尝试 completion endpoint，鉴权失败、服务端错误和超时直接报告失败，避免重复生成请求。离线回归使用网络替身，未验证真实服务。
+
+本地整理：删除仅转发统一入口的 analyze_sglang_torch_profile.py；旧命令不再提供兼容。融合与重叠案例统一维护在 references/fuse-overlap-catalog.md，overlap-catalog.md 改为专题索引；迁入其中独有的 TokenSpeed 通信案例并核对案例入口，不重新声称已验证上游当前 PR 状态。
+
+收敛为离线工具：删除 run_*_host.sh、probe_llm_server.py 和 make_trtllm_py_executor_override.py；移除 CLI URL/在线采集参数及公共模块中失去调用方的网络与采集代码。原线上工作流改为离线输入与结果说明，不承诺旧在线命令兼容。

@@ -30,9 +30,6 @@ class CheckFlowTests(unittest.TestCase):
         self.source.write_text("value=1\n")
         tests = self.project / "tests"
         tests.mkdir()
-        (
-            self.project / ".agents/skills/mechanical-refactor-verify/scripts/tests"
-        ).mkdir(parents=True)
         (tests / "test_behavior.py").write_text(
             "import unittest\nfrom pathlib import Path\n"
             "class Behavior(unittest.TestCase):\n"

@@ -41,4 +41,4 @@ Claude 和 Codex 适配均由共享角色生成。客户端原生工具名与 sa
 
 ## 来源与适用边界
 
-方法来源为[训练框架调研](research/training-frameworks-agent-engineering.md)中的 Megatron-LM、verl、slime、vime 及[推理框架调研](research/inference-frameworks-agent-engineering.md)中的 vLLM、SGLang 与 Omni 项目。本文为本仓库的协作设计，不声称这些项目都提供相同 Agent 运行时。逐项目迁移与未采用政策见[迁移记录](framework-practices.md)。
+方法来源为[训练框架调研](research/training-frameworks-agent-engineering.md)中的 Megatron-LM、verl、slime、vime 及[推理框架调研](research/inference-frameworks-agent-engineering.md)中的 vLLM、SGLang 与 Omni 项目。本文为本仓库的协作设计，不声称这些项目都提供相同 Agent 运行时。逐项目迁移与未采用政策见[来源与项目映射](../.agents/skills/training-inference-change/UPSTREAM.md#调研方法的项目映射)。

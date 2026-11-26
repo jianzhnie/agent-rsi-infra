@@ -12,7 +12,7 @@ metadata:
 
 ## 本仓库适配（使用前读取）
 
-本 Skill 为 InfraRSI 上游流程的本地迁入版本。先读[共同适配边界](../_catalogue/infrarsi-adaptation.md)和[来源记录](UPSTREAM.md)：下文 harness 接口、固定阈值、允许动作与历史案例只适用于其原环境，不自动成为本仓库要求或执行授权。没有目标设备或工具时报告未验证，不伪造 receipt。
+本 Skill 为 InfraRSI 上游流程的本地迁入版本。先读[来源与本地适配边界](UPSTREAM.md)：下文 harness 接口、固定阈值、允许动作与历史案例只适用于其原环境，不自动成为本仓库要求或执行授权。没有目标设备或工具时报告未验证，不伪造 receipt。
 
 
 # Profile the whole update
@@ -58,3 +58,9 @@ metadata:
 
 ## Failure case (real)
 - FP8 batch-quantization fusion cut component launches from 64 to 3, yet the whole update stayed -4.62% / -3.89% versus BF16 on two node groups. A same-rank, same-step diff placed the excess in forward/backward (+445.3 / +454.4 ms) and park (+50.5 / +71.6 ms): weights were re-quantized under GA and recompute. Component speed did not survive into the update. (reports/low_precision_winh_20261014/quant_fusion_20261015; MANUSCRIPT.md 6.6)
+
+## 本地测量与交付参考
+
+固定基线、数据/模型版本、工作负载、精度、设备与预算，通过目标项目入口运行实验，按同一协议重复对比候选。任务输入与证据使用 [训练优化模板](../../../docs/templates/training-optimization-task.md) 和 [验证报告](../../../docs/task-evidence.md)。
+
+按需阅读 [测量](references/measurement.md)、[实验记录](references/ledger.md)、[拓扑](references/print_topology.md) 与 [术语](references/glossary.md)。已有 trace 可从本仓根目录运行 python3 -m autotuner.profile_analyzer；依赖和边界见 [工具说明](../../../autotuner/README.md)。这套参考不提供任务运行器、集群调度或自动晋级。

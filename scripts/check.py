@@ -47,7 +47,6 @@ def _commands(fix: bool) -> list[tuple[str, list[str]]]:
                 "-m",
                 "pytest",
                 "tests",
-                ".agents/skills/mechanical-refactor-verify/scripts/tests",
                 "-q",
             ],
         ),

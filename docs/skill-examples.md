@@ -21,7 +21,6 @@
 | model-microbenchmark | 给出 vLLM 版本、模型、并行配置与精确 batch：“比较 forward 延迟” | 单 Kernel 或 serving 吞吐测量 | 实际命令、输入形状、原始样本、模型/环境版本 |
 | debug-distributed-hang | 给出 SGLang revision、各 rank 日志、堆栈和启动配置：“定位首个分歧” | 未经授权终止进程或重启集群 | 时间线、退出/通信/逻辑分歧证据、待验证假设 |
 | llm-torch-profiler-analysis | 给出已有 trace、框架版本和采集设置：“离线分析瓶颈” | 默认启动在线采集或把 trace 当 benchmark | Kernel 汇总、重叠线索、采集限制和复核建议 |
-| mechanical-refactor-verify | 给出移动前后 revision 和映射：“证明此文件拆分为指定机械变换” | 证明业务语义完全等价 | 可重放命令、变换差异、剩余差异与行为测试 |
 | code-cleanup | 给出疑似死代码、调用与注册路径：“核实后清理” | 仅凭文本搜索无命中删除公共 API | 可达性/注册证据、兼容影响和受影响测试 |
 | kernel-organization | 给出目标 SGLang Kernel API、已有实现及调用方：“确认归属后迁移” | 将 SGLang 路径规范强加其他框架 | 实现清单、放置理由、注册/调用迁移与验证 |
 | kl-consistency-test | 给出模型、prefill/decode 输入、阈值和 logprob：“定位 KL 偏差” | 未定位差异就放宽阈值 | batch 不变性、路径差异实验及阈值依据 |
@@ -87,10 +86,8 @@
 | learn-optimization-skills | “从失败记录提炼带反例的候选规则” | 自动修改全局规则或训练评测标准 | 根因、条件、反例、固定任务对照与待审结论 |
 | weak-model-protocol | “为现有驱动设计动作校验与重试预算” | 自动搭建 runtime 或替换模型 | schema、错误处理、预算记账及验证缺口 |
 
-上游案例见[负结果目录](../.agents/skills/_catalogue/negative-results.md)，本地边界和未验证范围见[适配说明](../.agents/skills/_catalogue/infrarsi-adaptation.md)。本仓库未复现其案例收益，也未验证真实客户端自动发现这些新增 Skill。
+历史案例仅作上游研究资料，未在本仓库复现；来源与本地限制见各 Skill 的 UPSTREAM.md。
 
-## ATTUNE 训练吞吐调优
+## 训练吞吐诊断
 
-请求示例：“固定训练版本、数据与设备，对比基线和候选的本地日志及 trace，报告吞吐、波动和数值验证结果。”先读 UPSTREAM.md；训练通过目标项目入口执行。交付原始证据、失败原因与未验证项。
-
-本次离线验证：profiler 合成 trace 24 项通过；三个数据工具测试 46 项通过、2 项跳过。整组脚本测试不能脱离完整 harness 直接运行；真实 GPU、模型、Kubernetes/Ray 和客户端加载均未验证。
+使用 profile-whole-update：“固定训练版本、数据与设备，对比基线和候选的本地日志及 trace，报告吞吐、波动和数值验证结果。”训练通过目标项目入口执行，交付原始证据、失败原因与未验证项；本地分析工具见 [autotuner](../autotuner/README.md)。

@@ -52,7 +52,7 @@
 
 ## 验证分层
 
-pytest 统一组织根 tests/ 与 mechanical-refactor-verify 的附属回归，已有 unittest 用例由 pytest 收集，无需为迁移改写断言。Python 使用 Ruff，Shell 使用语法与静态分析；未来引入 C/C++ 实现时再接入 clang-format、编译和必要的 API 审计，不给当前纯配置仓库增加空门禁。正确性、设备覆盖和性能结果分别呈现。
+pytest 统一组织根 tests/ 的回归，已有 unittest 用例由 pytest 收集，无需为迁移改写断言。Python 使用 Ruff，Shell 使用语法与静态分析；未来引入 C/C++ 实现时再接入 clang-format、编译和必要的 API 审计，不给当前纯配置仓库增加空门禁。正确性、设备覆盖和性能结果分别呈现。
 
 ## 检查与修复
 
@@ -150,7 +150,7 @@ DeepSpeed checklist 采用固定 commit `039bfc9f3f493ae5bf3f99582b4e4e593660d98
 
 PR 自查流程补充参考 FlashInfer [self-review](https://github.com/flashinfer-ai/flashinfer/blob/4d5a6ce322587d247fb192f97a0d23eeba9e3412/.claude/skills/self-review/SKILL.md)，固定 commit `4d5a6ce322587d247fb192f97a0d23eeba9e3412`，许可见[保留全文](.agents/skills/flashinfer-add-cuda-kernel/LICENSE)。不复制自动修复、PR 发布动作或强制发现问题的要求。
 
-训练与推理报告的项目实践按 [迁移记录](docs/framework-practices.md) 落地到共享工作流及按需参考；架构遵循 [RSI 设计](docs/RSI_DESIGN.md)，不自动创建目标框架配置或代替设备验证。
+训练与推理报告的项目实践按 [来源与项目映射](.agents/skills/training-inference-change/UPSTREAM.md#调研方法的项目映射) 落地到共享工作流及按需参考；架构遵循 [RSI 设计](docs/RSI_DESIGN.md)，不自动创建目标框架配置或代替设备验证。
 
 跨 Agent 或 Skill 比较结果时采用[任务契约与验证报告](docs/task-evidence.md)，保留未执行项及原始证据。报告结构检查不代表实际行为已验证。
 

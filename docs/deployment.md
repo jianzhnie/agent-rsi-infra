@@ -57,7 +57,7 @@ CI 使用显式 `--check` 入口验证 Linux 与 macOS；实际客户端加载�
 
 ## SGLang 专项 Skills
 
-分布式挂起、Kernel 组织、代码清理和 KL 一致性技能中的源码路径与框架接口指目标 SGLang checkout；不要求本仓库安装 SGLang。`llm-torch-profiler-analysis` 默认分析已有本地 trace，在线采集脚本保留为按需审查的上游资源。`mechanical-refactor-verify` 依赖 Git、Python 3.10+ 和目标仓库的格式化工具，附属测试使用 pytest；执行证明脚本及 hooks 前检查其内容，机械变换通过不代表业务行为正确。
+分布式挂起、Kernel 组织、代码清理和 KL 一致性技能中的源码路径与框架接口指目标 SGLang checkout；不要求本仓库安装 SGLang。`llm-torch-profiler-analysis` 默认分析已有本地 trace，在线采集使用目标框架工具，本地仅保留已有 trace 分析。
 
 ## 角色适配维护
 
@@ -73,10 +73,10 @@ Codex 格式依据：[官方多 Agent 文档](https://developers.openai.com/code
 
 ## InfraRSI 资源
 
-12 个 Skill 仍放在共享 `.agents/skills/`，客户端沿用现有发现方式，无需新增角色或配置。完整复制资源时保留兄弟目录 `_catalogue/`（适配说明、负结果、来源与许可），单独复制一个 Skill 时也需带上该目录并保持相对路径。它不是额外的 Skill 入口。
+12 个 Skill 仍放在共享 `.agents/skills/`，客户端沿用现有发现方式，无需新增角色或配置。来源、许可和本地适配边界分别记录在各 Skill 的 UPSTREAM.md。
 
-[适配边界](../.agents/skills/_catalogue/infrarsi-adaptation.md)说明哪些接口只存在于上游 harness；本仓库没有安装该 runtime、GPU 工具链或模型，也未自动改写系统环境。所有资源为 experimental；实际客户端发现、目标版本数值与性能必须另行验证。
+各 Skill 的来源记录说明哪些接口只存在于上游 harness；本仓库没有安装该 runtime、GPU 工具链或模型，也未自动改写系统环境。所有资源为 experimental；实际客户端发现、目标版本数值与性能必须另行验证。
 
-## ATTUNE Skill
+## 训练吞吐诊断
 
-`autotune-training-throughput` 提供本地日志测量、trace 分析和数值检查，通过共享目录发现；训练由目标项目现有入口执行。先读[来源与边界](../.agents/skills/autotune-training-throughput/UPSTREAM.md)。
+`profile-whole-update` 提供完整 update 测量与验证指引，通过共享目录发现；训练由目标项目现有入口执行。先读[来源与边界](../.agents/skills/profile-whole-update/UPSTREAM.md)。

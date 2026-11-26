@@ -71,7 +71,7 @@ ignore = [
 keep-runtime-typing = true
 
 [tool.pytest.ini_options]
-testpaths = ["tests", ".agents/skills/mechanical-refactor-verify/scripts/tests"]
+testpaths = ["tests"]
 python_files = ["test_*.py"]
 addopts = ["-v", "--tb=short", "--strict-markers"]
 markers = [

@@ -1,11 +1,11 @@
-"""Profiler helpers preserve request failures and distinguish invalid input from code defects."""
+"""Offline profiler inputs reject live capture and keep trace failures visible."""
 
 import importlib.util
 import json
+import subprocess
 import sys
 from pathlib import Path
 from unittest.mock import patch
-from urllib.error import HTTPError
 
 import pytest
 
@@ -17,52 +17,6 @@ spec = importlib.util.spec_from_file_location("profiler_common_regression", SCRI
 helpers = importlib.util.module_from_spec(spec)
 sys.modules[spec.name] = helpers
 spec.loader.exec_module(helpers)
-
-
-@pytest.mark.parametrize("status_code", [404, 405, 501])
-def test_missing_chat_endpoint_uses_completion_api(status_code: int) -> None:
-    """Servers without a chat endpoint can still use the completion endpoint."""
-    error = HTTPError(
-        "http://localhost/v1/chat/completions", status_code, "unsupported", {}, None
-    )
-    with patch.object(helpers.request, "urlopen") as open_url:
-        response = open_url.return_value
-        response.__enter__.return_value.read.return_value = b"{}"
-        open_url.side_effect = [error, response]
-        helpers.send_probe_request(
-            "http://localhost", "hello", 8, 42, "vllm", "test-model"
-        )
-        requests = [call.args[0] for call in open_url.call_args_list]
-    assert [request.full_url for request in requests] == [
-        "http://localhost/v1/chat/completions",
-        "http://localhost/v1/completions",
-    ]
-    assert json.loads(requests[1].data) == {
-        "model": "test-model",
-        "prompt": "hello",
-        "temperature": 0.0,
-        "max_tokens": 8,
-        "stream": False,
-    }
-
-
-@pytest.mark.parametrize("failure", [401, 500, "timeout"])
-def test_failed_request_is_not_submitted_again(failure: int | str) -> None:
-    """Authentication errors, server failures and timeouts must not trigger a second generation."""
-    error = (
-        TimeoutError("request timed out")
-        if failure == "timeout"
-        else HTTPError(
-            "http://localhost/v1/chat/completions", failure, "failed", {}, None
-        )
-    )
-    with patch.object(helpers.request, "urlopen", side_effect=error) as open_url:
-        with pytest.raises(type(error)) as raised:
-            helpers.send_probe_request(
-                "http://localhost", "hello", 8, 42, "vllm", "test-model"
-            )
-        assert raised.value is error
-        assert open_url.call_count == 1
 
 
 def test_trace_discovery_does_not_hide_programming_errors(tmp_path: Path) -> None:
@@ -78,3 +32,76 @@ def test_trace_discovery_does_not_hide_programming_errors(tmp_path: Path) -> Non
             helpers.file_looks_like_trace(trace_path)
         with pytest.raises(RuntimeError, match="parser defect"):
             helpers.detect_framework_from_path(trace_path)
+
+
+@pytest.mark.parametrize(
+    "options",
+    [["--url", "http://localhost"], ["--mapping-url", "http://localhost"], []],
+)
+def test_cli_rejects_online_or_missing_inputs(options: list[str]) -> None:
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(SCRIPT.parent / "analyze_llm_torch_profile.py"),
+            "triage",
+            *options,
+        ],
+        capture_output=True,
+        text=True,
+        timeout=10,
+    )
+    assert result.returncode == 2
+    assert "error:" in result.stderr
+
+
+def test_cli_analyzes_local_trace_without_changing_input(tmp_path: Path) -> None:
+    trace_path = tmp_path / "sglang_prefill.trace.json"
+    trace_path.write_text(
+        json.dumps(
+            {
+                "traceEvents": [
+                    {
+                        "ph": "X",
+                        "cat": "kernel",
+                        "name": "matmul",
+                        "ts": 100,
+                        "dur": 20,
+                        "pid": 0,
+                        "tid": 0,
+                        "args": {"device": 0, "stream": 7},
+                    }
+                ]
+            }
+        )
+    )
+    original = trace_path.read_bytes()
+    for options in (
+        ["--input", str(trace_path)],
+        ["--mapping-input", str(trace_path), "--formal-input", str(trace_path)],
+    ):
+        result = subprocess.run(
+            [
+                sys.executable,
+                str(SCRIPT.parent / "analyze_llm_torch_profile.py"),
+                "triage",
+                "--framework",
+                "sglang",
+                *options,
+            ],
+            capture_output=True,
+            text=True,
+            timeout=10,
+        )
+        assert result.returncode == 0, result.stderr
+        assert "matmul" in result.stdout
+        assert trace_path.read_bytes() == original
+
+
+def test_local_framework_detection_never_contacts_server(tmp_path: Path) -> None:
+    trace_path = tmp_path / "profile.trace.json"
+    trace_path.write_text(json.dumps({"traceEvents": []}))
+    (tmp_path / "server_args.json").write_text(
+        json.dumps({"model_path": "test", "tp_size": 2})
+    )
+    assert helpers.resolve_framework("vllm", input_path=trace_path) == "vllm"
+    assert helpers.resolve_framework("auto", input_path=trace_path) == "sglang"

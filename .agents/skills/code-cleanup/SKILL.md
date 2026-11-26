@@ -17,7 +17,7 @@ the code can decide. Neighbors:
 - Tests and CI: [ci-test-audit](https://github.com/sgl-project/sglang/blob/049bf85d931c9633d26094ae5ff9a7dbac6723b4/.agents/skills/ci-test-audit/SKILL.md). A cleanup keeps finding tests
   that never run; hand them over with the evidence.
 - Proving a move or split is a pure relocation:
-  [mechanical-refactor-verify](../mechanical-refactor-verify/SKILL.md).
+  [mechanical-refactor-verify](https://github.com/sgl-project/sglang/blob/049bf85d931c9633d26094ae5ff9a7dbac6723b4/.agents/skills/mechanical-refactor-verify/SKILL.md).
 - Where a kernel belongs, and which of several implementations of one kernel contract
   survives: [kernel-organization](../kernel-organization/SKILL.md). Env vars:
   [env-var-conventions](https://github.com/sgl-project/sglang/blob/049bf85d931c9633d26094ae5ff9a7dbac6723b4/.agents/skills/env-var-conventions/SKILL.md). The frozen large classes:

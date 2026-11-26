@@ -12,7 +12,7 @@ metadata:
 
 ## 本仓库适配（使用前读取）
 
-本 Skill 为 InfraRSI 上游流程的本地迁入版本。先读[共同适配边界](../_catalogue/infrarsi-adaptation.md)和[来源记录](UPSTREAM.md)：下文 harness 接口、固定阈值、允许动作与历史案例只适用于其原环境，不自动成为本仓库要求或执行授权。没有目标设备或工具时报告未验证，不伪造 receipt。
+本 Skill 为 InfraRSI 上游流程的本地迁入版本。先读[来源与本地适配边界](UPSTREAM.md)：下文 harness 接口、固定阈值、允许动作与历史案例只适用于其原环境，不自动成为本仓库要求或执行授权。没有目标设备或工具时报告未验证，不伪造 receipt。
 
 
 # Manage memory lifetimes

@@ -37,3 +37,5 @@ Use these upstream files when the workflow or behavior needs to be justified fro
 
 - `test/registered/profiling/test_start_profile.py`
   - validates `/start_profile` behavior, including `CUDA_PROFILER`
+
+本地仅保留离线分析；上游采集和 scheduler 路径是阅读源码的线索，不表示本仓提供在线执行入口。

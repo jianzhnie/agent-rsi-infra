@@ -14,11 +14,10 @@
 | SGLang 多 rank 挂起或 collective 超时 | [debug-distributed-hang](../.agents/skills/debug-distributed-hang/SKILL.md) | 先区分状态分歧、进程退出与通信故障 |
 | SGLang prefill/decode 或缓存 logprob 一致性 | [kl-consistency-test](../.agents/skills/kl-consistency-test/SKILL.md) | 不把 bit-exact 或历史阈值推广为通用门槛 |
 | 清理死代码、重复实现或兼容层 | [code-cleanup](../.agents/skills/code-cleanup/SKILL.md) | 案例来自 SGLang，先核对目标契约 |
-| 证明文件拆分、移动或重命名是机械变换 | [mechanical-refactor-verify](../.agents/skills/mechanical-refactor-verify/SKILL.md) | 先审查脚本与 hooks；仍需行为验证 |
 
 ## 训练优化专项路由
 
-以下 InfraRSI 迁入资源均为 experimental，先读[共同适配边界](../.agents/skills/_catalogue/infrarsi-adaptation.md)。它们提供方法，不提供上游 harness 或 GPU 执行授权；只选与当前问题相关的一项。
+以下 InfraRSI 迁入资源均为 experimental，先读各 Skill 的 UPSTREAM.md。它们提供方法，不提供上游 harness 或 GPU 执行授权；只选与当前问题相关的一项。
 
 | 任务 | Skill | 关键边界 |
 | --- | --- | --- |

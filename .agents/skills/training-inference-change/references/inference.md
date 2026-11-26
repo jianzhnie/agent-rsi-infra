@@ -29,4 +29,4 @@
 
 Python、C++/CUDA、Mojo 和编译器接口分别使用目标项目的格式、构建与测试配置。公共测试不自动运行昂贵模型示例；模型评测、correctness 和 benchmark 分开。
 
-本参考提炼自 vLLM、SGLang、LMDeploy、TensorRT-LLM、MAX/Modular、DeepInfer、vLLM-Omni、SGLang-Omni 的调研。官方 Skill 分发方式是部署选项，不授权执行安装命令；MCP、hook 与 provider 设置不因本参考存在而启用。项目映射见[迁移记录](../../../../docs/framework-practices.md)。
+本参考提炼自 vLLM、SGLang、LMDeploy、TensorRT-LLM、MAX/Modular、DeepInfer、vLLM-Omni、SGLang-Omni 的调研。官方 Skill 分发方式是部署选项，不授权执行安装命令；MCP、hook 与 provider 设置不因本参考存在而启用。项目映射见[来源与项目映射](../UPSTREAM.md#调研方法的项目映射)。

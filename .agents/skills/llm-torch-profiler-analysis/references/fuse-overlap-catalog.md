@@ -3,7 +3,7 @@
 This catalog is the source-backed lookup table that the profiler skill should
 consult before labeling a fuse or overlap opportunity as novel.
 
-For overlap-only triage, also load `references/overlap-catalog.md`.
+For overlap-only triage, use [the topic index](overlap-catalog.md). Case facts, paths, gates and historical revision notes are maintained only in this file. The index adds no independent support or performance claims.
 
 This revision is intentionally kernel-scoped. Keep rows here only when they map
 to one fused GPU/NPU kernel family, one fused collective-plus-kernel family, or
@@ -278,6 +278,14 @@ only vLLM references to the TokenSpeed package.
 | TokenSpeed fused top-k + top-p sampling | `fused_topk_topp`<br>`fused_topk_topp_renorm` | `tokenspeed-kernel/python/tokenspeed_kernel/thirdparty/cuda/fused_topk_topp.py`<br>`tokenspeed-kernel/python/tokenspeed_kernel/thirdparty/cuda/csrc/fused_topk_topp/fused_topk_topp.cu` | CUDA extension fuses top-k, top-p, and renormalization for decode sampling | Treat top-k/top-p/renorm chains in TokenSpeed traces as an existing sampling fusion first. <!-- codespell:ignore thirdparty --> |
 | TokenSpeed persistent lm_head GEMM | `lm_head_gemm`<br>`should_use_fused`<br>`persistent` | `tokenspeed-kernel/python/tokenspeed_kernel/thirdparty/cuda/lm_head_gemm.py`<br>`tokenspeed-kernel/python/tokenspeed_kernel/thirdparty/cuda/csrc/lm_head_gemm.cu` | Shape-gated persistent GEMM replaces `torch.matmul` for selected lm_head / router-like projection shapes | Treat visible lm_head matmul ladders as a candidate for this existing TokenSpeed path before inventing a new logits GEMM. <!-- codespell:ignore thirdparty --> |
 | TokenSpeed NVFP4 GEMM + SwiGLU + quant | `nvfp4_gemm_swiglu_nvfp4_quant`<br>`SwiGLU`<br>`SFC` | `tokenspeed-kernel/python/tokenspeed_kernel/thirdparty/cute_dsl/nvfp4_gemm_swiglu_nvfp4_quant.py` | CuTe DSL kernel fuses block-scaled NVFP4 GEMM, SwiGLU, and optional output quantization | Treat split expert GEMM + activation + FP4 quant chains as matching an upstream TokenSpeed kernel family. <!-- codespell:ignore thirdparty --> |
+
+<a id="tokenspeed-communication-overlap"></a>
+
+### TokenSpeed communication overlap
+
+| Pattern | Trace keywords | Primary code | Existing path | Skill should conclude |
+| --- | --- | --- | --- | --- |
+| TokenSpeed allreduce / communication fusion | `enable_allreduce_fusion`<br>`comm_fusion`<br>`comm_fusion_max_num_tokens`<br>`allreduce` | `docs/configuration/server.md`<br>`python/tokenspeed/runtime/distributed/comm_backend` | TokenSpeed exposes runtime knobs for communication fusion and token-count gating, so all-reduce windows may be a disabled or shape-gated TokenSpeed path | Treat split all-reduce + compute windows in TokenSpeed traces as a comm-fusion eligibility question before calling it a novel overlap opportunity. |
 
 ## 16. vLLM-origin kernel-overlap families
 

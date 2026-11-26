@@ -40,6 +40,6 @@ Offload 与预取检查异步 copy 的完成依赖、buffer 复用、释放与�
 
 训练 Kernel 依次验证独立算子 reference、forward/backward、模型训练对照和独立 benchmark。按受影响路径选择逐层 weights/logits/loss 或等价多步对照，容差需有依据。性能采样、吞吐/延迟和峰值内存单独保存，未复现的单次测量不构成收益证据。
 
-本参考提炼自 Megatron-LM、DeepSpeed、TorchTitan、ms-swift、Liger Kernel 的调研；Unsloth 部分仅采用报告列出的待验证数值风险，不将未经核实的配置当作事实。项目映射见[迁移记录](../../../../docs/framework-practices.md)。
+本参考提炼自 Megatron-LM、DeepSpeed、TorchTitan、ms-swift、Liger Kernel 的调研；Unsloth 部分仅采用报告列出的待验证数值风险，不将未经核实的配置当作事实。项目映射见[来源与项目映射](../UPSTREAM.md#调研方法的项目映射)。
 
 后续补充的 mesh、配置与实验边界提炼自 [TorchTitan 固定来源](torchtitan/UPSTREAM.md)，保留 BSD 许可；不将其专用 API 和兼容政策推广为通用约束。

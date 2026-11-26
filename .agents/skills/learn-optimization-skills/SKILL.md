@@ -1,8 +1,8 @@
 ---
 name: learn-optimization-skills
-description: How the optimizer improves itself between development tasks - what it may and may not edit, the promotion gate for a new package, memory entry format, and how to distill applicability conditions and counter-examples from a trajectory.
+description: 从可复现任务证据中提炼 Skill 改进，记录适用条件、反例和回归结果，并通过人工评审采用；不自动写入模型记忆或晋级全局规则。
 license: Apache-2.0
-when_to_use: Reflection after a development task; writing memory entries during a search; deciding whether a lesson is general or task-specific; 'what did we learn', 'update skills', 'memory entry', 'reflect'.
+when_to_use: 从可复现任务证据中提炼 Skill 改进，记录适用条件、反例和回归结果，并通过人工评审采用；不自动写入模型记忆或晋级全局规则。
 metadata:
   author: InfraRSI A0 (human-authored)
   source: human-authored (A0)
@@ -10,49 +10,28 @@ metadata:
   tags: [rsi, reflection, memory, skills, package, learning]
 ---
 
-## 本仓库适配（使用前读取）
+# 从任务证据改进 Skill
 
-本 Skill 为 InfraRSI 上游流程的本地迁入版本。先读[共同适配边界](../_catalogue/infrarsi-adaptation.md)和[来源记录](UPSTREAM.md)：下文 harness 接口、固定阈值、允许动作与历史案例只适用于其原环境，不自动成为本仓库要求或执行授权。没有目标设备或工具时报告未验证，不伪造 receipt。
+## 适用范围
 
+用于任务复盘、复现失败或评估已有 Skill 改动。先判断问题是否可复现、可归因且具有重复价值；偶发失败不直接变成全局规则，单次成功不证明普遍收益。来源和本地改写见 [UPSTREAM.md](UPSTREAM.md)。
 
-# Learn optimization skills
+## 输入与前置条件
 
-The optimizer A (skills, memory, retrieval and analysis tools, policy, prompts) is distinct from the target S (the
-training job). Only A transfers between tasks. Training patches never transfer, and private retest results never
-feed back into A.
+提供任务契约、代码与 Skill 版本、模型/客户端和环境信息、候选改动、原始命令与结果、失败原因及成本。证据不足时先补复现，不以回忆或最终配置替代执行记录。
 
-## Trigger conditions
-- After each development task (reflect), and during a search when a result explains something reusable (write_memory).
+## 工作流程
 
-## Required observations (receipt fields)
-- The finished task's trace: candidates with changes and verdicts, screens with StepTime and costs, invalid reasons, skill/memory/tool hit logs.
+1. 区分代码缺陷、Skill 步骤遗漏、客户端加载、测试不稳定、目标环境和任务定义问题，定位应修改的事实来源。
+2. 将经验写成候选：触发条件、适用硬件/模型/负载、观察结果、原因、建议和反例。分别记录收益、退化与未验证项。
+3. 只修改用户任务授权范围内的 Skill、参考或工具。保持独立验收条件和预算不变，不能为候选通过而放宽测试。
+4. 对脚本缺陷加入能复现原问题的行为测试；对流程改进重放相关代表性任务，比较证据完整性、结果、成本和回归。
+5. 提交具体改动与证据供人工评审。只有用户要求时创建提交或 PR；接受后由 Git 记录版本，退化时按既有流程回滚。
 
-## Rules: what may change
-- May edit: skills (conditions, rules, counter-examples, real cases), memory.db entries, retrieval and policy settings within caps, prompts, receipt-analysis tools (JSON analysis subset).
-- May not edit: harness, reward, invariants, frozen zone, budgets, tolerances, model weights, the L0 schema, patch guard. They are outside the package.
-- A new package must pass selfcheck (schema; skills parse with all sections; tools run on historical receipts; prompts keep placeholders; policy within caps; answer-isolation audit). Otherwise the previous package is kept and the reflection is recorded as invalid_fallback.
+## 验证
 
-## Rules: memory entries
-- Format: tags {hardware: [...], model: [...], data: [...]}, slow (config delta, StepTime), fast (config delta, StepTime), outcome, failure_reason, lesson. Tags make retrieval conditional on context; a lesson without tags generalizes blindly.
-- Record failures with their mechanism (e.g. "OOM at update 2: lazy moments"), not just "failed".
+运行本仓适用的检查入口，并完成目标任务的相关回归；资源结构检查不能代替真实客户端、GPU 或模型验证。记录后续任务是否实际加载并使用了改动，未使用的工具不能算收益。见过的任务复跑与未见任务评估分别报告。
 
-## Rules: distilling skills
-- Write conditions, not answers: "when headroom > X and recompute is full, remove recompute from k layers" rather than "use config c7".
-- Keep counter-examples next to the rule: Muon three-phase optimizations have no AdamW counterpart; fastmask needs zero bases or falls back; NUMA binding depends on the node's NUMA layout; an external TP4 suggestion was reordered after timings contradicted it.
-- A tool that changed but was never invoked is "unconsumed": it is not evidence of learning. Inheritance counts only when retrieval or tool logs show use.
-- Re-solving a task seen before is an answer-isolated re-solve, not an unseen task.
+## 交付物
 
-## Allowed actions
-- write_memory during search; in reflection: edit skills/policy/prompts/tools, add memory.
-
-## Failure signals
-- Package unchanged after a task with clear lessons; selfcheck failures; lessons that name one task's final config; held-out identifiers anywhere in the package (audit failure).
-
-## Verification
-- selfcheck passes; audit passes; later tasks' logs show the new skill sections or tools being retrieved/invoked.
-
-## Success case (real)
-- Tool inheritance (T5): compare_same_rank_stages.py, written for the FP8 investigation, read the BF16 anchor queue, paired (rank, step) and checked 448 pairs, then produced QSA/prefix/QKV/segsum analyses for later candidates. The row-wise dual-FP64 gate (T2), frozen before a kernel repair, rejected v1 and was reused on two more layer sets. (agentic_moe_sft_tech_report_20261018/RSI_TRACK.md T5, T2)
-
-## Failure case (real)
-- RSI pilots of the previous project: pilot-1 10.441060 -> 10.448436 s (retest 10.490263), pilot-2 10.556310 -> 10.607184 s. The A0 package came out unchanged, pilot-2 was interrupted, 0 of 6 formal lineages ran, and the evidence was judged insufficient (pilot-1 had 1 reflection cycle where 2 were needed). Without completed cycles and recorded inheritance, no self-improvement claim is possible. (RSI_TRACK.md 3, 6; rsi_pilot_v1/D1_PILOT_COMPLETION_V1.md)
+交付根因、复现、最小候选、适用条件、反例、验证报告及人工采用状态，使用 [任务证据规范](../../../docs/task-evidence.md) 和 [贡献流程](../../../CONTRIBUTING.md#从反馈改进流程)。记录存放在任务产物或审查材料中；本 Skill 不写 memory.db、不调用不存在的 selfcheck，也不修改客户端个人记忆。

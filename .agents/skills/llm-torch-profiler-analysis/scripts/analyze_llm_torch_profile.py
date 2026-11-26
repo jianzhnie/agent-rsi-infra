@@ -11,19 +11,12 @@ from pathlib import Path
 import triage_kernel_helpers as kernel_helpers
 import triage_overlap_helpers as overlap_helpers
 from profile_common import (
-    DEFAULT_DECODE_INPUT_LEN,
-    DEFAULT_DECODE_OUTPUT_LEN,
-    DEFAULT_PREFILL_INPUT_LEN,
-    DEFAULT_PREFILL_OUTPUT_LEN,
-    DEFAULT_WARMUP_STEPS,
-    PROFILE_WORKLOAD_CHOICES,
     discover_trace_targets,
     framework_display_name,
     load_server_args,
     load_trace_json,
     parse_stage,
     resolve_framework,
-    run_profiler,
 )
 
 MIN_RENDER_SHARE_PCT = 1.0
@@ -58,7 +51,7 @@ def build_triage_parser() -> argparse.ArgumentParser:
         ],
         help=(
             "Serving framework. Use auto to detect from trace contents, path hints, "
-            "or URL features."
+            "or saved server configuration."
         ),
     )
     parser.add_argument(
@@ -68,154 +61,16 @@ def build_triage_parser() -> argparse.ArgumentParser:
         help="Single trace file or profile directory to triage.",
     )
     parser.add_argument(
-        "--url",
-        type=str,
-        default=None,
-        help=(
-            "Running server URL for single-trace triage. SGLang supports direct "
-            "capture via sglang.profiler. vLLM and TensorRT-LLM require a server-side "
-            "torch-profiler output path exposed via --output-dir. TokenSpeed live "
-            "capture uses the server's /start_profile and /stop_profile endpoints "
-            "when they are available."
-        ),
-    )
-    parser.add_argument(
-        "--output-dir",
-        type=str,
-        default=None,
-        help=(
-            "Trace output dir when using --url. For vLLM this should match the "
-            "server's torch_profiler_dir. For TensorRT-LLM it should match the "
-            "directory or file path configured by TLLM_TORCH_PROFILE_TRACE. "
-            "For TokenSpeed this is passed as start_profile.output_dir."
-        ),
-    )
-    parser.add_argument(
-        "--profile-prefix",
-        type=str,
-        default="triage-trace",
-        help=(
-            "Profile prefix when generating a trace from --url. SGLang uses it "
-            "directly; TokenSpeed maps it to profile_id; vLLM and TensorRT-LLM may "
-            "ignore it on the HTTP profiler path."
-        ),
-    )
-    parser.add_argument(
         "--mapping-input",
         type=str,
         default=None,
         help="Graph-off mapping trace file or directory.",
     )
     parser.add_argument(
-        "--mapping-url",
-        type=str,
-        default=None,
-        help="Running graph-off server URL for the mapping trace.",
-    )
-    parser.add_argument(
         "--formal-input",
         type=str,
         default=None,
         help="Formal graph-on trace file or directory.",
-    )
-    parser.add_argument(
-        "--formal-url",
-        type=str,
-        default=None,
-        help="Running graph-on server URL for the formal trace.",
-    )
-    parser.add_argument(
-        "--mapping-output-dir",
-        type=str,
-        default=None,
-        help="Trace output dir when using --mapping-url.",
-    )
-    parser.add_argument(
-        "--formal-output-dir",
-        type=str,
-        default=None,
-        help="Trace output dir when using --formal-url.",
-    )
-    parser.add_argument(
-        "--mapping-profile-prefix",
-        type=str,
-        default="mapping-trace",
-        help="Profile prefix for the mapping trace.",
-    )
-    parser.add_argument(
-        "--formal-profile-prefix",
-        type=str,
-        default="formal-trace",
-        help="Profile prefix for the formal trace.",
-    )
-    parser.add_argument(
-        "--num-steps",
-        type=int,
-        default=5,
-        help="Active profiler steps when generating traces from URLs.",
-    )
-    parser.add_argument(
-        "--warmup-steps",
-        type=int,
-        default=DEFAULT_WARMUP_STEPS,
-        help="Warmup steps to run before arming the profiler for URL capture.",
-    )
-    parser.add_argument(
-        "--profile-by-stage", action=argparse.BooleanOptionalAction, default=True
-    )
-    parser.add_argument(
-        "--merge-profiles", action=argparse.BooleanOptionalAction, default=False
-    )
-    parser.add_argument("--probe-requests", type=int, default=1)
-    parser.add_argument(
-        "--probe-prompt",
-        type=str,
-        default=(
-            "Repeat the word profiler many times with spaces so the server performs several decode steps. "
-            "Do not add explanations."
-        ),
-    )
-    parser.add_argument("--probe-max-new-tokens", type=int, default=None)
-    parser.add_argument("--probe-delay", type=float, default=0.5)
-    parser.add_argument(
-        "--profile-workload",
-        choices=PROFILE_WORKLOAD_CHOICES,
-        default="both",
-        help=(
-            "Live-capture workload shape. Default 'both' captures separate "
-            "prefill and decode profiles instead of one mixed request. Use "
-            "'legacy' to keep the old --probe-prompt behavior."
-        ),
-    )
-    parser.add_argument(
-        "--prefill-input-len",
-        type=int,
-        default=DEFAULT_PREFILL_INPUT_LEN,
-        help="Synthetic input length for the prefill profile workload.",
-    )
-    parser.add_argument(
-        "--prefill-output-len",
-        type=int,
-        default=DEFAULT_PREFILL_OUTPUT_LEN,
-        help="Output length for the prefill profile workload.",
-    )
-    parser.add_argument(
-        "--decode-input-len",
-        type=int,
-        default=DEFAULT_DECODE_INPUT_LEN,
-        help="Synthetic input length for the decode profile workload.",
-    )
-    parser.add_argument(
-        "--decode-output-len",
-        type=int,
-        default=DEFAULT_DECODE_OUTPUT_LEN,
-        help="Output length for the decode profile workload.",
-    )
-    parser.add_argument(
-        "--start-step",
-        type=int,
-        default=None,
-        help="Pass through to sglang.profiler when generating traces from URLs.",
     )
     parser.add_argument(
         "--pid-substring",
@@ -241,91 +96,27 @@ def build_triage_parser() -> argparse.ArgumentParser:
 def parse_triage_args(argv: Sequence[str]) -> argparse.Namespace:
     parser = build_triage_parser()
     args = parser.parse_args(argv)
-
-    single_trace_mode = bool(args.input) or bool(args.url)
-    dual_trace_mode = any(
-        [
-            args.mapping_input,
-            args.mapping_url,
-            args.formal_input,
-            args.formal_url,
-        ]
-    )
-
-    if single_trace_mode and dual_trace_mode:
-        parser.error(
-            "Use either single-trace mode (--input/--url) or two-trace mode "
-            "(--mapping-* plus --formal-*), not both."
-        )
-
-    if single_trace_mode:
-        if bool(args.input) == bool(args.url):
-            parser.error("Provide exactly one of --input or --url.")
-        return args
-
-    if bool(args.mapping_input) == bool(args.mapping_url):
-        parser.error("Provide exactly one of --mapping-input or --mapping-url.")
-    if bool(args.formal_input) == bool(args.formal_url):
-        parser.error("Provide exactly one of --formal-input or --formal-url.")
+    if args.input:
+        if args.mapping_input or args.formal_input:
+            parser.error(
+                "Use --input or a --mapping-input/--formal-input pair, not both."
+            )
+    elif not args.mapping_input or not args.formal_input:
+        parser.error("Provide --input or both --mapping-input and --formal-input.")
     return args
 
 
 def resolve_profile_targets(
-    *,
-    label: str,
-    input_path: str | None,
-    url: str | None,
-    output_dir: str | None,
-    profile_prefix: str | None,
-    args: argparse.Namespace,
+    *, input_path: str, framework: str
 ) -> tuple[list[Path], dict | None, str]:
-    if bool(input_path) == bool(url):
-        raise ValueError(f"{label} trace requires exactly one of input path or URL.")
-
-    if url:
-        framework = resolve_framework(
-            args.framework,
-            input_path=Path(output_dir).resolve() if output_dir else None,
-            url=url,
-        )
-        target_dir = run_profiler(
-            url=url,
-            output_dir=output_dir,
-            num_steps=args.num_steps,
-            profile_by_stage=args.profile_by_stage,
-            merge_profiles=args.merge_profiles,
-            profile_prefix=profile_prefix,
-            probe_requests=max(0, args.probe_requests),
-            probe_prompt=args.probe_prompt,
-            probe_max_new_tokens=args.probe_max_new_tokens,
-            probe_delay=args.probe_delay,
-            warmup_steps=args.warmup_steps,
-            start_step=args.start_step,
-            framework=framework,
-            framework_hint_path=output_dir,
-            profile_workload=args.profile_workload,
-            prefill_input_len=args.prefill_input_len,
-            prefill_output_len=args.prefill_output_len,
-            decode_input_len=args.decode_input_len,
-            decode_output_len=args.decode_output_len,
-        )
-        traces, server_args = discover_trace_targets(target_dir, all_traces=False)
-        resolved_framework = resolve_framework(
-            args.framework,
-            input_path=target_dir,
-            url=url,
-            server_args=server_args,
-        )
-        return traces, server_args, resolved_framework
-
     resolved = Path(input_path).resolve()
     traces, server_args = discover_trace_targets(resolved, all_traces=False)
     if server_args is None:
         server_args = load_server_args(resolved)
-    framework = resolve_framework(
-        args.framework, input_path=resolved, server_args=server_args
+    resolved_framework = resolve_framework(
+        framework, input_path=resolved, server_args=server_args
     )
-    return traces, server_args, framework
+    return traces, server_args, resolved_framework
 
 
 def build_mapping_kernel_map(trace_paths: Sequence[Path], framework: str) -> dict:
@@ -614,15 +405,11 @@ def render_fuse_tables(rows: Sequence[dict]) -> list[str]:
 
 
 def run_triage(args: argparse.Namespace) -> int:
-    single_trace_mode = bool(args.input) or bool(args.url)
+    single_trace_mode = bool(args.input)
     if single_trace_mode:
         formal_traces, formal_server_args, formal_framework = resolve_profile_targets(
-            label="input",
             input_path=args.input,
-            url=args.url,
-            output_dir=args.output_dir,
-            profile_prefix=args.profile_prefix,
-            args=args,
+            framework=args.framework,
         )
         mapping_traces = formal_traces
         mapping_server_args = formal_server_args
@@ -630,21 +417,13 @@ def run_triage(args: argparse.Namespace) -> int:
     else:
         mapping_traces, mapping_server_args, mapping_framework = (
             resolve_profile_targets(
-                label="mapping",
                 input_path=args.mapping_input,
-                url=args.mapping_url,
-                output_dir=args.mapping_output_dir,
-                profile_prefix=args.mapping_profile_prefix,
-                args=args,
+                framework=args.framework,
             )
         )
         formal_traces, formal_server_args, formal_framework = resolve_profile_targets(
-            label="formal",
             input_path=args.formal_input,
-            url=args.formal_url,
-            output_dir=args.formal_output_dir,
-            profile_prefix=args.formal_profile_prefix,
-            args=args,
+            framework=args.framework,
         )
 
     mapping_kernel_map = build_mapping_kernel_map(mapping_traces, mapping_framework)

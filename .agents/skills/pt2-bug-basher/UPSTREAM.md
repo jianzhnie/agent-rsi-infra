@@ -19,3 +19,5 @@
 编译器架构、错误分类、minifier、日志与源码导航保留上游内容。内部 API、默认值、标志和源码路径可能随 PyTorch 版本变化；迁入和本地检查不代表已在 GPU 或目标模型上复现这些流程。
 
 补充本地性能诊断参考的导航，不复制 TorchTitan local_compile 实现；该参考的固定来源和独立许可记录在文档中。
+
+本地维护：删除指向不存在的 Architectural Knowledge 章节的导航，保留 Key Source Files 入口。

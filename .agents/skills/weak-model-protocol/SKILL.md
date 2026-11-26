@@ -1,8 +1,8 @@
 ---
 name: weak-model-protocol
-description: Protocol that lets a cheaper LLM drive the optimizer safely - JSON-schema actions, one action per turn from an explicit menu, configs before patches, templates before free patches, small injected context, verifier checklist and bounded retries.
+description: 实验性协议设计参考：为受预算约束的模型设计结构化动作、验证与重试边界；本仓不提供协议执行器、上游 harness 或模型切换服务。
 license: Apache-2.0
-when_to_use: The driver is a weaker or cheaper model (API or self-hosted); invalid or malformed actions; context overflow; provider errors; 'weak model', 'DeepSeek API driver', 'json schema', 'retries', 'menu'.
+when_to_use: 实验性协议设计参考：为受预算约束的模型设计结构化动作、验证与重试边界；本仓不提供协议执行器、上游 harness 或模型切换服务。
 metadata:
   author: InfraRSI A0 (human-authored)
   source: human-authored (A0)
@@ -10,43 +10,28 @@ metadata:
   tags: [weak-model, protocol, json, actions, retries, context, verifier]
 ---
 
-## 本仓库适配（使用前读取）
+# 受预算约束的模型动作协议（实验参考）
 
-本 Skill 为 InfraRSI 上游流程的本地迁入版本。先读[共同适配边界](../_catalogue/infrarsi-adaptation.md)和[来源记录](UPSTREAM.md)：下文 harness 接口、固定阈值、允许动作与历史案例只适用于其原环境，不自动成为本仓库要求或执行授权。没有目标设备或工具时报告未验证，不伪造 receipt。
+## 适用范围
 
+用于设计或审查目标项目已有 Agent 执行器的动作协议。不是可直接运行的优化工具；模型调用、JSON Schema 执行、权限检查、计费与状态持久化都由目标实现负责。来源及本地改写见 [UPSTREAM.md](UPSTREAM.md)。
 
-# Weak-model protocol
+## 输入与前置条件
 
-The same harness guarantees validity for every driver; the protocol only makes a weaker model productive and cheap.
-Numerics, budgets and applicability are checked by programs; the model chooses and explains.
+提供执行器接口、允许动作、模型与 provider 版本、预算、超时和失败处理要求。没有执行器时，只交付协议设计和测试建议，不模拟运行或保证上游保护机制存在。
 
-## Trigger conditions
-- Weak mode (policy.modes.weak), or any driver producing malformed actions, oversize patches or repeated invalid configs.
+## 设计流程
 
-## Required observations (receipt fields)
-- Receipt digests (<= 1.5K tokens) instead of raw receipts; the STATE block (budget, best, L1 gate, templates).
+1. 为每个动作定义名称、参数、前置条件和结果状态；明确模型提出请求与执行器授权、执行、验证的边界。
+2. 优先传递已验证配置和结构化结果摘要；上下文保留任务约束、原始证据位置及失败原因，不只保留模型自述。
+3. 用目标接口实际支持的 schema 或受约束解码方式校验输出。格式合格不代表参数有效或行为已授权。
+4. 根据故障类型制定重试策略，明确次数、时间与成本上限。鉴权、业务失败和不确定是否已执行的写操作不盲目重试；失败尝试同样计入预算。
+5. 模型、预算和验收阈值变化必须显式记录。对候选给出验证结果，由既定人工评审流程决定是否采用。
 
-## Rules (FINAL_PLAN 7.2)
-1. Actions are JSON constrained by a schema (response_format json_object for APIs, guided decoding for vLLM/SGLang), temperature 0.
-2. One action per turn from an explicit menu: inspect / propose_config / apply_patch_template / propose_patch / run_trial / write_memory / finish.
-3. Configs first: L1 stays locked until enough L0 screens ran (default 6) or L0 stalls (3 screens without a new best). Validated templates before any free patch; free patches <= 80 changed lines. L2 is closed.
-4. Inject only the top-2 relevant skill sections (<= 4K tokens) and a <= 1.5K-token receipt digest.
-5. The verifier re-checks with the checklist and may veto.
-6. Context <= 32K tokens with a rolling summary; structured state (candidates table) is persistent and re-rendered each turn.
-7. At most 3 retries per turn after a rejected reply, each with the validation error fed back; every attempt is charged.
-8. Never escalate silently to a stronger model; the served model id is checked on every reply.
+## 验证
 
-## Allowed actions
-- The menu above; configs as small deltas (<= 6 keys) on a named base candidate.
+在目标执行器测试非法动作、缺失字段、无效配置、超时、限流、预算耗尽及执行中断。确认错误不会生成伪成功状态，重试不会重复产生副作用。上下文大小、patch 大小和动作数量按实测与任务风险确定，不照搬上游固定数字。
 
-## Failure signals
-- Same invalid config proposed twice (duplicate detector), schema errors after 3 retries, provider errors (HTTP 429/5xx), context near the limit.
+## 交付物
 
-## Verification
-- Accounting complete for every call (tokens and cost known, model id matches); JSON actions valid; InvalidAccept = 0.
-
-## Success case (real)
-- Closest project record: the 32-GPU first RSI pilot (pilot-1) drove the model with "exactly one JSON action, without markdown" over seven actions (read_source, define_analysis, run_analysis, patch_target, submit_candidate, propose_package, finish); every call was a fresh tools-disabled session and every call's cost was accounted. The protocol worked; the search itself found no speedup (B0 / c1 / retest 10.441060 / 10.448436 / 10.490263 s). (rsi_infra_execution_20261018/rsi_pilot_v1/D1_PILOT_COMPLETION_V1.md)
-
-## Failure case (real)
-- The second pilot (pilot-2) driver hit 23 consecutive provider 429 responses (calls 11-33); call 34 only reached STARTED, no session end, selection unfrozen, no retest. The known lower bound of spent cost was 132,677 tokens and USD 2.7731617499999994. Lesson: malformed or failed calls cost budget and must be visible; there is no hidden retry, and an exception without a cost receipt closes accounting. Model self-claims also need program checks: a claim that "the AST blocks in-place mutation" was refuted by dict |= and nested-list +=. (rsi_pilot_v1/D2_SEARCH_EXTERNAL_TERMINATION_V1.md; agentic_moe_sft_tech_report_20261018/RSI_TRACK.md 9)
+协议或 schema、状态转换、依赖、失败用例、实际验证结果与未实现能力。遵循 [任务证据规范](../../../docs/task-evidence.md)，不把文档存在写成执行器已支持。

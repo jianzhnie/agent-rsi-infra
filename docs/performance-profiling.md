@@ -45,3 +45,13 @@ vLLM 的 profiler 参数、启停端点和 Proton graph 支持随版本变化，
 方法提炼自 TorchTitan [local_compile_perf](https://github.com/pytorch/torchtitan/blob/72e5566782bbdafaa9bafd422733a307319213c5/.claude/skills/local_compile_perf/SKILL.md)，固定 revision `72e5566782bbdafaa9bafd422733a307319213c5`；许可见[保留的 BSD-3-Clause](../.agents/skills/training-inference-change/references/torchtitan/LICENSE)。未迁入其 local_compile API、案例性能数字、自动提交、并行 Agent 或 PR 排版要求。编译失败仍使用 `pt2-bug-basher` 排障。
 
 CUDA Graph trace 的显示整理见[可视化参考](../.agents/skills/llm-torch-profiler-analysis/references/cuda-graph-trace.md)；整理后的显示泳道不代表原始 stream。
+
+## 本仓离线工具
+
+| 目标 | 入口 | 主要结果 |
+| --- | --- | --- |
+| 训练逐 rank 与流水线诊断 | [autotuner](../autotuner/README.md) | 计算、通信、主机等待、显存和耗时守恒 |
+| 推理 Kernel 融合与重叠调查 | [profiler Skill](../.agents/skills/llm-torch-profiler-analysis/SKILL.md) | Kernel 归属、重叠机会与融合模式 |
+| CUDA Graph 显示整理 | [trace 整理](../.agents/skills/llm-torch-profiler-analysis/references/cuda-graph-trace.md) | 用于查看的新副本，不改变原始证据 |
+
+前两套分析的用途不同，保留独立实现。所有入口只分析已有本地产物；真实采集、模型运行和性能验收由目标项目负责。

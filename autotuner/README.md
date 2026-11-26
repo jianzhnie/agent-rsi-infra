@@ -14,4 +14,4 @@ python3 -m autotuner.profile_analyzer rank 0 --profile-dir <trace-dir>
 
 时间字段沿用既有输出协议：`_us` 为微秒，`_ms` 为毫秒；显存字段 `_gib` 为 GiB。结果描述 trace 中观察到的事件，不能替代完整训练 benchmark 或数值验证。
 
-代码源自 [amazon-science/attune](https://github.com/amazon-science/attune/tree/c07fe30dcf2e16cae0ae47f62d1f857ce2a634b6/skill/scripts/profile_analyzer)，保留源码版权声明。许可与来源声明见 [LICENSE](LICENSE)、[NOTICE](NOTICE) 和 [THIRD_PARTY_NOTICES](THIRD_PARTY_NOTICES)。
+代码源自 [amazon-science/attune](https://github.com/amazon-science/attune/tree/c07fe30dcf2e16cae0ae47f62d1f857ce2a634b6/skill/scripts/profile_analyzer)，保留源码版权声明。本地未保留独立许可与声明文件；固定版本原文见上游 [LICENSE](https://github.com/amazon-science/attune/blob/c07fe30dcf2e16cae0ae47f62d1f857ce2a634b6/LICENSE)、[NOTICE](https://github.com/amazon-science/attune/blob/c07fe30dcf2e16cae0ae47f62d1f857ce2a634b6/NOTICE) 和 [THIRD_PARTY_NOTICES](https://github.com/amazon-science/attune/blob/c07fe30dcf2e16cae0ae47f62d1f857ce2a634b6/THIRD_PARTY_NOTICES)。

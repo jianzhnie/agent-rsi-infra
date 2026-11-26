@@ -1,6 +1,6 @@
 ---
 name: llm-torch-profiler-analysis
-description: 离线分析 LLM 的 PyTorch profiler trace，汇总 Kernel 耗时、潜在重叠与融合模式，支持 SGLang、vLLM、TensorRT-LLM 和 TokenSpeed。用于已有 trace 或 profile 目录诊断，默认不进行在线采集。
+description: 离线分析 LLM 的 PyTorch profiler trace，汇总 Kernel 耗时、潜在重叠与融合模式，支持 SGLang、vLLM、TensorRT-LLM 和 TokenSpeed。用于已有 trace 或 profile 目录诊断，不提供在线采集。
 ---
 
 # LLM Torch Profiler 分析
@@ -28,8 +28,8 @@ python <skill-directory>/scripts/analyze_llm_torch_profile.py triage \
 
 Graph replay 泳道过多或需要合并 PP rank trace 时，读取 [trace 可视化参考](references/cuda-graph-trace.md)。它生成显示副本，不恢复真实 stream，也不替代原始 trace 的分析。
 
-## 在线与历史资源
+## 工作流与验证边界
 
-[上游流程](references/upstream-workflow.md)保留在线采集说明和历史验证上下文；其中机器路径、容器名与固定模型不是本地默认值。附属 `run_*_host.sh`、probe 和 override 脚本可能连接服务、启动进程或写配置；仅在用户明确要求在线采集且目标与资源范围已确定后审查使用，不从离线分析自动切换过去。
+完整输入和结果解读见 [离线工作流](references/upstream-workflow.md)。在线采集由目标框架工具负责，本 Skill 无 URL、服务探测或容器启动入口。
 
-采集开销与正式计时的区分见[性能诊断参考](../../../docs/performance-profiling.md)。来源、许可与适配见 [UPSTREAM.md](UPSTREAM.md)。
+采集开销与正式计时的区分见 [性能诊断参考](../../../docs/performance-profiling.md)。来源、许可与本地改动见 [UPSTREAM.md](UPSTREAM.md)。

@@ -21,7 +21,6 @@
 | model-microbenchmark | [上游适配 Skill](skills/model-microbenchmark/SKILL.md) | 使用 vllm bench forward 测量模型前向 |
 | debug-distributed-hang | [上游适配 Skill](skills/debug-distributed-hang/SKILL.md) | SGLang 多卡挂起、rank 分歧与通信诊断 |
 | llm-torch-profiler-analysis | [上游适配 Skill](skills/llm-torch-profiler-analysis/SKILL.md) | 离线 LLM trace 分析与融合、重叠线索 |
-| mechanical-refactor-verify | [上游适配 Skill](skills/mechanical-refactor-verify/SKILL.md) | 可重放机械变换验证，不替代行为测试 |
 | code-cleanup | [上游适配 Skill](skills/code-cleanup/SKILL.md) | 有证据的代码清理与兼容边界检查 |
 | kernel-organization | [上游适配 Skill](skills/kernel-organization/SKILL.md) | SGLang Kernel 契约、归属与去重 |
 | kl-consistency-test | [上游适配 Skill](skills/kl-consistency-test/SKILL.md) | SGLang prefill/decode 与缓存状态一致性 |
@@ -29,7 +28,7 @@
 | training-inference-change | [共享 Skill](skills/training-inference-change/SKILL.md) | 训练、RL 与推理变更的契约和分层验证 |
 | choose-parallel-layout | [上游适配 Skill](skills/choose-parallel-layout/SKILL.md) | 选择并行布局、微批次与梯度累积 |
 | discover-training-system | [上游适配 Skill](skills/discover-training-system/SKILL.md) | 核对训练硬件、拓扑、有效环境及执行路径 |
-| learn-optimization-skills | [上游适配 Skill](skills/learn-optimization-skills/SKILL.md) | 从可复现任务中提炼候选 Skill 改进 |
+| learn-optimization-skills | [上游适配 Skill](skills/learn-optimization-skills/SKILL.md) | 从可复现任务中提炼候选，经回归与人工评审采用 |
 | manage-memory-lifetimes | [上游适配 Skill](skills/manage-memory-lifetimes/SKILL.md) | 诊断训练 OOM、延迟初始化与恢复内存 |
 | moe-ep-communication | [上游适配 Skill](skills/moe-ep-communication/SKILL.md) | 诊断与优化 MoE 专家布局和通信 |
 | optimize-data-path | [上游适配 Skill](skills/optimize-data-path/SKILL.md) | 优化保持既定数据契约的预取与传输 |
@@ -38,8 +37,7 @@
 | recompute-policy | [上游适配 Skill](skills/recompute-policy/SKILL.md) | 评估激活重计算的内存时间权衡 |
 | validate-training-lifecycle | [上游适配 Skill](skills/validate-training-lifecycle/SKILL.md) | 验证训练保存、恢复与适用的导出路径 |
 | verify-training-semantics | [上游适配 Skill](skills/verify-training-semantics/SKILL.md) | 审查训练优化是否保持约定语义 |
-| weak-model-protocol | [上游适配 Skill](skills/weak-model-protocol/SKILL.md) | 设计受预算约束的结构化模型动作协议 |
-| autotune-training-throughput | [上游适配 Skill](skills/autotune-training-throughput/SKILL.md) | ATTUNE 训练吞吐实验、测量与候选验证 |
+| weak-model-protocol | [上游适配 Skill](skills/weak-model-protocol/SKILL.md) | 实验性动作协议参考；本仓不提供执行器 |
 | context | [脚本](../.claude/hooks/session/context.sh) | 初始化会话，compact/resume 时保留已有记录 |
 | record-event | [脚本](../.claude/hooks/logging/record-event.sh) | 命令、Agent、配置及异常日志 |
 | guard-tool | [脚本](../.claude/hooks/tools/guard-tool.sh) | 工具调用前的补充拦截 |
@@ -73,14 +71,12 @@ Claude 角色适配生成到 `.claude/agents/`，Codex 角色配置生成到 `.c
 | kernel-organization | experimental | [来源与适配](skills/kernel-organization/UPSTREAM.md) | 目标 SGLang；数值/性能验证需相应 GPU |
 | kl-consistency-test | experimental | [来源与适配](skills/kl-consistency-test/UPSTREAM.md) | 目标 SGLang、模型权重和设备 |
 | llm-torch-profiler-analysis | experimental | [来源与适配](skills/llm-torch-profiler-analysis/UPSTREAM.md) | 已有 trace 和分析依赖；离线分析不需 GPU |
-| mechanical-refactor-verify | experimental | [来源与适配](skills/mechanical-refactor-verify/UPSTREAM.md) | Git、Python、目标格式化工具；业务测试按项目 |
 | model-microbenchmark | experimental | [来源与适配](skills/model-microbenchmark/UPSTREAM.md) | CUDA、目标 vLLM、模型权重及足够显存 |
 | model-recipes | experimental | [来源与适配](skills/model-recipes/UPSTREAM.md) | 查询需网络及脚本依赖；部署另需 GPU/权重 |
 | pt2-bug-basher | experimental | [来源与适配](skills/pt2-bug-basher/UPSTREAM.md) | 目标 PyTorch 环境；复现可能需要 GPU |
 | shell-check | active | 本仓维护，revision 与改动见 Git 历史 | Bash、ShellCheck；无需 GPU |
 | training-inference-change | experimental | [来源与适配](skills/training-inference-change/UPSTREAM.md) | 目标训练/推理环境；按契约需要设备与权重 |
 | triton-kernel-writing | experimental | [来源与适配](skills/triton-kernel-writing/UPSTREAM.md) | 目标 GPU、Triton 与 reference |
-
 | choose-parallel-layout | experimental | [来源与适配](skills/choose-parallel-layout/UPSTREAM.md) | 目标训练环境、设备及按需模型/数据；本仓未验证 |
 | discover-training-system | experimental | [来源与适配](skills/discover-training-system/UPSTREAM.md) | 目标训练环境、设备及按需模型/数据；本仓未验证 |
 | learn-optimization-skills | experimental | [来源与适配](skills/learn-optimization-skills/UPSTREAM.md) | 日志/历史产物；真实结论需目标训练环境 |
@@ -126,6 +122,6 @@ Claude 角色适配生成到 `.claude/agents/`，Codex 角色配置生成到 `.c
 
 ## InfraRSI 训练优化资源
 
-全部 12 个 Skill 及负结果目录按固定版本迁入。先读[本地适配边界](skills/_catalogue/infrarsi-adaptation.md)，历史案例见[负结果目录](skills/_catalogue/negative-results.md)。不提供上游 harness 或训练执行服务；许可声明与本地补充文本的区别见[共享来源记录](skills/_catalogue/UPSTREAM.md)。真实客户端版本、GPU/框架任务和最近真实任务验证日期均未记录，保持 experimental。
+12 个训练优化 Skill 按固定版本迁入，来源与本地适配边界由各 Skill 的 UPSTREAM.md 维护。共享负结果目录已移除，不提供上游 harness 或训练执行服务；历史案例不作为本仓实测结果。
 
-ATTUNE Skill 为 experimental：[来源与部署边界](skills/autotune-training-throughput/UPSTREAM.md)。提供离线测量与分析，训练通过目标项目入口执行；真实 GPU、模型及客户端版本未验证。
+ATTUNE 测量参考已合入 profile-whole-update，来源及实验边界统一见 [UPSTREAM.md](skills/profile-whole-update/UPSTREAM.md)。

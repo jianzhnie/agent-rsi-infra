@@ -31,4 +31,4 @@ license: Apache-2.0
 
 本流程不授予安装依赖、使用远程资源、启动服务或发布权限。遵守用户已有授权，不额外复制上游 draft、签名、fork、标题确认或 bot 操作政策。
 
-来源与逐项目落点见 [UPSTREAM.md](UPSTREAM.md) 和[迁移记录](../../../docs/framework-practices.md)。
+来源与逐项目落点见 [UPSTREAM.md](UPSTREAM.md) 和[来源与项目映射](UPSTREAM.md#调研方法的项目映射)。
