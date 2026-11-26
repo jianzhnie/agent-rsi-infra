@@ -52,6 +52,12 @@ def test_bad_samples_are_rejected(samples):
     with pytest.raises(ValueError):
         validate(record)
 
+def test_baseline_and_candidate_must_identify_distinct_revisions():
+    record = sample()
+    record["candidate"]["revision"] = record["baseline"]["revision"]
+    with pytest.raises(ValueError, match="revisions must differ"):
+        validate(record)
+
 
 def test_environment_does_not_accept_arbitrary_environment_variables():
     record = sample()
