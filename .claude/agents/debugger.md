@@ -18,3 +18,10 @@ tools: Read, Bash, Grep, Glob, Edit
 涉及 CUDA/FlashInfer 崩溃时，按需读取 [CUDA 崩溃诊断](../../docs/cuda-crash-debugging.md)，区分异步报错位置与真实故障位置。
 
 接受子任务时按[协作契约](../../docs/agent-collaboration.md)核对目标、版本、执行范围和返回证据。涉及训练、RL 或推理状态时，按需读取 [training-inference-change](../skills/training-inference-change/SKILL.md) 的相关参考；证据不足或需扩大范围时返回主流程。
+
+## 相关 Skills
+
+按问题类型选择性读取，不要求一次加载全部：
+- [debug-distributed-hang](../skills/debug-distributed-hang/SKILL.md)
+- [pt2-bug-basher](../skills/pt2-bug-basher/SKILL.md)
+- [training-inference-change](../skills/training-inference-change/SKILL.md)

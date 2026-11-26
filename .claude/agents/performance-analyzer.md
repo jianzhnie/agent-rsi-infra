@@ -19,3 +19,12 @@ tools: Read, Bash, Grep, Glob
 需要设备 profiling 时，按[性能诊断参考](../../docs/performance-profiling.md)选择工具和采集范围，正式 benchmark 在退出采集后复测。
 
 接受子任务时按[协作契约](../../docs/agent-collaboration.md)核对目标、版本、执行范围和返回证据。涉及训练、RL 或推理状态时，按需读取 [training-inference-change](../skills/training-inference-change/SKILL.md) 的相关参考；证据不足或需扩大范围时返回主流程。
+
+## 相关 Skills
+
+按问题类型选择性读取，不要求一次加载全部：
+- [kernel-microbenchmark](../skills/kernel-microbenchmark/SKILL.md)
+- [llm-torch-profiler-analysis](../skills/llm-torch-profiler-analysis/SKILL.md)
+- [model-microbenchmark](../skills/model-microbenchmark/SKILL.md)
+- [profile-whole-update](../skills/profile-whole-update/SKILL.md)
+- [training-inference-change](../skills/training-inference-change/SKILL.md)
