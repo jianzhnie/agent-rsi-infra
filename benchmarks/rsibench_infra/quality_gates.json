@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "source": "RSIBench-Infra arXiv:2611.24395v1, Appendix 8.1",
+  "task_to_gate": {
+    "glm_52_744b_sglang": "gsm8k_088",
+    "glm_53_744b_sglang": "longbench_v2_100q_256k",
+    "inkling_975b_sglang": "longbench_v2_100q_256k",
+    "kimi_k3_2_8t_sglang": "longbench_v2_100q_256k",
+    "llada_2_1_mini_16b_sglang": "longbench_v2_36q_24k",
+    "qwen3_8_27b_sglang": "longbench_v2_100q_256k",
+    "qwen3_vl_32b_sglang": "mmmu_qwen3vl",
+    "lingbot_world_2_sglang_diffusion": "lingbot_world_frames",
+    "pi05_libero_sglang_diffusion": "pi05_reference_actions",
+    "muse_glimmer_30b_vllm": "longbench_v2_100q_128k",
+    "deepseek_v4_flash_284b_vllm": "longbench_v2_100q_128k",
+    "glm_53_flash_320b_vllm": "gsm8k_0865",
+    "minimax_h3_vllm_omni": "minimax_h3_video_audio",
+    "wan22_ti2v_5b_vllm_omni": "wan22_video",
+    "qwen3_tts_base_17b_vllm_omni": "qwen3_tts_wer",
+    "nemotron_3_ultra_550b_trtllm": "longbench_v2_100q_256k",
+    "qwen3_30b_a3b_grpo_skyrl": "training_curve_64",
+    "mimo_7b_rl_mtp_sft_skyrl": "training_curve_16",
+    "qwen3_8b_32b_opd_verl": "training_curve_8",
+    "qwen3_vl_8b_grpo_verl": "vl_grpo_curve"
+  },
+  "gates": {
+    "longbench_v2_36q_24k": {
+      "kind": "long-context text",
+      "question_count": 36,
+      "context_length": 24576,
+      "acceptance_accuracy": null,
+      "note": "Numeric threshold is task-calibrated and not specified as a universal value in the paper."
+    },
+    "longbench_v2_100q_128k": {
+      "kind": "long-context text",
+      "question_count": 100,
+      "context_length": 131072,
+      "acceptance_accuracy": null,
+      "note": "Supply independently calibrated acceptance_accuracy."
+    },
+    "longbench_v2_100q_256k": {
+      "kind": "long-context text",
+      "question_count": 100,
+      "context_length": 262144,
+      "acceptance_accuracy": null,
+      "note": "Supply independently calibrated acceptance_accuracy."
+    },
+    "gsm8k_088": {
+      "kind": "accuracy",
+      "minimum_accuracy": 0.88
+    },
+    "gsm8k_0865": {
+      "kind": "accuracy",
+      "minimum_accuracy": 0.865
+    },
+    "mmmu_qwen3vl": {
+      "kind": "accuracy deviation",
+      "example_count": 847,
+      "reference_accuracy": 0.7273,
+      "maximum_absolute_deviation": 0.05
+    },
+    "lingbot_world_frames": {
+      "kind": "reference video frames",
+      "chunks": 16,
+      "total_frames": 189,
+      "per_chunk_mae_max": 2,
+      "per_chunk_psnr_min": 35
+    },
+    "pi05_reference_actions": {
+      "kind": "reference robot actions",
+      "cases": 16,
+      "max_absolute_error": 0.05,
+      "mean_absolute_error": 0.01,
+      "note": "Frozen-observation comparison, not closed-loop robot success."
+    },
+    "minimax_h3_video_audio": {
+      "kind": "reference video/audio",
+      "mean_video_lpips_max": 0.2,
+      "audio_spectral_cosine_min": 0.8,
+      "audio_rms_ratio": [
+        0.5,
+        2
+      ]
+    },
+    "wan22_video": {
+      "kind": "reference video",
+      "cases": 4,
+      "mean_framewise_lpips_max": 0.2583455,
+      "worst_frame_lpips_max": 0.31249873,
+      "mean_temporal_difference_mae_max": 0.05224669,
+      "worst_pair_temporal_difference_mae_max": 0.1403157,
+      "motion_ratio": [
+        0.97985323,
+        1.04997272
+      ],
+      "duration_error_seconds_max": 0.001,
+      "frame_timestamp_error_seconds_max": 0.0001
+    },
+    "qwen3_tts_wer": {
+      "kind": "speech WER",
+      "requests": 202,
+      "mean_wer_max": 0.014
+    },
+    "training_curve_64": {
+      "kind": "training replay",
+      "updates": 64,
+      "relative_loss_error_strict_max": 0.02,
+      "relative_grad_norm_error_strict_max": 0.15
+    },
+    "training_curve_16": {
+      "kind": "training replay",
+      "updates": 16,
+      "relative_loss_error_strict_max": 0.02,
+      "relative_grad_norm_error_strict_max": 0.15
+    },
+    "training_curve_8": {
+      "kind": "training replay",
+      "updates": 8,
+      "relative_loss_error_strict_max": 0.02,
+      "relative_grad_norm_error_strict_max": 0.15
+    },
+    "vl_grpo_curve": {
+      "kind": "VLM GRPO replay",
+      "updates": 8,
+      "normalized_error_pass_max": 0.5,
+      "normalized_error_fail_min": 1,
+      "signals": [
+        "total_loss",
+        "gradient_norm",
+        "policy_loss",
+        "kl_loss",
+        "actor_forward_error",
+        "reference_forward_error",
+        "kl_gradient_probe"
+      ]
+    }
+  }
+}
