@@ -327,6 +327,12 @@ def main(argv: list[str] | None = None) -> int:
     aggregate_cmd = commands.add_parser("aggregate")
     aggregate_cmd.add_argument("results", type=Path)
     aggregate_cmd.add_argument("--output", type=Path)
+    quality_cmd = commands.add_parser("verify-quality")
+    quality_cmd.add_argument("task_id")
+    quality_cmd.add_argument("evidence", type=Path)
+    quality_cmd.add_argument("--catalog", type=Path, required=True)
+    quality_cmd.add_argument("--gates", type=Path, required=True)
+    quality_cmd.add_argument("--acceptance-accuracy", type=float)
     run_cmd = commands.add_parser("validate-run")
     run_cmd.add_argument("manifest", type=Path)
     run_cmd.add_argument("--catalog", type=Path, required=True)
@@ -341,6 +347,16 @@ def main(argv: list[str] | None = None) -> int:
             result = inspect_oci_layer(args.archive)
         elif args.command == "score":
             result = score_result(read_json(args.result))
+        elif args.command == "verify-quality":
+            from rsi_bench.quality import evaluate_quality
+            catalog = load_catalog(args.catalog)
+            gates = read_json(args.gates)
+            mapping = gates.get("task_to_gate", {})
+            if args.task_id not in mapping:
+                raise ValueError(f"Unknown task_id: {args.task_id}")
+            result = {"task_id": args.task_id, "gate_id": mapping[args.task_id],
+                      **evaluate_quality(mapping[args.task_id], read_json(args.evidence),
+                                         args.acceptance_accuracy)}
         elif args.command == "aggregate":
             payload = read_json(args.results)
             result = aggregate_results(payload["results"], payload["eligible_task_ids"])
