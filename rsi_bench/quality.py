@@ -195,6 +195,8 @@ def evaluate_quality(gate_id: str, evidence: dict[str, Any],
                 ("reference_forward_error", 0.6, 0.9),
             ):
                 value = _metric(update.get(name), name)
+                if value < 0:
+                    raise ValueError(f"{name} must be a nonnegative error")
                 state = "passed" if value <= passed else "failed" if value >= failed else "inconclusive"
                 checks.append({"metric": name, "update": i, "value": value, "status": state})
                 states.append(state)
