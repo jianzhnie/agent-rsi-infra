@@ -75,6 +75,9 @@ def evaluate_quality(gate_id: str, evidence: dict[str, Any],
         for i, case in enumerate(cases):
             if not isinstance(case, dict):
                 raise ValueError("Wan2.2 case must be an object")
+            for name in ("video_dimensions_match", "video_frame_count_match", "video_frame_rate_match",
+                         "video_encoding_valid", "timestamps_valid"):
+                checks.append({"metric": name, "case": i, "passed": case.get(name) is True})
             for name, (low, high) in limits.items():
                 check = _range(name, case.get(name), low, high)
                 check["case"] = i
@@ -85,6 +88,8 @@ def evaluate_quality(gate_id: str, evidence: dict[str, Any],
             "audio_spectral_cosine_similarity": (0.8, 1.0),
             "audio_rms_amplitude_ratio": (0.5, 2.0),
         }
+        for name in ("video_dimensions_match", "video_frame_count_match", "video_frame_rate_match", "video_encoding_valid"):
+            checks.append({"metric": name, "passed": evidence.get(name) is True})
         for name, (low, high) in limits.items():
             checks.append(_range(name, evidence.get(name), low, high))
         for name in ("audio_sample_rate_matches", "audio_channels_match", "audio_format_valid"):
