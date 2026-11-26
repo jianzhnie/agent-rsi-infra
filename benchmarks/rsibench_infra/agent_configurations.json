@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "source": "RSIBench-Infra arXiv:2611.24395v1, Appendix 9",
+  "shared_policy": {
+    "task_instruction_language": "English",
+    "reasoning_effort": "max",
+    "context_limit_tokens": 1000000,
+    "agent_execution_budget_hours": 8
+  },
+  "configurations": [
+    {
+      "agent_model": "GPT-6 Astra",
+      "agent_surface": "Codex",
+      "formal_tasks": 20
+    },
+    {
+      "agent_model": "Claude Opus 5.5",
+      "agent_surface": "Claude Code",
+      "formal_tasks": 10,
+      "not_run_tasks": [
+        "infer-deepseekv4flash-284b",
+        "infer-glm5p2-744b",
+        "infer-glm5p3-744b",
+        "infer-glm5p3flash-320b",
+        "infer-kimik3-2p8t",
+        "infer-museglimmer-30b",
+        "infer-nemotron3ultra-550a55b",
+        "infer-qwen3p8-27b",
+        "train-qwen3-8b-opd",
+        "train-qwen3vl-4b-grpo"
+      ],
+      "not_run_reason": "API Error 400: safety-policy termination; excluded from Claude aggregate denominator"
+    },
+    {
+      "agent_model": "DeepSeek V4 Flash",
+      "agent_surface": "OpenCode",
+      "formal_tasks": 20
+    },
+    {
+      "agent_model": "GLM-5.3",
+      "agent_surface": "OpenCode",
+      "formal_tasks": 20
+    },
+    {
+      "agent_model": "Qwen3.8-Max",
+      "agent_surface": "OpenCode",
+      "formal_tasks": 20
+    },
+    {
+      "agent_model": "Seed Evolving Auto",
+      "agent_surface": "OpenCode",
+      "formal_tasks": 20
+    },
+    {
+      "agent_model": "Kimi K3",
+      "agent_surface": "OpenCode",
+      "formal_tasks": 20
+    }
+  ]
+}
