@@ -99,13 +99,12 @@ def evaluate_quality(gate_id: str, evidence: dict[str, Any],
             if not isinstance(chunk, dict):
                 raise ValueError("LingBot chunk must be an object")
             checks.extend([
+                {"metric": "frame_count_matches", "case": i, "passed": chunk.get("frame_count_matches") is True},
                 {"metric": "frame_shape_matches", "case": i, "passed": chunk.get("frame_shape_matches") is True},
                 {"metric": "event_id_matches", "case": i, "passed": chunk.get("event_id_matches") is True},
-                _range("mean_absolute_pixel_error", chunk.get("mean_absolute_pixel_error"), 0, 2),
-                _range("psnr_db", chunk.get("psnr_db"), 35, None),
+                {**_range("mean_absolute_pixel_error", chunk.get("mean_absolute_pixel_error"), 0, 2), "case": i},
+                {**_range("psnr_db", chunk.get("psnr_db"), 35, None), "case": i},
             ])
-            checks[-2]["case"] = i
-            checks[-1]["case"] = i
     elif gate_id == "pi05_reference_actions":
         cases = evidence.get("cases")
         if not isinstance(cases, list) or len(cases) != 16:
@@ -113,6 +112,7 @@ def evaluate_quality(gate_id: str, evidence: dict[str, Any],
         for i, case in enumerate(cases):
             if not isinstance(case, dict):
                 raise ValueError("Action case must be an object")
+            checks.append({"metric": "action_shape_matches", "case": i, "passed": case.get("action_shape_matches") is True})
             for name, field, limit in (
                 ("max_absolute_action_error", "max_absolute_error", 0.05),
                 ("mean_absolute_action_error", "mean_absolute_error", 0.01),
@@ -129,7 +129,14 @@ def evaluate_quality(gate_id: str, evidence: dict[str, Any],
         updates = evidence.get("updates")
         if not isinstance(updates, list) or len(updates) != updates_expected:
             raise ValueError(f"Training gate requires exactly {updates_expected} ordered updates")
+        if evidence.get("admission_checks_passed") is not True:
+            raise ValueError("Training replay admission, identity and negative controls must pass")
         for i, update in enumerate(updates):
+            if (update.get("update_index") != i or update.get("finite") is not True
+                    or update.get("masks_match") is not True
+                    or update.get("input_count_matches") is not True
+                    or update.get("optimizer_update_count_matches") is not True):
+                raise ValueError(f"Training update {i} is missing, invalid, reordered or changed its workload contract")
             for candidate, reference, label, limit in (
                 ("candidate_loss", "reference_loss", "relative_loss_error", 0.02),
                 ("candidate_global_grad_norm", "reference_global_grad_norm", "relative_grad_norm_error", 0.15),
@@ -142,6 +149,14 @@ def evaluate_quality(gate_id: str, evidence: dict[str, Any],
         updates = evidence.get("updates")
         if not isinstance(updates, list) or len(updates) != 8:
             raise ValueError("VLM GRPO gate requires eight ordered updates")
+        if evidence.get("admission_checks_passed") is not True:
+            raise ValueError("VLM GRPO admission, identity and negative controls must pass")
+        for i, update in enumerate(updates):
+            if (update.get("update_index") != i or update.get("finite") is not True
+                    or update.get("masks_match") is not True
+                    or update.get("input_count_matches") is not True
+                    or update.get("optimizer_update_count_matches") is not True):
+                raise ValueError(f"VLM GRPO update {i} is missing, invalid, reordered or changed its workload contract")
         families = {
             "total_loss": (0.002, 0.02, 0.01),
             "gradient_norm": (4.0, 0.10, 0.1),
