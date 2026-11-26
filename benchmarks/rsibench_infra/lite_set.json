@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "name": "RSIBench-Infra Lite Set",
+  "hardware": "single NVIDIA H20",
+  "task_ids": [
+    "qwen3_8_27b_sglang",
+    "muse_glimmer_30b_vllm",
+    "qwen3_vl_32b_sglang",
+    "llada_2_1_mini_16b_sglang",
+    "wan22_ti2v_5b_vllm_omni"
+  ],
+  "note": "Paper-defined five-task single-H20 subset; model assets and official recipes are not included."
+}
