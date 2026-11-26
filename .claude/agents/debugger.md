@@ -22,6 +22,6 @@ tools: Read, Bash, Grep, Glob, Edit
 ## 相关 Skills
 
 按问题类型选择性读取，不要求一次加载全部：
-- [debug-distributed-hang](../skills/debug-distributed-hang/SKILL.md)
-- [pt2-bug-basher](../skills/pt2-bug-basher/SKILL.md)
+- [sglang-distributed-hang-debugging](../skills/sglang-distributed-hang-debugging/SKILL.md)
+- [pytorch-compiler-debugging](../skills/pytorch-compiler-debugging/SKILL.md)
 - [training-inference-change](../skills/training-inference-change/SKILL.md)

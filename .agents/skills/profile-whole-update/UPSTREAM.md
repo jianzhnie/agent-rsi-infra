@@ -11,3 +11,5 @@
 ## ATTUNE 测量参考合并
 
 原 autotune-training-throughput 的测量、记录、拓扑与术语参考合并到 references/，取消重复发现入口。来源为 [amazon-science/attune](https://github.com/amazon-science/attune/tree/c07fe30dcf2e16cae0ae47f62d1f857ce2a634b6/skill)，revision c07fe30dcf2e16cae0ae47f62d1f857ce2a634b6，Apache-2.0。中文参考为本地适配，术语沿用上游内容；没有迁入 harness、调度或训练执行工具。许可全文见 [ATTUNE LICENSE](references/ATTUNE_LICENSE)。未经目标训练环境验证，不将上游固定窗口或历史收益当作本仓实测结论。
+
+参考文件命名整理：ledger.md → experiment-records.md。仅调整本地文件名及引用。

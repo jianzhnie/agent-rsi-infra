@@ -113,7 +113,7 @@ vLLM 的 Agent 指令文档明确建议：
 
 | 文件路径 | 作用 | 规范要点 |
 |---|---|---|
-| [`.agents/skills/kernel-organization/SKILL.md`](https://github.com/sgl-project/sglang/blob/main/.agents/skills/kernel-organization/SKILL.md) | Kernel 组织与迁移规范 | 按计算职责分组；统一公共 API；实现去重；规定测试目录；迁移时验证数值和性能 |
+| [`.agents/skills/sglang-kernel-organization/SKILL.md`](https://github.com/sgl-project/sglang/blob/main/.agents/skills/kernel-organization/SKILL.md) | Kernel 组织与迁移规范 | 按计算职责分组；统一公共 API；实现去重；规定测试目录；迁移时验证数值和性能 |
 | [`.agents/skills/`](https://github.com/sgl-project/sglang/tree/main/.agents/skills) | 仓库 Agent Skills | 覆盖 Kernel、测试、运行时等专项任务 |
 | [`docs/AGENTS.md`](https://github.com/sgl-project/sglang/blob/main/docs/AGENTS.md) | SGLang 文档站 Agent 规范 | 不猜 CLI/环境变量/默认值；以代码和权威文档为准；示例需可复制 |
 | [`docs/CONTRIBUTING.md`](https://github.com/sgl-project/sglang/blob/main/docs/CONTRIBUTING.md) | 文档贡献规范 | 主动语态、直接面向读者、短句、先目标后步骤、术语一致、提供示例 |
@@ -180,7 +180,7 @@ Skill 要求新增或优化 Kernel 前先搜索：
 
 ```text
 收到新增 fused attention kernel 需求
-  1. 阅读 kernel-organization Skill、kernels README、test README
+  1. 阅读 sglang-kernel-organization Skill、kernels README、test README
   2. 搜索 registry、Triton、PyTorch、FlashInfer、CUTLASS 等实现
   3. 明确计算契约：输入/输出、dtype、layout、边界行为
   4. 测量现有候选在真实 dispatch shapes 上的延迟

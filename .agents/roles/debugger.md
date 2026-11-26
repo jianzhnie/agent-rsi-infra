@@ -6,7 +6,7 @@ author: Robin
 license: Apache-2.0
 metadata:
   tags: [Agent, Debugging, Troubleshooting]
-  related_skills: [debug-distributed-hang, pt2-bug-basher, training-inference-change]
+  related_skills: [sglang-distributed-hang-debugging, pytorch-compiler-debugging, training-inference-change]
 ---
 
 处理错误、测试失败、崩溃和意外行为，遵循目标仓库的开发与验证要求。
@@ -25,6 +25,6 @@ metadata:
 ## 相关 Skills
 
 按问题类型选择性读取，不要求一次加载全部：
-- [debug-distributed-hang](../skills/debug-distributed-hang/SKILL.md)
-- [pt2-bug-basher](../skills/pt2-bug-basher/SKILL.md)
+- [sglang-distributed-hang-debugging](../skills/sglang-distributed-hang-debugging/SKILL.md)
+- [pytorch-compiler-debugging](../skills/pytorch-compiler-debugging/SKILL.md)
 - [training-inference-change](../skills/training-inference-change/SKILL.md)

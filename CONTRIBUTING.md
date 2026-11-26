@@ -140,11 +140,11 @@ PR 说明先给出具体输入或用户工作流、已有行为与预期行为�
 
 调研文件保留原有核查范围。这里采用工程方法，不将上游某个版本的命令、产品能力或性能数字视为本仓库已经实测的结果。
 
-PyTorch 指令采用固定版本的方法性约定，保留来源；许可见随 PT2 Skill 保留的 [上游 LICENSE](.agents/skills/pt2-bug-basher/LICENSE)。其构建、测试框架与 GitHub 政策不替代本仓库的实际命令和用户授权。
+PyTorch 指令采用固定版本的方法性约定，保留来源；许可见随 PT2 Skill 保留的 [上游 LICENSE](.agents/skills/pytorch-compiler-debugging/LICENSE)。其构建、测试框架与 GitHub 政策不替代本仓库的实际命令和用户授权。
 
 TRL 规范于 2026-11-24 读取，链接指向可变的 `main`。采用其工程方法，不迁入 Trainer 自包含架构、`paper_index.md`、专用测试目录或文档格式，也不采用“为保持一致而复制已知缺陷”的要求。重复逻辑的修复仍以正确性和目标仓库契约为准；测试继续隔离网络与通知。
 
-上述 SGLang 规则采用固定版本的方法提炼，许可见已保留的 [Apache-2.0 全文](.agents/skills/code-cleanup/LICENSE)。不迁入其注释语言限制、测试类别硬门槛、目录布局或统一评测工具要求。
+上述 SGLang 规则采用固定版本的方法提炼，许可见已保留的 [Apache-2.0 全文](.agents/skills/sglang-code-cleanup/LICENSE)。不迁入其注释语言限制、测试类别硬门槛、目录布局或统一评测工具要求。
 
 DeepSpeed checklist 采用固定 commit `039bfc9f3f493ae5bf3f99582b4e4e593660d98d` 的方法性提炼；[上游 Apache-2.0 许可](https://github.com/deepspeedai/DeepSpeed/blob/039bfc9f3f493ae5bf3f99582b4e4e593660d98d/LICENSE)。不采用其代码行数门槛、专用 accelerator/comm API、全量设备验证要求、格式工具或发布操作。
 

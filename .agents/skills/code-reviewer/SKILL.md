@@ -14,7 +14,7 @@ metadata:
 
 1. 先确定用户要求的 diff、PR 或基准版本，读取变更及必要上下文。不要将无关的工作区改动纳入审查。
 2. 阅读目标仓库指令，以及适用的目录级审查规则；路径变更同时考虑新旧位置。
-3. 默认只读取[轻量清单](references/light.md)。用户明确要求 `strict`、严格或深入审查时，只读取[严格清单](references/strict.md)。两份清单各自完整，不叠加加载。
+3. 默认只读取[轻量清单](references/light-review-checklist.md)。用户明确要求 `strict`、严格或深入审查时，只读取[严格清单](references/strict-review-checklist.md)。两份清单各自完整，不叠加加载。
 4. 对疑点追踪调用者、已有测试和契约。深挖后不成立的候选直接丢弃。
 
 ## 报告标准

@@ -18,7 +18,7 @@
 
 ## 典型任务：优化一个 Triton Kernel
 
-1. 阅读目标项目指令、相关实现和调用方，加载 `triton-kernel-writing`；测量时再加载 `kernel-microbenchmark`。若目标为 SGLang，先用 `kernel-organization` 查找相同契约的实现。
+1. 阅读目标项目指令、相关实现和调用方，加载 `triton-kernel-writing`；测量时再加载 `kernel-microbenchmark`。若目标为 SGLang，先用 `sglang-kernel-organization` 查找相同契约的实现。
 2. 固定目标 revision、输入 shape/dtype、设备和优化范围；定义独立 reference、误差容限及边界输入，先约定验收条目。
 3. 运行 baseline 数值测试，再实现候选并重跑相同测试，检查越界、尾块及不支持的输入。
 4. 在相同环境、计时边界和缓存策略下预热并重复测量双方，保留原始样本；profiler 只用于诊断。

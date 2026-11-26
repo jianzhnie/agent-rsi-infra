@@ -1,8 +1,8 @@
 {
-  "add-or-fix-type-checking": {
-    "when_to_use": "按 add-or-fix-type-checking 的 SKILL.md description 和正文选择任务；排除正文未支持的框架与运行模式，不用于无关改动。",
+  "transformers-type-checking": {
+    "when_to_use": "按 transformers-type-checking 的 SKILL.md description 和正文选择任务；排除正文未支持的框架与运行模式，不用于无关改动。",
     "preconditions": "读取目标代码 revision、任务输入与项目指令；依赖、设备和允许操作以该 Skill 正文为准，缺失时报告而非自动安装。",
-    "workflow": "先读取 skills/add-or-fix-type-checking/SKILL.md，只加载其与当前任务相关的附属参考，遵守本地适配和用户授权。",
+    "workflow": "先读取 skills/transformers-type-checking/SKILL.md，只加载其与当前任务相关的附属参考，遵守本地适配和用户授权。",
     "validation": "运行目标 Transformers 的类型检查和受影响测试，报告残余类型错误；不套用到其他类型工具。",
     "deliverables": "交付准确命令、结果、代码版本、日志/产物位置、适用设备及未执行项和原因；纯分析报告证据来源与覆盖范围。"
   },
@@ -13,10 +13,10 @@
     "validation": "逐 rank 内存、进程组合法性、全局 batch 和数据语义不变；完整 update 与数值验证；无环境时列出 not_run/blocked，不以结构验证替代实际结果。",
     "deliverables": "实际命令、双方版本与环境、原始日志/样本、结果与限制、未执行原因；候选改进需人工审查，不自动提交发布。"
   },
-  "code-cleanup": {
-    "when_to_use": "按 code-cleanup 的 SKILL.md description 和正文选择任务；排除正文未支持的框架与运行模式，不用于无关改动。",
+  "sglang-code-cleanup": {
+    "when_to_use": "按 sglang-code-cleanup 的 SKILL.md description 和正文选择任务；排除正文未支持的框架与运行模式，不用于无关改动。",
     "preconditions": "读取目标代码 revision、任务输入与项目指令；依赖、设备和允许操作以该 Skill 正文为准，缺失时报告而非自动安装。",
-    "workflow": "先读取 skills/code-cleanup/SKILL.md，只加载其与当前任务相关的附属参考，遵守本地适配和用户授权。",
+    "workflow": "先读取 skills/sglang-code-cleanup/SKILL.md，只加载其与当前任务相关的附属参考，遵守本地适配和用户授权。",
     "validation": "证明候选非动态注册或公共依赖，执行受影响行为回归；无法证明的删除保留并报告。",
     "deliverables": "交付准确命令、结果、代码版本、日志/产物位置、适用设备及未执行项和原因；纯分析报告证据来源与覆盖范围。"
   },
@@ -27,10 +27,10 @@
     "validation": "保持只读，核对调用路径和实际契约；每项发现给位置、触发条件和后果，未覆盖范围明确说明。",
     "deliverables": "交付准确命令、结果、代码版本、日志/产物位置、适用设备及未执行项和原因；纯分析报告证据来源与覆盖范围。"
   },
-  "debug-distributed-hang": {
-    "when_to_use": "按 debug-distributed-hang 的 SKILL.md description 和正文选择任务；排除正文未支持的框架与运行模式，不用于无关改动。",
+  "sglang-distributed-hang-debugging": {
+    "when_to_use": "按 sglang-distributed-hang-debugging 的 SKILL.md description 和正文选择任务；排除正文未支持的框架与运行模式，不用于无关改动。",
     "preconditions": "读取目标代码 revision、任务输入与项目指令；依赖、设备和允许操作以该 Skill 正文为准，缺失时报告而非自动安装。",
-    "workflow": "先读取 skills/debug-distributed-hang/SKILL.md，只加载其与当前任务相关的附属参考，遵守本地适配和用户授权。",
+    "workflow": "先读取 skills/sglang-distributed-hang-debugging/SKILL.md，只加载其与当前任务相关的附属参考，遵守本地适配和用户授权。",
     "validation": "逐 rank 核对堆栈、进程退出和 collective 顺序；真实设备复现不可用时只报告证据边界。",
     "deliverables": "交付准确命令、结果、代码版本、日志/产物位置、适用设备及未执行项和原因；纯分析报告证据来源与覆盖范围。"
   },
@@ -62,21 +62,21 @@
     "validation": "先 correctness，再同负载基线计时；记录缓存、计时边界、原始样本和硬件，不能外推端到端收益。",
     "deliverables": "交付准确命令、结果、代码版本、日志/产物位置、适用设备及未执行项和原因；纯分析报告证据来源与覆盖范围。"
   },
-  "kernel-organization": {
-    "when_to_use": "按 kernel-organization 的 SKILL.md description 和正文选择任务；排除正文未支持的框架与运行模式，不用于无关改动。",
+  "sglang-kernel-organization": {
+    "when_to_use": "按 sglang-kernel-organization 的 SKILL.md description 和正文选择任务；排除正文未支持的框架与运行模式，不用于无关改动。",
     "preconditions": "读取目标代码 revision、任务输入与项目指令；依赖、设备和允许操作以该 Skill 正文为准，缺失时报告而非自动安装。",
-    "workflow": "先读取 skills/kernel-organization/SKILL.md，只加载其与当前任务相关的附属参考，遵守本地适配和用户授权。",
+    "workflow": "先读取 skills/sglang-kernel-organization/SKILL.md，只加载其与当前任务相关的附属参考，遵守本地适配和用户授权。",
     "validation": "核对目标 SGLang namespace、registry、调用/打包引用与受影响数值测试，其他框架不复制其路径。",
     "deliverables": "交付准确命令、结果、代码版本、日志/产物位置、适用设备及未执行项和原因；纯分析报告证据来源与覆盖范围。"
   },
-  "kl-consistency-test": {
-    "when_to_use": "按 kl-consistency-test 的 SKILL.md description 和正文选择任务；排除正文未支持的框架与运行模式，不用于无关改动。",
+  "sglang-kl-consistency-test": {
+    "when_to_use": "按 sglang-kl-consistency-test 的 SKILL.md description 和正文选择任务；排除正文未支持的框架与运行模式，不用于无关改动。",
     "preconditions": "读取目标代码 revision、任务输入与项目指令；依赖、设备和允许操作以该 Skill 正文为准，缺失时报告而非自动安装。",
-    "workflow": "先读取 skills/kl-consistency-test/SKILL.md，只加载其与当前任务相关的附属参考，遵守本地适配和用户授权。",
+    "workflow": "先读取 skills/sglang-kl-consistency-test/SKILL.md，只加载其与当前任务相关的附属参考，遵守本地适配和用户授权。",
     "validation": "固定后端、样本和 cache 路径，对比 logprob 与尾部误差，区分批量数值差异和状态错误，不随意放宽阈值。",
     "deliverables": "交付准确命令、结果、代码版本、日志/产物位置、适用设备及未执行项和原因；纯分析报告证据来源与覆盖范围。"
   },
-  "learn-optimization-skills": {
+  "improve-optimization-skills": {
     "when_to_use": "从可复现任务证据提炼 Skill 候选，经回归与人工评审采用。",
     "preconditions": "任务契约、代码/Skill/客户端版本、环境与原始证据；读取该 Skill 的 UPSTREAM.md。",
     "workflow": "按 SKILL.md 明确实际接口、条件、失败处理及候选变更；不将上游 harness 接口视为本仓已有能力。",
@@ -97,17 +97,17 @@
     "validation": "逐 rank/时点 allocated/reserved/free、allocator 外内存、第二步与恢复压力；无环境时列出 not_run/blocked，不以结构验证替代实际结果。",
     "deliverables": "实际命令、双方版本与环境、原始日志/样本、结果与限制、未执行原因；候选改进需人工审查，不自动提交发布。"
   },
-  "model-microbenchmark": {
-    "when_to_use": "按 model-microbenchmark 的 SKILL.md description 和正文选择任务；排除正文未支持的框架与运行模式，不用于无关改动。",
+  "vllm-model-microbenchmark": {
+    "when_to_use": "按 vllm-model-microbenchmark 的 SKILL.md description 和正文选择任务；排除正文未支持的框架与运行模式，不用于无关改动。",
     "preconditions": "读取目标代码 revision、任务输入与项目指令；依赖、设备和允许操作以该 Skill 正文为准，缺失时报告而非自动安装。",
-    "workflow": "先读取 skills/model-microbenchmark/SKILL.md，只加载其与当前任务相关的附属参考，遵守本地适配和用户授权。",
+    "workflow": "先读取 skills/vllm-model-microbenchmark/SKILL.md，只加载其与当前任务相关的附属参考，遵守本地适配和用户授权。",
     "validation": "核对版本支持、真实 forward 路径和分布式计时边界，分别报告样本波动与数值覆盖，不代替 serving 测量。",
     "deliverables": "交付准确命令、结果、代码版本、日志/产物位置、适用设备及未执行项和原因；纯分析报告证据来源与覆盖范围。"
   },
-  "model-recipes": {
-    "when_to_use": "按 model-recipes 的 SKILL.md description 和正文选择任务；排除正文未支持的框架与运行模式，不用于无关改动。",
+  "vllm-model-recipes": {
+    "when_to_use": "按 vllm-model-recipes 的 SKILL.md description 和正文选择任务；排除正文未支持的框架与运行模式，不用于无关改动。",
     "preconditions": "读取目标代码 revision、任务输入与项目指令；依赖、设备和允许操作以该 Skill 正文为准，缺失时报告而非自动安装。",
-    "workflow": "先读取 skills/model-recipes/SKILL.md，只加载其与当前任务相关的附属参考，遵守本地适配和用户授权。",
+    "workflow": "先读取 skills/vllm-model-recipes/SKILL.md，只加载其与当前任务相关的附属参考，遵守本地适配和用户授权。",
     "validation": "核对官方配置来源、硬件/拓扑和验证状态，查询不启动服务；改写 recipe 需目标环境验证。",
     "deliverables": "交付准确命令、结果、代码版本、日志/产物位置、适用设备及未执行项和原因；纯分析报告证据来源与覆盖范围。"
   },
@@ -139,10 +139,10 @@
     "validation": "完整计时边界、墙钟、同 rank/step 对照、独立运行与噪声；阶段最大值不可相加；无环境时列出 not_run/blocked，不以结构验证替代实际结果。",
     "deliverables": "实际命令、双方版本与环境、原始日志/样本、结果与限制、未执行原因；候选改进需人工审查，不自动提交发布。"
   },
-  "pt2-bug-basher": {
-    "when_to_use": "按 pt2-bug-basher 的 SKILL.md description 和正文选择任务；排除正文未支持的框架与运行模式，不用于无关改动。",
+  "pytorch-compiler-debugging": {
+    "when_to_use": "按 pytorch-compiler-debugging 的 SKILL.md description 和正文选择任务；排除正文未支持的框架与运行模式，不用于无关改动。",
     "preconditions": "读取目标代码 revision、任务输入与项目指令；依赖、设备和允许操作以该 Skill 正文为准，缺失时报告而非自动安装。",
-    "workflow": "先读取 skills/pt2-bug-basher/SKILL.md，只加载其与当前任务相关的附属参考，遵守本地适配和用户授权。",
+    "workflow": "先读取 skills/pytorch-compiler-debugging/SKILL.md，只加载其与当前任务相关的附属参考，遵守本地适配和用户授权。",
     "validation": "仅显式调用，按目标 PyTorch 编译器问题复现与缩小范围；保存日志和版本，不自动扩大任务。",
     "deliverables": "交付准确命令、结果、代码版本、日志/产物位置、适用设备及未执行项和原因；纯分析报告证据来源与覆盖范围。"
   },
@@ -188,7 +188,7 @@
     "validation": "固定数据/工作量/loss/优化器/精度/参数与计时边界，按目标契约验证；无环境时列出 not_run/blocked，不以结构验证替代实际结果。",
     "deliverables": "实际命令、双方版本与环境、原始日志/样本、结果与限制、未执行原因；候选改进需人工审查，不自动提交发布。"
   },
-  "weak-model-protocol": {
+  "model-action-protocol": {
     "when_to_use": "实验性动作协议设计与审查，不提供执行器或自动优化服务。",
     "preconditions": "任务契约、代码/Skill/客户端版本、环境与原始证据；读取该 Skill 的 UPSTREAM.md。",
     "workflow": "按 SKILL.md 明确实际接口、条件、失败处理及候选变更；不将上游 harness 接口视为本仓已有能力。",

@@ -13,17 +13,17 @@
 | code-reviewer | 给出 base/head 和关注范围：“使用 light 审查该 diff” | 自动修复或没有证据的风格建议 | 位置、触发条件、后果、覆盖边界；无发现也说明范围 |
 | install-skill-from-github | 给出 GitHub Skill URL、固定 commit、目标目录：“审查并迁入完整技能” | 安装 Python 包、执行下载的脚本 | 来源、解析 revision、许可、目标路径、安装结果 |
 | shell-check | 给出脚本或目录：“检查这些 Shell 文件” | 证明脚本业务逻辑正确 | 选中文件、bash -n/shellcheck 命令与逐项结果 |
-| pt2-bug-basher | 给出 PyTorch revision、torch.compile 最小复现及错误：“显式使用此 Skill 排障” | 无复现的泛化编译建议 | 复现、归因实验、失败边界与回归测试 |
-| add-or-fix-type-checking | 给出 Transformers checkout 和类型错误日志：“修复这些类型错误” | 将上游工具约定套用任意项目 | 类型检查及受影响行为测试结果 |
+| pytorch-compiler-debugging | 给出 PyTorch revision、torch.compile 最小复现及错误：“显式使用此 Skill 排障” | 无复现的泛化编译建议 | 复现、归因实验、失败边界与回归测试 |
+| transformers-type-checking | 给出 Transformers checkout 和类型错误日志：“修复这些类型错误” | 将上游工具约定套用任意项目 | 类型检查及受影响行为测试结果 |
 | kernel-microbenchmark | 给出算子、baseline/candidate、shape/dtype、设备：“比较延迟” | 服务端端到端吞吐测试 | reference、数值结果、计时设置、原始样本与环境 |
 | triton-kernel-writing | 给出 Kernel、调用方和 reference：“优化尾块处理” | 无目标代码的性能承诺 | 数值与边界测试、特化限制、性能证据或未测原因 |
-| model-recipes | 给出模型 revision、GPU 型号/数量与目标：“查找适用 vLLM recipe” | 把 recipe 当作已验证性能 | 来源、版本限制、配置建议及未验证项 |
-| model-microbenchmark | 给出 vLLM 版本、模型、并行配置与精确 batch：“比较 forward 延迟” | 单 Kernel 或 serving 吞吐测量 | 实际命令、输入形状、原始样本、模型/环境版本 |
-| debug-distributed-hang | 给出 SGLang revision、各 rank 日志、堆栈和启动配置：“定位首个分歧” | 未经授权终止进程或重启集群 | 时间线、退出/通信/逻辑分歧证据、待验证假设 |
+| vllm-model-recipes | 给出模型 revision、GPU 型号/数量与目标：“查找适用 vLLM recipe” | 把 recipe 当作已验证性能 | 来源、版本限制、配置建议及未验证项 |
+| vllm-model-microbenchmark | 给出 vLLM 版本、模型、并行配置与精确 batch：“比较 forward 延迟” | 单 Kernel 或 serving 吞吐测量 | 实际命令、输入形状、原始样本、模型/环境版本 |
+| sglang-distributed-hang-debugging | 给出 SGLang revision、各 rank 日志、堆栈和启动配置：“定位首个分歧” | 未经授权终止进程或重启集群 | 时间线、退出/通信/逻辑分歧证据、待验证假设 |
 | llm-torch-profiler-analysis | 给出已有 trace、框架版本和采集设置：“离线分析瓶颈” | 默认启动在线采集或把 trace 当 benchmark | Kernel 汇总、重叠线索、采集限制和复核建议 |
-| code-cleanup | 给出疑似死代码、调用与注册路径：“核实后清理” | 仅凭文本搜索无命中删除公共 API | 可达性/注册证据、兼容影响和受影响测试 |
-| kernel-organization | 给出目标 SGLang Kernel API、已有实现及调用方：“确认归属后迁移” | 将 SGLang 路径规范强加其他框架 | 实现清单、放置理由、注册/调用迁移与验证 |
-| kl-consistency-test | 给出模型、prefill/decode 输入、阈值和 logprob：“定位 KL 偏差” | 未定位差异就放宽阈值 | batch 不变性、路径差异实验及阈值依据 |
+| sglang-code-cleanup | 给出疑似死代码、调用与注册路径：“核实后清理” | 仅凭文本搜索无命中删除公共 API | 可达性/注册证据、兼容影响和受影响测试 |
+| sglang-kernel-organization | 给出目标 SGLang Kernel API、已有实现及调用方：“确认归属后迁移” | 将 SGLang 路径规范强加其他框架 | 实现清单、放置理由、注册/调用迁移与验证 |
+| sglang-kl-consistency-test | 给出模型、prefill/decode 输入、阈值和 logprob：“定位 KL 偏差” | 未定位差异就放宽阈值 | batch 不变性、路径差异实验及阈值依据 |
 | flashinfer-add-cuda-kernel | 给出 FlashInfer revision、CUDA 实现、API 契约和设备：“接入此算子” | 一般框架的 Kernel 注册 | FFI/JIT/API/trace 集成、数值与打包检查 |
 | training-inference-change | 给出训练/rollout/推理改动、配置及验收：“选择相关契约并实施” | 普通文档修改或替代专项诊断 | 受影响契约、分层测试、设备/模型限制与结果 |
 
@@ -83,8 +83,8 @@
 | optimize-training-kernels | “评估当前版本融合开关及逐行梯度误差” | 只报告单 Kernel 加速 | reference、数值、精度及模型/完整 update |
 | verify-training-semantics | “核对候选是否保持约定工作量与训练行为” | 套用上游固定容差 | 不变量、实际路径、容差依据与失败项 |
 | validate-training-lifecycle | “比较连续训练与新进程恢复，验证适用的导出” | 加载成功即宣布恢复通过 | 状态、轨迹、峰值和 reload/forward |
-| learn-optimization-skills | “从失败记录提炼带反例的候选规则” | 自动修改全局规则或训练评测标准 | 根因、条件、反例、固定任务对照与待审结论 |
-| weak-model-protocol | “为现有驱动设计动作校验与重试预算” | 自动搭建 runtime 或替换模型 | schema、错误处理、预算记账及验证缺口 |
+| improve-optimization-skills | “从失败记录提炼带反例的候选规则” | 自动修改全局规则或训练评测标准 | 根因、条件、反例、固定任务对照与待审结论 |
+| model-action-protocol | “为现有驱动设计动作校验与重试预算” | 自动搭建 runtime 或替换模型 | schema、错误处理、预算记账及验证缺口 |
 
 历史案例仅作上游研究资料，未在本仓库复现；来源与本地限制见各 Skill 的 UPSTREAM.md。
 

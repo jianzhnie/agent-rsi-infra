@@ -25,6 +25,6 @@ tools: Read, Bash, Grep, Glob
 按问题类型选择性读取，不要求一次加载全部：
 - [kernel-microbenchmark](../skills/kernel-microbenchmark/SKILL.md)
 - [llm-torch-profiler-analysis](../skills/llm-torch-profiler-analysis/SKILL.md)
-- [model-microbenchmark](../skills/model-microbenchmark/SKILL.md)
+- [vllm-model-microbenchmark](../skills/vllm-model-microbenchmark/SKILL.md)
 - [profile-whole-update](../skills/profile-whole-update/SKILL.md)
 - [training-inference-change](../skills/training-inference-change/SKILL.md)

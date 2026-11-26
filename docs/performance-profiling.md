@@ -42,7 +42,7 @@ vLLM 的 profiler 参数、启停端点和 Proton graph 支持随版本变化，
 
 先快速筛选，再在空闲设备和独立新进程中重复确认；分别比较普通 launch 与 CUDA Graph replay，区分主机 launch 开销和设备计算收益。按影响验证 forward/backward、激活重计算及 TP/EP 等组合，确认所有继承配置或 recipe 的影响。失败方案与停止原因也保留，避免重复投入无收益方向；预算和停止阈值由任务约定，不照搬固定百分比。
 
-方法提炼自 TorchTitan [local_compile_perf](https://github.com/pytorch/torchtitan/blob/72e5566782bbdafaa9bafd422733a307319213c5/.claude/skills/local_compile_perf/SKILL.md)，固定 revision `72e5566782bbdafaa9bafd422733a307319213c5`；许可见[保留的 BSD-3-Clause](../.agents/skills/training-inference-change/references/torchtitan/LICENSE)。未迁入其 local_compile API、案例性能数字、自动提交、并行 Agent 或 PR 排版要求。编译失败仍使用 `pt2-bug-basher` 排障。
+方法提炼自 TorchTitan [local_compile_perf](https://github.com/pytorch/torchtitan/blob/72e5566782bbdafaa9bafd422733a307319213c5/.claude/skills/local_compile_perf/SKILL.md)，固定 revision `72e5566782bbdafaa9bafd422733a307319213c5`；许可见[保留的 BSD-3-Clause](../.agents/skills/training-inference-change/references/torchtitan/LICENSE)。未迁入其 local_compile API、案例性能数字、自动提交、并行 Agent 或 PR 排版要求。编译失败仍使用 `pytorch-compiler-debugging` 排障。
 
 CUDA Graph trace 的显示整理见[可视化参考](../.agents/skills/llm-torch-profiler-analysis/references/cuda-graph-trace.md)；整理后的显示泳道不代表原始 stream。
 

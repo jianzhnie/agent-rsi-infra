@@ -10,7 +10,7 @@
 
 向其他项目采用规范时，保留适用的工程要求，替换本仓库的目录导航和检查命令。
 
-GPU 与 vLLM Skills 的依赖在目标项目环境中准备，不加入本仓库开发依赖。`model-microbenchmark` 依赖支持 `vllm bench forward` 的 CUDA 环境；`model-recipes` 查询脚本使用 Bash、jq 和 awk；Kernel 示例的 PyTorch、pandas、FlashInfer、vLLM 与多卡要求见对应 Skill。安装技能不启动模型服务或运行 GPU 任务。
+GPU 与 vLLM Skills 的依赖在目标项目环境中准备，不加入本仓库开发依赖。`vllm-model-microbenchmark` 依赖支持 `vllm bench forward` 的 CUDA 环境；`vllm-model-recipes` 查询脚本使用 Bash、jq 和 awk；Kernel 示例的 PyTorch、pandas、FlashInfer、vLLM 与多卡要求见对应 Skill。安装技能不启动模型服务或运行 GPU 任务。
 
 ## 2. Claude Code
 

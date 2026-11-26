@@ -6,7 +6,7 @@ author: Robin
 license: Apache-2.0
 metadata:
   tags: [Agent, Performance, Optimization]
-  related_skills: [kernel-microbenchmark, llm-torch-profiler-analysis, model-microbenchmark, profile-whole-update, training-inference-change]
+  related_skills: [kernel-microbenchmark, llm-torch-profiler-analysis, vllm-model-microbenchmark, profile-whole-update, training-inference-change]
 ---
 
 分析吞吐量、延迟、内存和资源竞争问题，默认提供诊断与优化建议。
@@ -28,6 +28,6 @@ metadata:
 按问题类型选择性读取，不要求一次加载全部：
 - [kernel-microbenchmark](../skills/kernel-microbenchmark/SKILL.md)
 - [llm-torch-profiler-analysis](../skills/llm-torch-profiler-analysis/SKILL.md)
-- [model-microbenchmark](../skills/model-microbenchmark/SKILL.md)
+- [vllm-model-microbenchmark](../skills/vllm-model-microbenchmark/SKILL.md)
 - [profile-whole-update](../skills/profile-whole-update/SKILL.md)
 - [training-inference-change](../skills/training-inference-change/SKILL.md)

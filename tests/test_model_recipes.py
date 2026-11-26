@@ -8,7 +8,7 @@ from pathlib import Path
 
 SCRIPT = (
     Path(__file__).resolve().parents[1]
-    / ".agents/skills/model-recipes/scripts/read_recipe.sh"
+    / ".agents/skills/vllm-model-recipes/scripts/read_recipe.sh"
 )
 
 

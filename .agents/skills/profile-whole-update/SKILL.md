@@ -63,4 +63,4 @@ metadata:
 
 固定基线、数据/模型版本、工作负载、精度、设备与预算，通过目标项目入口运行实验，按同一协议重复对比候选。任务输入与证据使用 [训练优化模板](../../../docs/templates/training-optimization-task.md) 和 [验证报告](../../../docs/task-evidence.md)。
 
-按需阅读 [测量](references/measurement.md)、[实验记录](references/ledger.md)、[拓扑](references/print_topology.md) 与 [术语](references/glossary.md)。已有 trace 可从本仓根目录运行 python3 -m autotuner.profile_analyzer；依赖和边界见 [工具说明](../../../autotuner/README.md)。这套参考不提供任务运行器、集群调度或自动晋级。
+按需阅读 [测量](references/measurement.md)、[实验记录](references/experiment-records.md)、[拓扑](references/topology.md) 与 [术语](references/glossary.md)。已有 trace 可从本仓根目录运行 python3 -m autotuner.profile_analyzer；依赖和边界见 [工具说明](../../../autotuner/README.md)。这套参考不提供任务运行器、集群调度或自动晋级。
