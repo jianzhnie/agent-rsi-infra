@@ -14,7 +14,7 @@ The code validates the 20-task catalog, the five-task single-H20 Lite Set, OCI a
 
 ## Install and commands
 
-\`\`\`bash
+```bash
 python -m pip install -e '.[dev]'
 python scripts/rsibench_infra.py catalog benchmarks/rsibench_infra/tasks.json --lite-set benchmarks/rsibench_infra/lite_set.json
 python scripts/rsibench_infra.py inspect-submission submit_oci.tar.gz
@@ -22,7 +22,7 @@ python scripts/rsibench_infra.py verify-quality glm_52_744b_sglang quality.json 
 python scripts/rsibench_infra.py validate-run run-manifest.json --catalog benchmarks/rsibench_infra/tasks.json
 python scripts/rsibench_infra.py score result.json --output scored.json
 python scripts/rsibench_infra.py aggregate aggregate.json --output summary.json
-\`\`\`
+```
 
 For LongBench v2, pass --acceptance-accuracy from a separately versioned baseline calibration. The paper describes task-specific acceptance but does not publish a universal numeric threshold; inventing one would invalidate a faithful comparison.
 
