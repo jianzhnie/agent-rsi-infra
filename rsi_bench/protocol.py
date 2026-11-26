@@ -242,6 +242,9 @@ def aggregate_results(rows: list[dict[str, Any]], eligible_task_ids: list[str]) 
     if set(by_id) != set(eligible_task_ids):
         raise ValueError("Results must match the eligible task set exactly")
     ordered = [by_id[task_id] for task_id in eligible_task_ids]
+    agent_models = {_string(row.get("agent_model"), "agent_model") for row in ordered}
+    if len(agent_models) != 1:
+        raise ValueError("Aggregate results must belong to exactly one agent configuration")
     if any(row.get("formal") is not True for row in ordered):
         raise ValueError("Not-run tasks cannot enter the formal denominator")
     speedups = [_number(row.get("speedup"), "speedup", zero=True) for row in ordered]
@@ -249,7 +252,7 @@ def aggregate_results(rows: list[dict[str, Any]], eligible_task_ids: list[str]) 
     if any(score > 1 for score in scores):
         raise ValueError("SOL scores must be in [0, 1]")
     faster = sum(value > 1.10 for value in speedups)
-    return {"eligible_tasks": len(ordered), "faster_count": faster,
+    return {"agent_model": next(iter(agent_models)), "eligible_tasks": len(ordered), "faster_count": faster,
             "faster_rate_percent": 100 * faster / len(ordered),
             "median_speedup": statistics.median(speedups),
             "mean_sol_score": statistics.fmean(scores),
@@ -292,7 +295,7 @@ def validate_run(manifest: dict[str, Any], task: dict[str, Any]) -> dict[str, An
     if set(seen) != set(range(ranks_expected)) or any(value != layer for value in seen.values()):
         raise ValueError("Every deployment rank must use the exact submitted layer digest")
     service = _string(deploy.get("service_id"), "deployment service_id")
-    _string(bench.get("verifier_image_digest"), "verifier image digest")
+    _digest(bench.get("verifier_image_digest"), "verifier image digest")
     if bench.get("candidate_layer_attached") is not False or bench.get("candidate_layer_digest") is not None:
         raise ValueError("Benchmark Job must not receive the candidate layer")
     if bench.get("candidate_layer_mounts") != []:
@@ -353,8 +356,11 @@ def main(argv: list[str] | None = None) -> int:
             catalog = load_catalog(args.catalog)
             gates = read_json(args.gates)
             mapping = gates.get("task_to_gate", {})
-            if args.task_id not in mapping:
+            task_by_id = {row["task_id"]: row for row in catalog["tasks"]}
+            if args.task_id not in task_by_id or args.task_id not in mapping:
                 raise ValueError(f"Unknown task_id: {args.task_id}")
+            if task_by_id[args.task_id]["quality_gate_id"] != mapping[args.task_id]:
+                raise ValueError("Quality-gate map differs from the pinned task catalog")
             result = {"task_id": args.task_id, "gate_id": mapping[args.task_id],
                       **evaluate_quality(mapping[args.task_id], read_json(args.evidence),
                                          args.acceptance_accuracy)}
