@@ -73,6 +73,8 @@ def validate(value):
             "max": max(samples),
             "count": len(samples),
         }
+    if value["baseline"]["revision"] == value["candidate"]["revision"]:
+        raise ValueError("Baseline and candidate revisions must differ")
     encoded = json.dumps(
         environment, sort_keys=True, separators=(",", ":"), ensure_ascii=False
     )
