@@ -10,7 +10,7 @@ time or call count is far above the other stages' is flagged as a stage memory-p
 
 import numpy as np
 
-from autotuner.profile_analyzer import intervals, memory, taxonomy
+from autoresearch.profile_analyzer import intervals, memory, taxonomy
 
 # Function-name keys (lowercased, substring) of cleanup frames, most specific kind first.
 KINDS = (

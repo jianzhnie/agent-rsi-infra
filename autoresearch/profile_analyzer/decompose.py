@@ -7,8 +7,8 @@ wall = compute + comm_exposed + memcpy_exposed + sum(host idle classes) + unattr
 
 import numpy as np
 
-from autotuner.profile_analyzer import comm as communication
-from autotuner.profile_analyzer import intervals, memmgmt, memory, taxonomy
+from autoresearch.profile_analyzer import comm as communication
+from autoresearch.profile_analyzer import intervals, memmgmt, memory, taxonomy
 
 ANALYSIS_VERSION = 10
 MIN_GAP_US = 1000.0  # idle intervals shorter than this are "fine-grained idle"

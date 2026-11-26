@@ -6,7 +6,7 @@ import ast
 
 import numpy as np
 
-from autotuner.profile_analyzer import taxonomy
+from autoresearch.profile_analyzer import taxonomy
 
 
 def _parse_ranks(s):

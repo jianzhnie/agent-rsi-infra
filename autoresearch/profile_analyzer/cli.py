@@ -15,7 +15,7 @@ import traceback
 
 import numpy as np
 
-from autotuner.profile_analyzer import (
+from autoresearch.profile_analyzer import (
     decompose,
     memmgmt,
     memory,

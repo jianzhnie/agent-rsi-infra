@@ -4,7 +4,7 @@
 
 import numpy as np
 
-from autotuner.profile_analyzer import intervals, taxonomy
+from autoresearch.profile_analyzer import intervals, taxonomy
 
 GIB = 1024.0**3
 UNRESERVED_NOTE = (

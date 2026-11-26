@@ -10,7 +10,7 @@ import pytest
 
 np = pytest.importorskip("numpy")
 
-from autotuner.profile_analyzer import (  # noqa: E402 -- numpy is optional outside profiler environments
+from autoresearch.profile_analyzer import (  # noqa: E402 -- numpy is optional outside profiler environments
     cli,
     intervals,
     parse,

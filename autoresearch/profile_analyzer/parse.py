@@ -25,7 +25,7 @@ try:  # optional accelerator
 except ImportError:  # pragma: no cover
     _orjson = None
 
-from autotuner.profile_analyzer import taxonomy
+from autoresearch.profile_analyzer import taxonomy
 
 logger = logging.getLogger(__name__)
 

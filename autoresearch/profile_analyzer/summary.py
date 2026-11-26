@@ -5,7 +5,7 @@
 Measurements only. The "largest bucket" line names the biggest conserved bucket; it is not a diagnosis.
 """
 
-from autotuner.profile_analyzer import memmgmt, memory, taxonomy
+from autoresearch.profile_analyzer import memmgmt, memory, taxonomy
 
 SHORT = {
     "gc": "gc",

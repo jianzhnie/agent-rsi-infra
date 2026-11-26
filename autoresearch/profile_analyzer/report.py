@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 """Text rendering: overview and drill-down subcommands. Measurements only; no verdicts."""
 
-from autotuner.profile_analyzer import memory, pipeline, summary, taxonomy
+from autoresearch.profile_analyzer import memory, pipeline, summary, taxonomy
 
 SHORT = {
     "gc": "gc",
