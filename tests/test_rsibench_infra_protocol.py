@@ -141,7 +141,45 @@ def test_quality_gate_uses_all_reference_video_cases():
         "mean_temporal_difference_mae": 0.04, "worst_pair_temporal_difference_mae": 0.1,
         "motion_magnitude_ratio": 1.0, "absolute_duration_error_seconds": 0.0001,
         "absolute_frame_timestamp_error_seconds": 0.00001,
+        "video_dimensions_match": True, "video_frame_count_match": True,
+        "video_frame_rate_match": True, "video_encoding_valid": True,
+        "timestamps_valid": True,
     }.items()}
     assert evaluate_quality("wan22_video", {"cases": [good.copy() for _ in range(4)]})["passed"]
     good["motion_magnitude_ratio"] = 1.2
     assert not evaluate_quality("wan22_video", {"cases": [good] * 4})["passed"]
+
+
+def test_reference_frame_and_action_gates_require_shape_and_count_contracts():
+    chunks = [{
+        "frame_count_matches": True, "frame_shape_matches": True,
+        "event_id_matches": True, "mean_absolute_pixel_error": 1.0, "psnr_db": 36.0,
+    } for _ in range(16)]
+    good_world = {"chunk_count": 16, "total_frames": 189, "chunks": chunks}
+    assert evaluate_quality("lingbot_world_frames", good_world)["passed"]
+    chunks[3]["frame_count_matches"] = False
+    assert not evaluate_quality("lingbot_world_frames", good_world)["passed"]
+
+    cases = [{
+        "action_shape_matches": True, "max_absolute_error": 0.04, "mean_absolute_error": 0.005,
+    } for _ in range(16)]
+    assert evaluate_quality("pi05_reference_actions", {"cases": cases})["passed"]
+    cases[0]["action_shape_matches"] = False
+    assert not evaluate_quality("pi05_reference_actions", {"cases": cases})["passed"]
+
+
+def test_training_replay_rejects_missing_or_reordered_update_contract():
+    update = {
+        "update_index": 0, "finite": True, "masks_match": True,
+        "input_count_matches": True, "optimizer_update_count_matches": True,
+        "candidate_loss": 1.0, "reference_loss": 1.0,
+        "candidate_global_grad_norm": 2.0, "reference_global_grad_norm": 2.0,
+    }
+    with pytest.raises(ValueError, match="admission"):
+        evaluate_quality("training_curve_16", {"updates": [update] * 16})
+    rows = [dict(update, update_index=i) for i in range(16)]
+    rows[4]["update_index"] = 5
+    with pytest.raises(ValueError, match="reordered"):
+        evaluate_quality("training_curve_16", {
+            "admission_checks_passed": True, "updates": rows,
+        })
