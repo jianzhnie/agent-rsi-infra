@@ -1,0 +1,372 @@
+{
+  "schema_version": 1,
+  "source": {
+    "paper": "RSIBench-Infra: Can Agents Optimize Their Own Training and Inference Infrastructure at Production Scale?",
+    "arxiv": "2611.24395v1",
+    "task_matrix": "Table 1",
+    "throughput_references": "Table 3",
+    "note": "Paper-reported inventory and reference rates only; not measurements from this repository. The public project page announced code as coming soon."
+  },
+  "tasks": [
+    {
+      "task_id": "glm_52_744b_sglang",
+      "kind": "inference",
+      "model": "GLM-5.2 744B",
+      "engine": "SGLang",
+      "workload": "agentic trace, 256k context, 894 requests",
+      "hardware": {
+        "nodes": 2,
+        "devices_per_node": 16,
+        "devices_total": 32,
+        "accelerator": "Ascend 910B2"
+      },
+      "baseline_throughput": 12.9325,
+      "sol_throughput": 658.039,
+      "throughput_unit": "tokens/s",
+      "quality_gate_id": "gsm8k_088",
+      "reference_source": "paper_tables_1_and_3"
+    },
+    {
+      "task_id": "glm_53_744b_sglang",
+      "kind": "inference",
+      "model": "GLM-5.3 744B",
+      "engine": "SGLang",
+      "workload": "agentic trace, 256k context, 894 requests",
+      "hardware": {
+        "nodes": 2,
+        "devices_per_node": 8,
+        "devices_total": 16,
+        "accelerator": "NVIDIA H20"
+      },
+      "baseline_throughput": 113.4608,
+      "sol_throughput": 378.2019,
+      "throughput_unit": "tokens/s",
+      "quality_gate_id": "longbench_v2_100q_256k",
+      "reference_source": "paper_tables_1_and_3"
+    },
+    {
+      "task_id": "inkling_975b_sglang",
+      "kind": "inference",
+      "model": "Inkling 975B",
+      "engine": "SGLang",
+      "workload": "agentic trace, 256k context, 894 requests",
+      "hardware": {
+        "nodes": 1,
+        "devices_per_node": 8,
+        "devices_total": 8,
+        "accelerator": "NVIDIA H20"
+      },
+      "baseline_throughput": 104.37,
+      "sol_throughput": 586.6227,
+      "throughput_unit": "tokens/s",
+      "quality_gate_id": "longbench_v2_100q_256k",
+      "reference_source": "paper_tables_1_and_3"
+    },
+    {
+      "task_id": "kimi_k3_2_8t_sglang",
+      "kind": "inference",
+      "model": "Kimi K3 2.8T",
+      "engine": "SGLang",
+      "workload": "agentic trace, 256k context, 894 requests",
+      "hardware": {
+        "nodes": 4,
+        "devices_per_node": 8,
+        "devices_total": 32,
+        "accelerator": "NVIDIA H20"
+      },
+      "baseline_throughput": 26.2467,
+      "sol_throughput": 201.4855,
+      "throughput_unit": "tokens/s",
+      "quality_gate_id": "longbench_v2_100q_256k",
+      "reference_source": "paper_tables_1_and_3"
+    },
+    {
+      "task_id": "llada_2_1_mini_16b_sglang",
+      "kind": "inference",
+      "model": "LLaDA2.1-mini 16B",
+      "engine": "SGLang",
+      "workload": "agentic trace, 32k context, 140 requests",
+      "hardware": {
+        "nodes": 1,
+        "devices_per_node": 1,
+        "devices_total": 1,
+        "accelerator": "NVIDIA H20"
+      },
+      "baseline_throughput": 92.7092,
+      "sol_throughput": 642.2889,
+      "throughput_unit": "tokens/s",
+      "quality_gate_id": "longbench_v2_36q_24k",
+      "reference_source": "paper_tables_1_and_3"
+    },
+    {
+      "task_id": "qwen3_8_27b_sglang",
+      "kind": "inference",
+      "model": "Qwen3.8 27B",
+      "engine": "SGLang",
+      "workload": "agentic trace, 256k context, 894 requests",
+      "hardware": {
+        "nodes": 1,
+        "devices_per_node": 1,
+        "devices_total": 1,
+        "accelerator": "NVIDIA H20"
+      },
+      "baseline_throughput": 108.9275,
+      "sol_throughput": 300.2242,
+      "throughput_unit": "tokens/s",
+      "quality_gate_id": "longbench_v2_100q_256k",
+      "reference_source": "paper_tables_1_and_3"
+    },
+    {
+      "task_id": "qwen3_vl_32b_sglang",
+      "kind": "inference",
+      "model": "Qwen3-VL 32B",
+      "engine": "SGLang",
+      "workload": "32 synthetic 1080p JPEG requests",
+      "hardware": {
+        "nodes": 1,
+        "devices_per_node": 1,
+        "devices_total": 1,
+        "accelerator": "NVIDIA H20"
+      },
+      "baseline_throughput": 106.0794,
+      "sol_throughput": 301.4007,
+      "throughput_unit": "tokens/s",
+      "quality_gate_id": "mmmu_qwen3vl",
+      "reference_source": "paper_tables_1_and_3"
+    },
+    {
+      "task_id": "lingbot_world_2_sglang_diffusion",
+      "kind": "inference",
+      "model": "LingBot-World 2.0 14B",
+      "engine": "SGLang Diffusion",
+      "workload": "832x480 at 16fps; 16 chunks / 189 frames",
+      "hardware": {
+        "nodes": 1,
+        "devices_per_node": 8,
+        "devices_total": 8,
+        "accelerator": "NVIDIA H20"
+      },
+      "baseline_throughput": 7.542,
+      "sol_throughput": 10.7843,
+      "throughput_unit": "frames/s",
+      "quality_gate_id": "lingbot_world_frames",
+      "reference_source": "paper_tables_1_and_3"
+    },
+    {
+      "task_id": "pi05_libero_sglang_diffusion",
+      "kind": "inference",
+      "model": "pi0.5-LIBERO 3.3B",
+      "engine": "SGLang Diffusion",
+      "workload": "LIBERO frozen reference observations, 16x3",
+      "hardware": {
+        "nodes": 1,
+        "devices_per_node": 1,
+        "devices_total": 1,
+        "accelerator": "NVIDIA H20"
+      },
+      "baseline_throughput": 2.7078,
+      "sol_throughput": 31.2171,
+      "throughput_unit": "action_chunks/s",
+      "quality_gate_id": "pi05_reference_actions",
+      "reference_source": "paper_tables_1_and_3"
+    },
+    {
+      "task_id": "muse_glimmer_30b_vllm",
+      "kind": "inference",
+      "model": "Muse-Glimmer 30B",
+      "engine": "vLLM",
+      "workload": "agentic trace, 128k context, 936 requests",
+      "hardware": {
+        "nodes": 1,
+        "devices_per_node": 1,
+        "devices_total": 1,
+        "accelerator": "NVIDIA H20"
+      },
+      "baseline_throughput": 47.8075,
+      "sol_throughput": 71.1419,
+      "throughput_unit": "tokens/s",
+      "quality_gate_id": "longbench_v2_100q_128k",
+      "reference_source": "paper_tables_1_and_3"
+    },
+    {
+      "task_id": "deepseek_v4_flash_284b_vllm",
+      "kind": "inference",
+      "model": "DeepSeek V4 Flash 284B",
+      "engine": "vLLM",
+      "workload": "agentic trace, 64k context, 193 requests",
+      "hardware": {
+        "nodes": 1,
+        "devices_per_node": 8,
+        "devices_total": 8,
+        "accelerator": "Ascend 910B2"
+      },
+      "baseline_throughput": 160.6205,
+      "sol_throughput": 1083.4008,
+      "throughput_unit": "tokens/s",
+      "quality_gate_id": "longbench_v2_100q_128k",
+      "reference_source": "paper_tables_1_and_3"
+    },
+    {
+      "task_id": "glm_53_flash_320b_vllm",
+      "kind": "inference",
+      "model": "GLM-5.3-Flash 320B",
+      "engine": "vLLM",
+      "workload": "agentic trace, 256k context, 894 requests",
+      "hardware": {
+        "nodes": 2,
+        "devices_per_node": 8,
+        "devices_total": 16,
+        "accelerator": "Ascend 910B2"
+      },
+      "baseline_throughput": 4.885,
+      "sol_throughput": 176.8834,
+      "throughput_unit": "tokens/s",
+      "quality_gate_id": "gsm8k_0865",
+      "reference_source": "paper_tables_1_and_3"
+    },
+    {
+      "task_id": "minimax_h3_vllm_omni",
+      "kind": "inference",
+      "model": "MiniMax-H3 64B",
+      "engine": "vLLM-Omni",
+      "workload": "672x384 video, 107 frames; synchronized audio",
+      "hardware": {
+        "nodes": 1,
+        "devices_per_node": 2,
+        "devices_total": 2,
+        "accelerator": "NVIDIA H20"
+      },
+      "baseline_throughput": 202.7969,
+      "sol_throughput": 301.533,
+      "throughput_unit": "videos/hour",
+      "quality_gate_id": "minimax_h3_video_audio",
+      "reference_source": "paper_tables_1_and_3"
+    },
+    {
+      "task_id": "wan22_ti2v_5b_vllm_omni",
+      "kind": "inference",
+      "model": "Wan2.2 TI2V 5B",
+      "engine": "vLLM-Omni",
+      "workload": "1280x704, 121 frames, 24fps; four prompt-seed pairs",
+      "hardware": {
+        "nodes": 1,
+        "devices_per_node": 1,
+        "devices_total": 1,
+        "accelerator": "NVIDIA H20"
+      },
+      "baseline_throughput": 6.628,
+      "sol_throughput": 10.2098,
+      "throughput_unit": "videos/hour",
+      "quality_gate_id": "wan22_video",
+      "reference_source": "paper_tables_1_and_3"
+    },
+    {
+      "task_id": "qwen3_tts_base_17b_vllm_omni",
+      "kind": "inference",
+      "model": "Qwen3-TTS Base 1.7B",
+      "engine": "vLLM-Omni",
+      "workload": "Seed-TTS Chinese fixed set, 202 requests",
+      "hardware": {
+        "nodes": 1,
+        "devices_per_node": 1,
+        "devices_total": 1,
+        "accelerator": "NVIDIA H20"
+      },
+      "baseline_throughput": 9.8315,
+      "sol_throughput": 47.5556,
+      "throughput_unit": "reference-audio-seconds/s",
+      "quality_gate_id": "qwen3_tts_wer",
+      "reference_source": "paper_tables_1_and_3"
+    },
+    {
+      "task_id": "nemotron_3_ultra_550b_trtllm",
+      "kind": "inference",
+      "model": "Nemotron 3 Ultra 550B",
+      "engine": "TensorRT-LLM",
+      "workload": "agentic trace, 256k context, 894 requests",
+      "hardware": {
+        "nodes": 1,
+        "devices_per_node": 8,
+        "devices_total": 8,
+        "accelerator": "NVIDIA H20"
+      },
+      "baseline_throughput": 26.6906,
+      "sol_throughput": 136.2664,
+      "throughput_unit": "tokens/s",
+      "quality_gate_id": "longbench_v2_100q_256k",
+      "reference_source": "paper_tables_1_and_3"
+    },
+    {
+      "task_id": "qwen3_30b_a3b_grpo_skyrl",
+      "kind": "training",
+      "model": "Qwen3-30B-A3B GRPO",
+      "engine": "SkyRL / Megatron",
+      "workload": "DAPO-Math17K; 512x8; 64 optimizer updates",
+      "hardware": {
+        "nodes": 1,
+        "devices_per_node": 8,
+        "devices_total": 8,
+        "accelerator": "NVIDIA H20"
+      },
+      "baseline_throughput": 5.888738,
+      "sol_throughput": 16.160189,
+      "throughput_unit": "workload-steps/hour",
+      "quality_gate_id": "training_curve_64",
+      "reference_source": "paper_tables_1_and_3"
+    },
+    {
+      "task_id": "mimo_7b_rl_mtp_sft_skyrl",
+      "kind": "training",
+      "model": "MiMo 7B-RL MTP SFT",
+      "engine": "SkyRL",
+      "workload": "GSM8K 64 examples; 16 updates; MTP active",
+      "hardware": {
+        "nodes": 1,
+        "devices_per_node": 8,
+        "devices_total": 8,
+        "accelerator": "NVIDIA H20"
+      },
+      "baseline_throughput": 1472.25606,
+      "sol_throughput": 2228.113649,
+      "throughput_unit": "training-steps/hour",
+      "quality_gate_id": "training_curve_16",
+      "reference_source": "paper_tables_1_and_3"
+    },
+    {
+      "task_id": "qwen3_8b_32b_opd_verl",
+      "kind": "training",
+      "model": "Qwen3 8B/32B OPD",
+      "engine": "VeRL",
+      "workload": "GSM8K + MATH; replay frozen rollout logprobs; 8 updates",
+      "hardware": {
+        "nodes": 2,
+        "devices_per_node": 8,
+        "devices_total": 16,
+        "accelerator": "NVIDIA H20"
+      },
+      "baseline_throughput": 53.765306,
+      "sol_throughput": 78.768159,
+      "throughput_unit": "training-steps/hour",
+      "quality_gate_id": "training_curve_8",
+      "reference_source": "paper_tables_1_and_3"
+    },
+    {
+      "task_id": "qwen3_vl_8b_grpo_verl",
+      "kind": "training",
+      "model": "Qwen3-VL 8B GRPO",
+      "engine": "VeRL",
+      "workload": "Geo3K; 512x5; two frozen batches and eight updates",
+      "hardware": {
+        "nodes": 1,
+        "devices_per_node": 8,
+        "devices_total": 8,
+        "accelerator": "NVIDIA H20"
+      },
+      "baseline_throughput": 4.509013,
+      "sol_throughput": 7.375054,
+      "throughput_unit": "training-steps/hour",
+      "quality_gate_id": "vl_grpo_curve",
+      "reference_source": "paper_tables_1_and_3"
+    }
+  ]
+}
