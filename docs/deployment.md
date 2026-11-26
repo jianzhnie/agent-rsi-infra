@@ -16,7 +16,7 @@ GPU 与 vLLM Skills 的依赖在目标项目环境中准备，不加入本仓库
 
 - 根 `CLAUDE.md` 使用 `@AGENTS.md` 导入共享指令。
 - `.claude/skills` 链接到 `../.agents/skills`，共享技能与其附属资源，包括可执行的 Shell 检查脚本。
-- `.claude/agents/` 是 Claude 格式的生成适配；通用角色正文维护在 `.agents/agents/`。
+- `.claude/agents/` 是 Claude 格式的生成适配；通用角色正文维护在 `.agents/roles/`。
 
 可选 Hooks 和状态栏的步骤：
 
@@ -51,7 +51,7 @@ CI 使用显式 `--check` 入口验证 Linux 与 macOS；实际客户端加载�
 
 ## 6. 维护
 
-共享开发指令维护在根目录 `AGENTS.md`，Python 检查以 `pyproject.toml` 为准。资源索引维护在 `.agents/README.md`，角色与 Skills 分别维护在 `.agents/agents/` 和 `.agents/skills/`，Claude Hooks 与设置维护在 `.claude/`，测试维护在 `tests/`。
+共享开发指令维护在根目录 `AGENTS.md`，Python 检查以 `pyproject.toml` 为准。资源索引维护在 `.agents/README.md`，角色与 Skills 分别维护在 `.agents/roles/` 和 `.agents/skills/`，Claude Hooks 与设置维护在 `.claude/`，测试维护在 `tests/`。
 
 变更公共路径时同步更新客户端入口、索引和测试。升级客户端或启用新的配置项时，重新检查实际加载行为。
 
@@ -61,7 +61,7 @@ CI 使用显式 `--check` 入口验证 Linux 与 macOS；实际客户端加载�
 
 ## 角色适配维护
 
-`.agents/agents/*.md` 只保存 name、description、署名、许可及职责正文，不包含客户端工具名、模型或权限字段。修改后运行 `python3 scripts/sync_agents.py`，提交共享源文件与两端生成结果；`--check` 检查是否同步。生成器只管理角色配置，不修改 Claude 活动设置或用户级 Codex 配置。
+`.agents/roles/*.md` 只保存 name、description、署名、许可及职责正文，不包含客户端工具名、模型或权限字段。修改后运行 `python3 scripts/sync_agents.py`，提交共享源文件与两端生成结果；`--check` 检查是否同步。生成器只管理角色配置，不修改 Claude 活动设置或用户级 Codex 配置。
 
 将适配用于其他项目时保持共享参考路径，检查目标客户端支持的配置格式；合并 `.codex/config.toml` 的角色表到已有配置，不直接覆盖。角色可用不等于自动委派已获授权；工具与 sandbox 是客户端边界，Bash 工具列表也不是完整的只读保障。
 

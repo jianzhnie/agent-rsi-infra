@@ -52,7 +52,7 @@ flowchart TD
 | 客户端入口 | [CLAUDE.md](../CLAUDE.md)、[GEMINI.md](../GEMINI.md) | 导入共享指令，说明客户端适配边界 |
 | 任务选择 | [组件与 Skill 路由](component-skills.md) | 按任务和目标框架选择资源 |
 | 执行方法 | `.agents/skills/<name>/SKILL.md` | 任务输入、关键操作、验证和交付要求 |
-| 角色分工 | `.agents/agents/` | 通用调试与性能分析角色 |
+| 角色分工 | `.agents/roles/` | 通用调试与性能分析角色 |
 | 自动化 | `scripts/`、`.claude/hooks/` | 可重复检查、事件处理与可选通知 |
 | 验证 | `tests/`、`.github/workflows/` | 资源布局、脚本行为和持续检查 |
 | 领域知识 | `docs/` | 工程实践、诊断参考与调研依据 |
@@ -68,7 +68,7 @@ agent-rsi-infra/
 ├── CONTRIBUTING.md            # 贡献与改进流程
 ├── .agents/
 │   ├── README.md              # 资源索引
-│   ├── agents/                # 通用角色源文件
+│   ├── roles/                 # 通用角色源文件
 │   └── skills/                # 共享技能及附属资源
 ├── .codex/                    # Codex 角色注册与生成配置
 ├── .claude/

@@ -52,7 +52,7 @@ class LayoutTests(unittest.TestCase):
             "../.claude/settings.example.json",
             "../.claude/scripts/status-line.sh",
         }
-        for folder in ("agents",):
+        for folder in ("roles",):
             expected.update(
                 str(p.relative_to(ROOT / ".agents"))
                 for p in (ROOT / ".agents" / folder).glob("*.md")
@@ -74,7 +74,7 @@ class LayoutTests(unittest.TestCase):
         self.assertFalse((AGENT / "agents").is_symlink())
         for path, content in outputs.items():
             self.assertEqual(path.read_text(), content, str(path))
-        sources = {p.stem for p in (ROOT / ".agents/agents").glob("*.md")}
+        sources = {p.stem for p in (ROOT / ".agents/roles").glob("*.md")}
         self.assertEqual(sources, {p.stem for p in (AGENT / "agents").glob("*.md")})
         self.assertEqual(
             sources, {p.stem for p in (ROOT / ".codex/agents").glob("*.toml")}
@@ -83,7 +83,7 @@ class LayoutTests(unittest.TestCase):
     def test_role_description_with_colon_remains_yaml_string(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            source = root / ".agents/agents/debugger.md"
+            source = root / ".agents/roles/debugger.md"
             source.parent.mkdir(parents=True)
             source.write_text(
                 '---\nname: debugger\ndescription: Inspect: "failure"\n---\n\nDebug.\n'
@@ -119,7 +119,7 @@ class LayoutTests(unittest.TestCase):
         for doc in [
             ROOT / "README.md",
             ROOT / ".agents/README.md",
-            *sorted((ROOT / ".agents/agents").glob("*.md")),
+            *sorted((ROOT / ".agents/roles").glob("*.md")),
             ROOT / "AGENTS.md",
             ROOT / "CONTRIBUTING.md",
             *sorted((ROOT / ".agents/skills").rglob("*.md")),

@@ -24,8 +24,8 @@
 
 | 任务 | 入口 | 返回结果与边界 |
 | --- | --- | --- |
-| 错误、失败或状态异常 | [debugger](../.agents/agents/debugger.md) | 复现、首个异常、根因与范围内修复；无法复现时明确缺失条件 |
-| 延迟、吞吐或资源退化 | [performance-analyzer](../.agents/agents/performance-analyzer.md) | 实测瓶颈、假设、建议和受影响配置；默认分析，不以预测代替收益 |
+| 错误、失败或状态异常 | [debugger](../.agents/roles/debugger.md) | 复现、首个异常、根因与范围内修复；无法复现时明确缺失条件 |
+| 延迟、吞吐或资源退化 | [performance-analyzer](../.agents/roles/performance-analyzer.md) | 实测瓶颈、假设、建议和受影响配置；默认分析，不以预测代替收益 |
 | 训练、RL、推理行为变更 | [training-inference-change](../.agents/skills/training-inference-change/SKILL.md) | 主流程使用的执行方法，按任务读取参考，不额外创建平行规范 |
 | 独立审查 | [code-reviewer](../.agents/skills/code-reviewer/SKILL.md) | 只读、可定位的问题与覆盖限制，不代替作者实施或批准 |
 

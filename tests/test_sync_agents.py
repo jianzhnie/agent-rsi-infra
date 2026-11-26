@@ -18,7 +18,7 @@ class AgentAdapterSyncTests(unittest.TestCase):
         scripts = self.project / "scripts"
         scripts.mkdir()
         shutil.copyfile(ROOT / "scripts/sync_agents.py", scripts / "sync_agents.py")
-        self.source_dir = self.project / ".agents/agents"
+        self.source_dir = self.project / ".agents/roles"
         self.source_dir.mkdir(parents=True)
         self.source = self.source_dir / "sample-role.md"
         self.source.write_text(

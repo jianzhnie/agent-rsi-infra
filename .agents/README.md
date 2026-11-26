@@ -1,6 +1,8 @@
 # Agent 资源索引
 
-这里集中索引角色、共享 Skills 与 Claude 适配资源。共享指令见根目录 `AGENTS.md`。角色源文件位于 `agents/`，采用通用 Markdown 与元数据；Skills 位于 `skills/`。
+这里集中索引角色、共享 Skills 与 Claude 适配资源。共享指令见根目录 `AGENTS.md`。角色源文件位于 `roles/`，采用通用 Markdown 与元数据；Skills 位于 `skills/`。
+
+`roles/` 定义角色职责；`skills/` 定义可复用任务流程，并保留客户端约定的技能发现路径。客户端专用角色目录仍使用 `.claude/agents/` 和 `.codex/agents/`。
 
 ## 资源索引
 
@@ -9,8 +11,8 @@
 | 名称 | 文件 | 用途 |
 | --- | --- | --- |
 | code-reviewer | [共享 Skill](skills/code-reviewer/SKILL.md) | 默认 light、按需 strict，只读报告有证据的问题 |
-| debugger | [角色](agents/debugger.md) | 复现、定位和修复问题 |
-| performance-analyzer | [角色](agents/performance-analyzer.md) | 根据性能测量分析瓶颈 |
+| debugger | [角色](roles/debugger.md) | 复现、定位和修复问题 |
+| performance-analyzer | [角色](roles/performance-analyzer.md) | 根据性能测量分析瓶颈 |
 | install-skill-from-github | [共享 Skill](skills/install-skill-from-github/SKILL.md) | GitHub Skill 迁入、许可与来源记录 |
 | shell-check | [共享 Skill](skills/shell-check/SKILL.md) | 可执行 Shell 检查与结果汇总 |
 | pt2-bug-basher | [上游适配 Skill](skills/pt2-bug-basher/SKILL.md) | 显式调用的 PyTorch 2 编译器排障流程 |

@@ -4,7 +4,7 @@
 
 ## 目录与事实来源
 
-- `.agents/README.md`：资源索引；`.agents/agents/`：通用角色源文件。
+- `.agents/README.md`：资源索引；`.agents/roles/`：通用角色源文件。
 - `.agents/skills/`：共享 Skills，保留技能名、署名、许可和附属资源。
 - `.codex/`：Codex 专用角色注册与生成适配。
 - `.claude/`：Claude 专用角色适配、Skills 链接、Hooks、脚本与配置示例。
