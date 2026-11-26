@@ -24,6 +24,9 @@ classifiers = [
 ]
 dependencies = []
 
+[project.scripts]
+rsibench-infra = "rsi_bench.protocol:main"
+
 [project.optional-dependencies]
 profiler = ["numpy>=1.24"]
 dev = [
@@ -39,6 +42,7 @@ Homepage = "https://github.com/jianzhnie/agent-rsi-infra"
 [tool.setuptools]
 # This distribution installs development dependencies; resources are used from Git.
 py-modules = []
+packages = ["rsi_bench"]
 
 [tool.ruff]
 required-version = "==0.15.12"
