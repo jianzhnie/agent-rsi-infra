@@ -50,7 +50,7 @@ CUDA Graph trace 的显示整理见[可视化参考](../.agents/skills/llm-torch
 
 | 目标 | 入口 | 主要结果 |
 | --- | --- | --- |
-| 训练逐 rank 与流水线诊断 | [autotuner](../autotuner/README.md) | 计算、通信、主机等待、显存和耗时守恒 |
+| 训练逐 rank 与流水线诊断 | [autoresearch](../autoresearch/README.md) | 计算、通信、主机等待、显存和耗时守恒 |
 | 推理 Kernel 融合与重叠调查 | [profiler Skill](../.agents/skills/llm-torch-profiler-analysis/SKILL.md) | Kernel 归属、重叠机会与融合模式 |
 | CUDA Graph 显示整理 | [trace 整理](../.agents/skills/llm-torch-profiler-analysis/references/cuda-graph-trace.md) | 用于查看的新副本，不改变原始证据 |
 

@@ -26,6 +26,20 @@ class CheckFlowTests(unittest.TestCase):
         (scripts / "check_skills.py").write_text(
             "print('Skill verification completed')\n"
         )
+        shutil.copyfile(ROOT / "scripts/sync_agents.py", scripts / "sync_agents.py")
+        roles = self.project / ".agents/roles"
+        roles.mkdir(parents=True)
+        self.role = roles / "sample-role.md"
+        self.role.write_text(
+            "---\nname: sample-role\ndescription: Sample role\n---\n\nInitial instructions.\n"
+        )
+        subprocess.run(
+            [sys.executable, str(scripts / "sync_agents.py")],
+            cwd=self.project,
+            check=True,
+            capture_output=True,
+            timeout=10,
+        )
         self.source = scripts / "example.py"
         self.source.write_text("value=1\n")
         tests = self.project / "tests"
@@ -182,6 +196,26 @@ class CheckFlowTests(unittest.TestCase):
         )
         self.assertEqual(dependency_version, required_version)
         self.assertEqual(hook_revision, f"v{dependency_version}")
+
+    def test_adapter_check_reports_stale_output_without_regenerating(self) -> None:
+        """Changing a shared role must fail its check until adapters are regenerated."""
+        adapter = self.project / ".claude/agents/sample-role.md"
+        original = adapter.read_bytes()
+        self.role.write_text(self.role.read_text().replace("Initial", "Updated"))
+        result = self.run_checks("--only", "adapters", "--json", "adapters.json")
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("Stale agent adapters", result.stderr)
+        self.assertEqual(adapter.read_bytes(), original)
+        report = json.loads((self.project / "adapters.json").read_text())
+        self.assertEqual(report["results"][0]["name"], "adapters")
+        self.assertEqual(report["results"][0]["status"], "failed")
+        subprocess.run(
+            [sys.executable, str(self.project / "scripts/sync_agents.py")],
+            check=True,
+            capture_output=True,
+            timeout=10,
+        )
+        self.assertEqual(self.run_checks("--only", "adapters").returncode, 0)
 
     def test_missing_shellcheck_is_blocked(self) -> None:
         (self.bin / "shellcheck").unlink()

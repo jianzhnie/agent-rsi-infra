@@ -54,6 +54,7 @@ flowchart TD
 | 执行方法 | `.agents/skills/<name>/SKILL.md` | 任务输入、关键操作、验证和交付要求 |
 | 角色分工 | `.agents/roles/` | 通用调试与性能分析角色 |
 | 自动化 | `scripts/`、`.claude/hooks/` | 可重复检查、事件处理与可选通知 |
+| 离线诊断 | `autoresearch/` 与 Skill 附属脚本 | 分析已有 trace 和数值日志，不提供训练或服务执行器 |
 | 验证 | `tests/`、`.github/workflows/` | 资源布局、脚本行为和持续检查 |
 | 领域知识 | `docs/` | 工程实践、诊断参考与调研依据 |
 
@@ -207,3 +208,9 @@ flowchart TD
 **启动条件**：Phase 1 已有可重放的真实任务及多次候选评估，人工排队或汇总成本有记录且已成为瓶颈。先由人工评审瓶颈证据、自动化范围、成本、回滚方式和维护责任，再选择最小实现；没有这些需求时不建设独立服务或数据库。
 
 候选接受须满足第 6 节的回归、代表性回放和人工审查要求。拒绝和回滚同样保留原因、失败证据与关联 revision，不以自动生成 PR 数量作为 RSI 成效。
+
+## 统一验证入口
+
+scripts/check.py 顺序执行 lint、format、skills、adapters、tests 和 shell，汇总每项状态，独立检查失败后继续后续项。需要定位问题时可用 --only adapters 或 --only skills,adapters；--fix 只修复 Python 风格，角色适配仍须显式运行 scripts/sync_agents.py 生成。
+
+资源契约检查验证发现名称、来源引用和索引；adapters 检查共享角色能否重现已提交的客户端配置；行为测试验证工具输入输出和失败场景。这些结果都不证明真实客户端加载、GPU 数值或性能收益，相关状态见 [兼容矩阵](agent-compatibility.md) 与任务验证报告。

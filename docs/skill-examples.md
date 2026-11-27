@@ -90,4 +90,4 @@
 
 ## 训练吞吐诊断
 
-使用 profile-whole-update：“固定训练版本、数据与设备，对比基线和候选的本地日志及 trace，报告吞吐、波动和数值验证结果。”训练通过目标项目入口执行，交付原始证据、失败原因与未验证项；本地分析工具见 [autotuner](../autotuner/README.md)。
+使用 profile-whole-update：“固定训练版本、数据与设备，对比基线和候选的本地日志及 trace，报告吞吐、波动和数值验证结果。”训练通过目标项目入口执行，交付原始证据、失败原因与未验证项；本地分析工具见 [autoresearch](../autoresearch/README.md)。

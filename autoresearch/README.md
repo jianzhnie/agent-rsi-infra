@@ -5,9 +5,9 @@
 从仓库根目录运行，解释器需安装 numpy；orjson 为可选解析加速依赖：
 
 ```bash
-python3 -m autotuner.profile_analyzer --help
-python3 -m autotuner.profile_analyzer --profile-dir <trace-dir> --json --no-cache
-python3 -m autotuner.profile_analyzer rank 0 --profile-dir <trace-dir>
+python3 -m autoresearch.profile_analyzer --help
+python3 -m autoresearch.profile_analyzer --profile-dir <trace-dir> --json --no-cache
+python3 -m autoresearch.profile_analyzer rank 0 --profile-dir <trace-dir>
 ```
 
 默认缓存写入 trace 附近，无法写入时尝试用户缓存目录；可用 `--cache-dir <dir>` 指定位置，或用 `--no-cache` 禁止读写缓存。缓存按源文件大小、纳秒修改时间和分析选项校验。JSON 写入 stdout，运行日志写入 stderr。

@@ -13,7 +13,7 @@ from pathlib import Path
 from typing import Literal
 
 ROOT = Path(__file__).resolve().parents[1]
-PYTHON_PATHS = ["scripts", "tests", ".agents/skills", "autotuner"]
+PYTHON_PATHS = ["scripts", "tests", ".agents/skills", "autoresearch"]
 DEFAULT_TIMEOUT = 300.0
 
 
@@ -40,6 +40,7 @@ def _commands(fix: bool) -> list[tuple[str, list[str]]]:
         ("lint", ["ruff", "check", "--no-fix", *PYTHON_PATHS]),
         ("format", ["ruff", "format", "--check", *PYTHON_PATHS]),
         ("skills", [sys.executable, "scripts/check_skills.py"]),
+        ("adapters", [sys.executable, "scripts/sync_agents.py", "--check"]),
         (
             "tests",
             [

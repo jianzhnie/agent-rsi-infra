@@ -57,7 +57,7 @@ pytest 统一组织根 tests/ 的回归，已有 unittest 用例由 pytest 收�
 ## 检查与修复
 
 - `python3 scripts/check.py --check`：默认模式，Ruff 使用 `--no-fix`，格式检查使用 `--check`；不会修改源码。
-- `python3 scripts/check.py --fix`：只应用 Ruff 的安全修复与格式化，随后重新运行 lint、格式、测试和 Shell 检查。修复失败或任何验证失败都返回非零，不因“已修改文件”报告成功。
+- `python3 scripts/check.py --fix`：只应用 Ruff 的安全修复与格式化，随后重新运行 lint、格式、资源契约、角色适配、测试和 Shell 检查。修复失败或任何验证失败都返回非零，不因“已修改文件”报告成功。
 - 所有 Python 路径和风格来自现有仓库配置。导入排序由 Ruff 的 `I` 规则处理，不另加 isort、Black 或 Megatron 的容器依赖。
 - pre-commit 是单独的提交门禁，其中部分 hooks 会修改文件；检查并接受修改后重新运行。`--all-files` 只覆盖 Git 跟踪文件，新增文件可通过 `--files` 显式检查。
 
@@ -157,3 +157,5 @@ PR 自查流程补充参考 FlashInfer [self-review](https://github.com/flashinf
 检查入口保持顺序编排：`--only lint,tests` 运行选定项，`--timeout 300` 设置每项超时，`--json <path>` 保存命令、执行环境和状态。`--fix` 要求完整验证，不能与 `--only` 合用。缺依赖标记 blocked，执行非零或超时标记 failed；未选中项不宣称通过。JSON 仅含已选项，CI 继续运行完整入口。工具版本探测有独立短超时，不作为检查通过证据。
 
 TorchTitan 的测试成本、golden 数值与 PR 必要性审查方法分别提炼自固定版本的 [tests.md](https://github.com/pytorch/torchtitan/blob/72e5566782bbdafaa9bafd422733a307319213c5/.claude/rules/tests.md)、[pr-review](https://github.com/pytorch/torchtitan/blob/72e5566782bbdafaa9bafd422733a307319213c5/.claude/skills/pr-review/SKILL.md) 和 [pr-description](https://github.com/pytorch/torchtitan/blob/72e5566782bbdafaa9bafd422733a307319213c5/.claude/skills/pr-description/SKILL.md)，revision `72e5566782bbdafaa9bafd422733a307319213c5`，许可见[保留的 BSD-3-Clause](.agents/skills/training-inference-change/references/torchtitan/LICENSE)。不迁入自动发布、强制人工摘要占位、固定审查裁决或无向后兼容政策。
+
+角色适配可单独运行 `python3 scripts/check.py --only adapters`；发现漂移后修改共享源并运行 `python3 scripts/sync_agents.py`，再检查生成差异。统一检查不会自动重写客户端配置。

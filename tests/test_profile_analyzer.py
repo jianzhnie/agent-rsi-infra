@@ -80,7 +80,7 @@ def test_module_cli_emits_json_without_writing_caches(trace_path, tmp_path) -> N
         [
             sys.executable,
             "-m",
-            "autotuner.profile_analyzer",
+            "autoresearch.profile_analyzer",
             "--profile-dir",
             str(trace_path),
             "--json",
